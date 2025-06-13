@@ -116,33 +116,35 @@ const OrderForm = () => {
         <div className="font-script text-2xl text-dusty-blue opacity-50">Free forever ♡</div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-8 relative">
+      <div className="w-full mx-auto px-6 lg:px-12 xl:px-16 relative">
         <div className="text-center mb-20">
           <div className="relative inline-block">
-            <h2 className="text-5xl lg:text-6xl font-serif font-bold text-charcoal mb-8 leading-tight">
+            <h2 className="text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-charcoal mb-8 leading-tight">
               Let's Make Your Restaurant More Accessible
             </h2>
             {/* Hand-drawn underline */}
             <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-4/5 h-4 bg-sage/20 transform -rotate-1 rounded-full"></div>
           </div>
-          <p className="text-xl text-pencil max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-xl lg:text-2xl text-pencil max-w-4xl mx-auto leading-relaxed font-light">
             Ready to welcome more diners? This quick form helps us create perfect braille menus 
             for your restaurant. No cost, no catch—just better accessibility.
           </p>
         </div>
 
-        <div className="paper-card rounded-3xl shadow-paper-lift overflow-hidden transform -rotate-1">
-          <FormStep steps={steps} currentStep={currentStep} />
+        <div className="max-w-5xl mx-auto">
+          <div className="paper-card rounded-3xl shadow-paper-lift overflow-hidden transform -rotate-1">
+            <FormStep steps={steps} currentStep={currentStep} />
 
-          <form className="p-12 bg-paper/50">
-            {renderCurrentStep()}
-            <FormNavigation
-              currentStep={currentStep}
-              onPrevStep={prevStep}
-              onNextStep={nextStep}
-              onSubmit={handleSubmit}
-            />
-          </form>
+            <form className="p-12 bg-paper/50">
+              {renderCurrentStep()}
+              <FormNavigation
+                currentStep={currentStep}
+                onPrevStep={prevStep}
+                onNextStep={nextStep}
+                onSubmit={handleSubmit}
+              />
+            </form>
+          </div>
         </div>
       </div>
     </section>

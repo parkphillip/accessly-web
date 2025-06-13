@@ -53,7 +53,7 @@ const Navigation = () => {
         ? 'bg-cream/95 backdrop-blur-lg shadow-paper border-b border-warm-gray/20' 
         : 'bg-transparent'
     }`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-full mx-auto px-6 lg:px-12 xl:px-16">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-sage/20 border-2 border-sage/40 rounded-lg flex items-center justify-center transform rotate-2 shadow-paper">

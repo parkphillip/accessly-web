@@ -13,7 +13,7 @@ const Footer = () => {
         Made with ♡
       </div>
 
-      <div className="max-w-7xl mx-auto px-8 relative">
+      <div className="w-full mx-auto px-6 lg:px-12 xl:px-16 relative">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           {/* Brand section with personality */}
           <div className="col-span-1 md:col-span-2">
@@ -26,7 +26,7 @@ const Footer = () => {
                 <div className="absolute -bottom-2 left-0 w-full h-1 bg-sage/40 transform -rotate-1 rounded-full"></div>
               </div>
             </div>
-            <p className="text-lg text-paper/80 leading-relaxed mb-8 max-w-md font-light">
+            <p className="text-lg lg:text-xl text-paper/80 leading-relaxed mb-8 max-w-md font-light">
               Making restaurants accessible to everyone through free braille menus. 
               No cost, no catch—just a more inclusive world, one menu at a time.
             </p>

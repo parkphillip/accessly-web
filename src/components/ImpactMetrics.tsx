@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Users, MapPin, Book } from 'lucide-react';
+
 const ImpactMetrics = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [counts, setCounts] = useState({
@@ -7,12 +9,15 @@ const ImpactMetrics = () => {
     customers: 0,
     menus: 0
   });
+  
   const sectionRef = useRef<HTMLDivElement>(null);
+  
   const finalCounts = {
     restaurants: 847,
     customers: 12500,
     menus: 3240
   };
+
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
@@ -21,35 +26,44 @@ const ImpactMetrics = () => {
     }, {
       threshold: 0.3
     });
+
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
+
     return () => observer.disconnect();
   }, []);
+
   useEffect(() => {
     if (isVisible) {
       const duration = 2000;
       const steps = 60;
       const stepDuration = duration / steps;
       let step = 0;
+
       const interval = setInterval(() => {
         step++;
         const progress = step / steps;
+
         setCounts({
           restaurants: Math.floor(finalCounts.restaurants * progress),
           customers: Math.floor(finalCounts.customers * progress),
           menus: Math.floor(finalCounts.menus * progress)
         });
+
         if (step >= steps) {
           clearInterval(interval);
           setCounts(finalCounts);
         }
       }, stepDuration);
+
       return () => clearInterval(interval);
     }
   }, [isVisible]);
-  return <section id="impact" className="py-24 bg-warm-tan/30 bg-stone-200">
-      <div className="max-w-7xl mx-auto px-8">
+
+  return (
+    <section id="impact" className="py-24 bg-stone-200">
+      <div className="w-full mx-auto px-6 lg:px-12 xl:px-16">
         <div ref={sectionRef} className="text-center mb-20 relative">
           {/* Hand-drawn circle around title */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -58,7 +72,7 @@ const ImpactMetrics = () => {
             </svg>
           </div>
           
-          <h2 className="text-5xl lg:text-6xl font-serif font-bold text-charcoal mb-8 relative">
+          <h2 className="text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-charcoal mb-8 relative">
             Making Real Impact
           </h2>
           
@@ -67,7 +81,7 @@ const ImpactMetrics = () => {
             These are real numbers!
           </div>
           
-          <p className="text-xl text-pencil max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-xl lg:text-2xl text-pencil max-w-4xl mx-auto leading-relaxed font-light">
             Every braille menu we create opens doors to independence and dignity. 
             <span className="font-script text-sage"> Here's the human story in numbers.</span>
           </p>
@@ -153,23 +167,23 @@ const ImpactMetrics = () => {
         </div>
 
         {/* Why This Matters section with editorial layout */}
-        <div className="relative">
+        <div className="relative max-w-6xl mx-auto">
           <div className="paper-card p-12 transform -rotate-1 shadow-paper-lift relative overflow-hidden">
             {/* Watercolor wash background */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-sage/10 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-dusty-blue/10 rounded-full blur-2xl"></div>
             
             <div className="relative">
-              <h3 className="text-3xl font-serif font-bold text-charcoal mb-8 scribble-underline">
+              <h3 className="text-3xl lg:text-4xl font-serif font-bold text-charcoal mb-8 scribble-underline">
                 Why This Matters
               </h3>
               
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2">
-                  <p className="text-lg text-pencil leading-relaxed font-light mb-6">
+                  <p className="text-lg lg:text-xl text-pencil leading-relaxed font-light mb-6">
                     <span className="font-serif font-semibold text-charcoal">24 million Americans</span> have significant vision loss, yet most restaurants remain inaccessible. 
                   </p>
-                  <p className="text-lg text-pencil leading-relaxed font-light">
+                  <p className="text-lg lg:text-xl text-pencil leading-relaxed font-light">
                     By providing <span className="font-script text-sage text-xl">free braille menus</span>, we're not just improving dining experiences—we're fostering 
                     independence, dignity, and true inclusion in our communities.
                   </p>
@@ -191,6 +205,8 @@ const ImpactMetrics = () => {
           <div className="absolute -bottom-3 -right-3 w-6 h-10 bg-dusty-blue/20 shadow-paper rounded transform -rotate-12 opacity-70"></div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default ImpactMetrics;

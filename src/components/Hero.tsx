@@ -68,7 +68,7 @@ const Hero = () => {
       <div className="absolute top-40 right-20 w-16 h-12 bg-paper shadow-paper rounded transform -rotate-6 opacity-40"></div>
       <div className="absolute bottom-32 left-1/3 w-24 h-20 bg-warm-gray/30 shadow-paper rounded-lg transform rotate-6 opacity-30"></div>
       
-      <div className="relative max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <div className="relative w-full mx-auto px-6 lg:px-12 xl:px-16 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         
         {/* Left Side - Content */}
         <div className="space-y-12 relative">
@@ -97,7 +97,7 @@ const Hero = () => {
 
           {/* Main Headline with handwritten touches */}
           <div className="space-y-8 relative">
-            <h1 className="text-6xl lg:text-7xl font-serif font-bold text-charcoal leading-[0.9]">
+            <h1 className="text-6xl lg:text-7xl xl:text-8xl font-serif font-bold text-charcoal leading-[0.9]">
               Free braille menus
               <span className="block text-sage mt-4 scribble-underline">for restaurants</span>
             </h1>
@@ -107,7 +107,7 @@ const Hero = () => {
               No cost,<br/>no catch!
             </div>
             
-            <p className="text-xl lg:text-2xl text-pencil max-w-2xl leading-relaxed font-light">
+            <p className="text-xl lg:text-2xl xl:text-3xl text-pencil max-w-2xl leading-relaxed font-light">
               Making dining accessible through the simple power of touch. 
               <span className="font-script text-sage">Every dot matters.</span>
             </p>
