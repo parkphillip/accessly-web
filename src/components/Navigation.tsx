@@ -9,14 +9,14 @@ const Navigation = () => {
   const navItems = [
     { id: 'hero', label: 'Home' },
     { id: 'impact', label: 'Impact' },
-    { id: 'demo', label: 'Braille Demo' },
+    { id: 'workshop', label: 'Workshop' },
     { id: 'network', label: 'Network' },
     { id: 'order', label: 'Get Started' },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 50);
       
       const sections = navItems.map(item => item.id);
       const currentSection = sections.find(section => {
@@ -50,26 +50,27 @@ const Navigation = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-white/80 backdrop-blur-md border-b border-gray-200' 
+        ? 'bg-stone-100/95 backdrop-blur-md shadow-lg' 
         : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <span className="text-2xl font-semibold text-black">
-              Accessly
-            </span>
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-amber-600 to-amber-800 rounded-lg flex items-center justify-center">
+              <div className="w-4 h-4 bg-stone-100 rounded-full opacity-80"></div>
+            </div>
+            <span className="text-xl font-bold text-stone-800">Accessly</span>
           </div>
 
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`px-4 py-2 rounded-lg transition-all duration-200 font-medium text-sm ${
+                className={`px-3 py-2 rounded-full transition-all duration-200 ${
                   activeSection === item.id
-                    ? 'bg-black text-white'
-                    : 'text-gray-600 hover:text-black hover:bg-gray-100'
+                    ? 'bg-amber-600 text-white shadow-md'
+                    : 'text-stone-700 hover:text-amber-700 hover:bg-stone-200/50'
                 }`}
               >
                 {item.label}
@@ -77,8 +78,8 @@ const Navigation = () => {
             ))}
           </div>
 
-          <button className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            <Menu className="w-5 h-5 text-gray-700" />
+          <button className="md:hidden p-2 rounded-lg hover:bg-stone-200/50 transition-colors">
+            <Menu className="w-6 h-6 text-stone-700" />
           </button>
         </div>
       </div>

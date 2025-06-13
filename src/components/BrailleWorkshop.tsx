@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 
-const BrailleDemo = () => {
+const BrailleWorkshop = () => {
   const [inputText, setInputText] = useState('Welcome to our restaurant');
   const [brailleOutput, setBrailleOutput] = useState<string[]>([]);
-  const [isConverting, setIsConverting] = useState(false);
+  const [animationIndex, setAnimationIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Simple braille mapping for demo
   const brailleMap: { [key: string]: string } = {
@@ -18,8 +19,9 @@ const BrailleDemo = () => {
     return text.toLowerCase().split('').map(char => brailleMap[char] || '⠀');
   };
 
-  const startConversion = () => {
-    setIsConverting(true);
+  const startAnimation = () => {
+    setIsAnimating(true);
+    setAnimationIndex(0);
     const braille = convertToBraille(inputText);
     setBrailleOutput([]);
     
@@ -30,63 +32,66 @@ const BrailleDemo = () => {
       
       if (index >= braille.length) {
         clearInterval(interval);
-        setIsConverting(false);
+        setIsAnimating(false);
       }
-    }, 60);
+    }, 100);
   };
 
   useEffect(() => {
-    startConversion();
+    startAnimation();
   }, []);
 
   return (
-    <section id="demo" className="py-24 bg-white">
+    <section id="workshop" className="py-20 bg-gradient-to-b from-amber-50 to-stone-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
-            Braille Conversion Demo
+          <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-6">
+            Interactive Braille Workshop
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Experience how text transforms into braille. Type any message below and see it converted 
-            into the tactile dots that provide independence to visually impaired diners.
+          <p className="text-xl text-stone-600 max-w-3xl mx-auto">
+            Experience the beauty of braille firsthand. Type any text below and watch it transform 
+            into tactile dots—the same dots that give independence to millions of visually impaired diners.
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gray-50 rounded-xl p-8 border border-gray-200">
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
             <div className="mb-8">
-              <label className="block text-lg font-semibold text-black mb-4">
-                Enter your text:
+              <label className="block text-lg font-semibold text-stone-700 mb-4">
+                Type your text:
               </label>
               <textarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="w-full p-4 border border-gray-300 rounded-lg text-lg focus:border-black focus:outline-none resize-none transition-colors duration-200 bg-white"
+                className="w-full p-4 border-2 border-stone-200 rounded-xl text-lg focus:border-amber-500 focus:outline-none resize-none"
                 rows={3}
-                placeholder="Type your message here..."
+                placeholder="Enter text to see it in braille..."
               />
             </div>
 
             <button
-              onClick={startConversion}
-              disabled={isConverting}
-              className="bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={startAnimation}
+              disabled={isAnimating}
+              className="bg-gradient-to-r from-amber-600 to-amber-700 text-white px-8 py-3 rounded-full font-semibold hover:from-amber-700 hover:to-amber-800 transition-all duration-200 shadow-lg disabled:opacity-50"
             >
-              {isConverting ? 'Converting...' : 'Convert to Braille'}
+              {isAnimating ? 'Converting...' : 'Convert to Braille'}
             </button>
 
-            <div className="mt-8 p-6 bg-white rounded-lg border border-gray-200">
-              <h3 className="text-lg font-semibold text-black mb-4">Braille Output:</h3>
+            <div className="mt-8 p-6 bg-stone-100 rounded-xl">
+              <h3 className="text-lg font-semibold text-stone-700 mb-4">Braille Output:</h3>
               <div 
-                className="text-4xl leading-relaxed font-mono bg-gray-50 p-6 rounded-lg min-h-[120px] flex flex-wrap items-center border border-gray-200"
-                style={{ letterSpacing: '0.15em' }}
+                className="text-4xl leading-relaxed font-mono bg-white p-6 rounded-lg shadow-inner min-h-[120px] flex flex-wrap items-center"
+                style={{ letterSpacing: '0.2em' }}
               >
                 {brailleOutput.map((char, index) => (
                   <span
                     key={index}
-                    className="inline-block transition-opacity duration-200"
+                    className={`inline-block transition-all duration-300 ${
+                      index < animationIndex ? 'opacity-100 transform scale-100' : 'opacity-0 transform scale-50'
+                    }`}
                     style={{ 
-                      color: char === '⠀' ? 'transparent' : '#000000'
+                      transitionDelay: `${index * 50}ms`,
+                      color: char === '⠀' ? 'transparent' : '#d97706'
                     }}
                   >
                     {char}
@@ -96,19 +101,21 @@ const BrailleDemo = () => {
             </div>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-black mb-3">About Braille</h4>
-                <p className="text-gray-600 text-sm">
+              <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-xl">
+                <h4 className="font-semibold text-stone-800 mb-3">Did You Know?</h4>
+                <p className="text-stone-600 text-sm">
                   Braille consists of patterns of raised dots arranged in cells of up to six dots each. 
-                  Each character is formed by a unique combination, creating a complete tactile reading system.
+                  Each character is formed by a unique combination of these dots, creating a complete 
+                  tactile reading system.
                 </p>
               </div>
               
-              <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-black mb-3">Our Quality Standards</h4>
-                <p className="text-gray-600 text-sm">
-                  Every braille menu uses high-grade materials and precise dot formation for clear, 
-                  comfortable reading. All menus are quality-tested before delivery.
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl">
+                <h4 className="font-semibold text-stone-800 mb-3">Quality Matters</h4>
+                <p className="text-stone-600 text-sm">
+                  Our braille menus use high-grade materials and precise dot formation to ensure 
+                  clear, comfortable reading. Every menu is quality-tested by braille readers 
+                  before delivery.
                 </p>
               </div>
             </div>
@@ -119,4 +126,4 @@ const BrailleDemo = () => {
   );
 };
 
-export default BrailleDemo;
+export default BrailleWorkshop;

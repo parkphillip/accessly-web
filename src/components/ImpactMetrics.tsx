@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Users, MapPin, Book } from 'lucide-react';
 
@@ -53,59 +54,64 @@ const ImpactMetrics = () => {
   }, [isVisible]);
 
   return (
-    <section id="impact" className="py-24 bg-gray-50">
+    <section id="impact" className="py-20 bg-gradient-to-b from-stone-50 to-amber-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div ref={sectionRef} className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
+        <div ref={sectionRef} className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-6">
             Making Real Impact
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-stone-600 max-w-3xl mx-auto">
             Every braille menu we create opens doors to independence and dignity. 
             Here's how we're transforming restaurant accessibility across the country.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          {[
-            { 
-              icon: MapPin, 
-              count: counts.restaurants, 
-              label: 'Partner Restaurants',
-              description: 'From local cafes to national chains, restaurants trust us to make their spaces accessible.'
-            },
-            { 
-              icon: Users, 
-              count: counts.customers, 
-              label: 'Customers Served',
-              description: 'Visually impaired diners now enjoy independent dining experiences at partner locations.'
-            },
-            { 
-              icon: Book, 
-              count: counts.menus, 
-              label: 'Braille Menus Created',
-              description: 'Each menu is carefully crafted with high-quality materials and perfect braille translation.'
-            }
-          ].map((item, index) => (
-            <div key={index} className="bg-white rounded-xl p-8 text-center shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
-              <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center mx-auto mb-6">
-                <item.icon className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-4xl font-bold text-black mb-2">
-                {item.count.toLocaleString()}
-              </div>
-              <div className="text-lg text-black mb-4 font-semibold">{item.label}</div>
-              <div className="text-sm text-gray-600 leading-relaxed">
-                {item.description}
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+            <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <MapPin className="w-8 h-8 text-white" />
             </div>
-          ))}
+            <div className="text-4xl font-bold text-amber-700 mb-2">
+              {counts.restaurants.toLocaleString()}
+            </div>
+            <div className="text-lg text-stone-600 mb-4">Partner Restaurants</div>
+            <div className="text-sm text-stone-500">
+              From local cafes to national chains, restaurants trust us to make their spaces accessible.
+            </div>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Users className="w-8 h-8 text-white" />
+            </div>
+            <div className="text-4xl font-bold text-blue-700 mb-2">
+              {counts.customers.toLocaleString()}
+            </div>
+            <div className="text-lg text-stone-600 mb-4">Customers Served</div>
+            <div className="text-sm text-stone-500">
+              Visually impaired diners now enjoy independent dining experiences at partner locations.
+            </div>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Book className="w-8 h-8 text-white" />
+            </div>
+            <div className="text-4xl font-bold text-green-700 mb-2">
+              {counts.menus.toLocaleString()}
+            </div>
+            <div className="text-lg text-stone-600 mb-4">Braille Menus Created</div>
+            <div className="text-sm text-stone-500">
+              Each menu is carefully crafted with high-quality materials and perfect braille translation.
+            </div>
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl p-8 text-center shadow-sm border border-gray-100">
-          <h3 className="text-2xl font-bold text-black mb-4">
+        <div className="bg-gradient-to-r from-amber-100 to-stone-100 rounded-2xl p-8 text-center">
+          <h3 className="text-2xl font-bold text-stone-800 mb-4">
             Why This Matters
           </h3>
-          <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg text-stone-600 max-w-4xl mx-auto">
             24 million Americans have significant vision loss, yet most restaurants remain inaccessible. 
             By providing free braille menus, we're not just improving dining experiences—we're fostering 
             independence, dignity, and true inclusion in our communities.
