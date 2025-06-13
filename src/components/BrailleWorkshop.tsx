@@ -42,27 +42,27 @@ const BrailleWorkshop = () => {
   }, []);
 
   return (
-    <section id="workshop" className="py-20 bg-slate-700">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+    <section id="workshop" className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+      <div className="max-w-7xl mx-auto px-8">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-8 tracking-tight">
             Experience Braille
           </h2>
-          <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
             Type any text below and watch it transform into tactile dots—the same dots that give independence to millions of visually impaired diners.
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-slate-900 border border-slate-600 p-8 shadow-2xl">
-            <div className="mb-8">
-              <label className="block text-lg font-semibold text-white mb-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-700 border border-slate-600/50 p-12 rounded-2xl shadow-2xl">
+            <div className="mb-10">
+              <label className="block text-xl font-semibold text-white mb-6">
                 Type your text:
               </label>
               <textarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="w-full p-4 bg-slate-800 border-2 border-slate-600 text-white rounded-lg text-lg focus:border-blue-500 focus:outline-none resize-none"
+                className="w-full p-6 bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-slate-600/50 text-white rounded-xl text-lg focus:border-blue-500/50 focus:outline-none resize-none shadow-inner font-light leading-relaxed"
                 rows={3}
                 placeholder="Enter text to see it in braille..."
               />
@@ -71,15 +71,15 @@ const BrailleWorkshop = () => {
             <button
               onClick={startAnimation}
               disabled={isAnimating}
-              className="bg-blue-600 text-white px-8 py-3 font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg disabled:opacity-50"
+              className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-10 py-4 font-semibold rounded-xl hover:from-blue-700 hover:to-blue-600 transition-all duration-300 transform hover:scale-[1.02] shadow-xl hover:shadow-blue-500/25 disabled:opacity-50 disabled:transform-none"
             >
               {isAnimating ? 'Converting...' : 'Convert to Braille'}
             </button>
 
-            <div className="mt-8 p-6 bg-slate-800 border border-slate-600">
-              <h3 className="text-lg font-semibold text-white mb-4">Braille Output:</h3>
+            <div className="mt-10 p-8 bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-600/50 rounded-xl shadow-inner">
+              <h3 className="text-xl font-semibold text-white mb-6">Braille Output:</h3>
               <div 
-                className="text-4xl leading-relaxed font-mono bg-slate-900 p-6 border border-slate-600 shadow-inner min-h-[120px] flex flex-wrap items-center"
+                className="text-4xl leading-relaxed font-mono bg-slate-950/50 p-8 border border-slate-700/50 shadow-inner min-h-[120px] flex flex-wrap items-center rounded-lg"
                 style={{ letterSpacing: '0.2em' }}
               >
                 {brailleOutput.map((char, index) => (
@@ -90,7 +90,7 @@ const BrailleWorkshop = () => {
                     }`}
                     style={{ 
                       transitionDelay: `${index * 50}ms`,
-                      color: char === '⠀' ? 'transparent' : '#60a5fa'
+                      color: char === '⠀' ? 'transparent' : '#93c5fd'
                     }}
                   >
                     {char}
@@ -99,19 +99,19 @@ const BrailleWorkshop = () => {
               </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-slate-800 border border-slate-600 p-6">
-                <h4 className="font-semibold text-white mb-3">Did You Know?</h4>
-                <p className="text-slate-400 text-sm">
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-600/50 p-8 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-white mb-4 text-lg">Did You Know?</h4>
+                <p className="text-slate-300 leading-relaxed">
                   Braille consists of patterns of raised dots arranged in cells of up to six dots each. 
                   Each character is formed by a unique combination of these dots, creating a complete 
                   tactile reading system.
                 </p>
               </div>
               
-              <div className="bg-slate-800 border border-slate-600 p-6">
-                <h4 className="font-semibold text-white mb-3">Quality Matters</h4>
-                <p className="text-slate-400 text-sm">
+              <div className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-600/50 p-8 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-white mb-4 text-lg">Quality Matters</h4>
+                <p className="text-slate-300 leading-relaxed">
                   Our braille menus use high-grade materials and precise dot formation to ensure 
                   clear, comfortable reading. Every menu is quality-tested by braille readers 
                   before delivery.
