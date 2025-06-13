@@ -62,30 +62,35 @@ const OrderForm = () => {
   };
 
   return (
-    <section id="order" className="py-20 bg-gradient-to-b from-amber-50 to-stone-50">
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-6">
+    <section id="order" className="py-32 bg-slate-900 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 to-slate-900/40"></div>
+      <div className="absolute top-1/4 -right-64 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 -left-32 w-80 h-80 bg-slate-700/10 rounded-full blur-2xl"></div>
+
+      <div className="max-w-4xl mx-auto px-8 relative">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-8 tracking-tight">
             Get Your Free Braille Menus
           </h2>
-          <p className="text-xl text-stone-600 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
             Ready to make your restaurant more accessible? Complete this simple form and we'll create 
             your professional braille menus at absolutely no cost to you.
           </p>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl shadow-2xl shadow-black/20 overflow-hidden">
           {/* Progress Bar */}
-          <div className="bg-gradient-to-r from-amber-100 to-stone-100 p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-slate-800/60 border-b border-slate-700/50 p-8">
+            <div className="flex items-center justify-between mb-6">
               {steps.map((step) => {
                 const Icon = step.icon;
                 return (
                   <div key={step.number} className="flex items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                       currentStep >= step.number 
-                        ? 'bg-amber-600 text-white' 
-                        : 'bg-stone-200 text-stone-500'
+                        ? 'bg-blue-500 border-blue-400 text-white shadow-lg shadow-blue-500/25' 
+                        : 'bg-slate-700/50 border-slate-600/50 text-slate-400'
                     }`}>
                       {currentStep > step.number ? (
                         <Check className="w-5 h-5" />
@@ -94,8 +99,8 @@ const OrderForm = () => {
                       )}
                     </div>
                     {step.number < 4 && (
-                      <div className={`w-16 h-1 mx-2 ${
-                        currentStep > step.number ? 'bg-amber-600' : 'bg-stone-200'
+                      <div className={`w-20 h-0.5 mx-4 transition-all duration-300 ${
+                        currentStep > step.number ? 'bg-blue-500 shadow-sm shadow-blue-500/50' : 'bg-slate-600/50'
                       }`}></div>
                     )}
                   </div>
@@ -103,18 +108,18 @@ const OrderForm = () => {
               })}
             </div>
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-stone-800">
+              <h3 className="text-xl font-semibold text-white">
                 Step {currentStep}: {steps[currentStep - 1].title}
               </h3>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-8">
+          <form onSubmit={handleSubmit} className="p-12">
             {/* Step 1: Restaurant Info */}
             {currentStep === 1 && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     Restaurant Name *
                   </label>
                   <input
@@ -122,14 +127,14 @@ const OrderForm = () => {
                     required
                     value={formData.restaurantName}
                     onChange={(e) => handleInputChange('restaurantName', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                     placeholder="Enter your restaurant name"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-stone-700 mb-2">
+                    <label className="block text-sm font-semibold text-slate-200 mb-3">
                       Street Address *
                     </label>
                     <input
@@ -137,12 +142,12 @@ const OrderForm = () => {
                       required
                       value={formData.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
-                      className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                      className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                       placeholder="123 Main Street"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-stone-700 mb-2">
+                    <label className="block text-sm font-semibold text-slate-200 mb-3">
                       City *
                     </label>
                     <input
@@ -150,14 +155,14 @@ const OrderForm = () => {
                       required
                       value={formData.city}
                       onChange={(e) => handleInputChange('city', e.target.value)}
-                      className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                      className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                       placeholder="Your city"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     State *
                   </label>
                   <input
@@ -165,7 +170,7 @@ const OrderForm = () => {
                     required
                     value={formData.state}
                     onChange={(e) => handleInputChange('state', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                     placeholder="State"
                   />
                 </div>
@@ -174,9 +179,9 @@ const OrderForm = () => {
 
             {/* Step 2: Contact Details */}
             {currentStep === 2 && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     Contact Person Name *
                   </label>
                   <input
@@ -184,13 +189,13 @@ const OrderForm = () => {
                     required
                     value={formData.contactName}
                     onChange={(e) => handleInputChange('contactName', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                     placeholder="Your full name"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     Email Address *
                   </label>
                   <input
@@ -198,13 +203,13 @@ const OrderForm = () => {
                     required
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                     placeholder="your@email.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     Phone Number *
                   </label>
                   <input
@@ -212,7 +217,7 @@ const OrderForm = () => {
                     required
                     value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -221,15 +226,15 @@ const OrderForm = () => {
 
             {/* Step 3: Menu Content */}
             {currentStep === 3 && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     Menu Type *
                   </label>
                   <select
                     value={formData.menuType}
                     onChange={(e) => handleInputChange('menuType', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                   >
                     <option value="full-menu">Full Menu</option>
                     <option value="dinner-only">Dinner Menu Only</option>
@@ -240,14 +245,14 @@ const OrderForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     Menu Content *
                   </label>
                   <textarea
                     required
                     value={formData.menuContent}
                     onChange={(e) => handleInputChange('menuContent', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none h-40 resize-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200 h-48 resize-none"
                     placeholder="Please paste your menu content here, or describe what you'd like included. We'll work with you to format it perfectly for braille."
                   />
                 </div>
@@ -256,15 +261,15 @@ const OrderForm = () => {
 
             {/* Step 4: Preferences */}
             {currentStep === 4 && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     Material Preference
                   </label>
                   <select
                     value={formData.materialPreference}
                     onChange={(e) => handleInputChange('materialPreference', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200"
                   >
                     <option value="standard">Standard Paper (Recommended)</option>
                     <option value="heavy-duty">Heavy-Duty Paper</option>
@@ -274,39 +279,54 @@ const OrderForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-2">
+                  <label className="block text-sm font-semibold text-slate-200 mb-3">
                     Additional Notes
                   </label>
                   <textarea
                     value={formData.additionalNotes}
                     onChange={(e) => handleInputChange('additionalNotes', e.target.value)}
-                    className="w-full p-3 border border-stone-300 rounded-lg focus:border-amber-500 focus:outline-none h-32 resize-none"
+                    className="w-full p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-200 h-40 resize-none"
                     placeholder="Any special requests, questions, or additional information you'd like to share?"
                   />
                 </div>
 
-                <div className="bg-gradient-to-r from-amber-50 to-stone-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-stone-800 mb-3">What Happens Next?</h4>
-                  <ul className="text-sm text-stone-600 space-y-2">
-                    <li>• We'll review your request within 24 hours</li>
-                    <li>• Our team will contact you to confirm details</li>
-                    <li>• Your braille menus will be professionally created</li>
-                    <li>• Free shipping directly to your restaurant</li>
-                    <li>• Ongoing support and updates at no cost</li>
+                <div className="bg-slate-800/30 border border-slate-700/30 p-8 rounded-2xl">
+                  <h4 className="font-semibold text-white mb-4 text-lg">What Happens Next?</h4>
+                  <ul className="text-slate-300 space-y-3 leading-relaxed">
+                    <li className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                      We'll review your request within 24 hours
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                      Our team will contact you to confirm details
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                      Your braille menus will be professionally created
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                      Free shipping directly to your restaurant
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                      Ongoing support and updates at no cost
+                    </li>
                   </ul>
                 </div>
               </div>
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8 pt-6 border-t border-stone-200">
+            <div className="flex justify-between mt-12 pt-8 border-t border-slate-700/50">
               <button
                 type="button"
                 onClick={prevStep}
-                className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+                className={`px-8 py-4 rounded-xl font-semibold transition-all duration-200 ${
                   currentStep === 1 
-                    ? 'bg-stone-100 text-stone-400 cursor-not-allowed' 
-                    : 'bg-stone-200 text-stone-700 hover:bg-stone-300'
+                    ? 'bg-slate-800/30 text-slate-500 cursor-not-allowed border border-slate-700/30' 
+                    : 'bg-slate-700/50 text-slate-200 hover:bg-slate-700/70 border border-slate-600/50 hover:border-slate-500/50'
                 }`}
                 disabled={currentStep === 1}
               >
@@ -317,18 +337,18 @@ const OrderForm = () => {
                 <button
                   type="button"
                   onClick={nextStep}
-                  className="bg-gradient-to-r from-amber-600 to-amber-700 text-white px-6 py-3 rounded-lg font-semibold hover:from-amber-700 hover:to-amber-800 transition-all duration-200 flex items-center gap-2"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center gap-3 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
                 >
                   Next Step
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-5 h-5" />
                 </button>
               ) : (
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 flex items-center gap-2"
+                  className="bg-gradient-to-r from-green-600 to-green-700 text-white px-10 py-4 rounded-xl font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 flex items-center gap-3 shadow-lg shadow-green-500/25 hover:shadow-green-500/40"
                 >
                   Submit Request
-                  <Check className="w-4 h-4" />
+                  <Check className="w-5 h-5" />
                 </button>
               )}
             </div>
