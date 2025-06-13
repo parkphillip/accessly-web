@@ -14,13 +14,8 @@ const Hero = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (animationStage < 3) {
-        setAnimationStage(animationStage + 1);
-      } else {
-        // Reset to start the cycle again
-        setAnimationStage(0);
-      }
-    }, animationStage === 0 ? 800 : animationStage === 1 ? 2000 : animationStage === 2 ? 2000 : 3000);
+      setAnimationStage((prev) => (prev + 1) % 4);
+    }, animationStage === 0 ? 1000 : animationStage === 1 ? 3000 : animationStage === 2 ? 3000 : 2000);
 
     return () => clearTimeout(timer);
   }, [animationStage]);
@@ -33,112 +28,104 @@ const Hero = () => {
   };
 
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center relative bg-gradient-to-br from-slate-50 via-blue-50 to-teal-50">
-      <div className="max-w-6xl mx-auto px-6 text-center">
-        {/* Animated Brand Name */}
-        <div className="mb-16">
-          <div className="flex justify-center items-center space-x-3 mb-12">
-            {brailleSequence.map((braille, index) => (
-              <div key={index} className="relative w-20 h-20 flex items-center justify-center">
-                {/* Braille character */}
-                <div
-                  className={`absolute text-5xl font-mono text-teal-600 transition-all duration-700 ${
-                    animationStage === 0 
-                      ? 'opacity-0 transform translate-y-4' 
-                      : animationStage === 1
-                      ? 'opacity-100 transform translate-y-0'
-                      : animationStage === 2
-                      ? 'opacity-100 transform scale-110'
-                      : 'opacity-0 transform scale-0'
-                  }`}
-                  style={{ transitionDelay: `${index * 150}ms` }}
-                >
-                  {braille}
+    <section id="hero" className="min-h-screen flex items-center relative bg-slate-50">
+      <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        {/* Left Side - Content */}
+        <div className="lg:col-span-7 space-y-8">
+          {/* Animated Brand Name */}
+          <div className="mb-8">
+            <div className="flex items-baseline space-x-1">
+              {brailleSequence.map((braille, index) => (
+                <div key={index} className="relative">
+                  {/* Braille character */}
+                  <div
+                    className={`text-4xl font-mono text-teal-700 transition-all duration-500 ${
+                      animationStage === 0 || animationStage === 2
+                        ? 'opacity-100 transform translate-y-0' 
+                        : 'opacity-0 transform translate-y-2'
+                    }`}
+                    style={{ transitionDelay: `${index * 80}ms` }}
+                  >
+                    {braille}
+                  </div>
+                  
+                  {/* Letter transformation */}
+                  <div
+                    className={`absolute inset-0 text-4xl font-bold text-slate-900 transition-all duration-500 ${
+                      animationStage === 1 || animationStage === 3
+                        ? 'opacity-100 transform translate-y-0' 
+                        : 'opacity-0 transform translate-y-2'
+                    }`}
+                    style={{ transitionDelay: `${index * 80}ms` }}
+                  >
+                    {finalLetters[index]}
+                  </div>
                 </div>
-                
-                {/* Letter transformation */}
-                <div
-                  className={`absolute text-6xl font-bold text-slate-800 transition-all duration-700 ${
-                    animationStage < 3 
-                      ? 'opacity-0 transform scale-0' 
-                      : 'opacity-100 transform scale-100'
-                  }`}
-                  style={{ transitionDelay: `${index * 100 + 500}ms` }}
-                >
-                  {finalLetters[index]}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Main Content */}
-        <div className={`transition-all duration-1000 ${
-          animationStage < 3 ? 'opacity-0 transform translate-y-8' : 'opacity-100 transform translate-y-0'
-        }`}>
-          <h1 className="text-6xl md:text-8xl font-bold text-slate-800 mb-8 leading-tight">
-            Free Braille Menus
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600 mt-4">
-              for Every Restaurant
-            </span>
-          </h1>
-          
-          <p className="text-2xl md:text-3xl text-slate-600 mb-16 max-w-3xl mx-auto font-light">
-            No cost, no catch—just better accessibility for everyone.
-          </p>
+          {/* Main Headline */}
+          <div className="space-y-6">
+            <h1 className="text-5xl lg:text-7xl font-bold text-slate-900 leading-tight tracking-tight">
+              Free braille menus
+              <span className="block text-teal-700">for every restaurant</span>
+            </h1>
+            
+            <p className="text-xl lg:text-2xl text-slate-700 max-w-2xl font-light leading-relaxed">
+              No cost. No catch. Just better access for blind and visually impaired diners everywhere.
+            </p>
+          </div>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          {/* Call to Action */}
+          <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <button 
               onClick={() => document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-gradient-to-r from-teal-600 to-blue-600 text-white px-12 py-5 rounded-full text-xl font-semibold hover:from-teal-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              className="group bg-teal-700 text-white px-8 py-4 text-lg font-medium hover:bg-teal-800 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-teal-200"
             >
-              Get Your Free Menus
+              <span className="group-hover:hidden">Join the movement</span>
+              <span className="hidden group-hover:inline">Get your free menus</span>
             </button>
             
             <button 
               onClick={() => document.getElementById('workshop')?.scrollIntoView({ behavior: 'smooth' })}
-              className="border-2 border-slate-300 text-slate-700 px-12 py-5 rounded-full text-xl font-semibold hover:border-teal-600 hover:text-teal-700 transition-all duration-200"
+              className="border-2 border-slate-400 text-slate-700 px-8 py-4 text-lg font-medium hover:border-teal-700 hover:text-teal-700 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-slate-200"
             >
-              Learn About Braille
+              Learn about braille
             </button>
           </div>
         </div>
 
-        {/* Features Preview */}
-        <div className={`mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 transition-all duration-1000 delay-500 ${
-          animationStage < 3 ? 'opacity-0 transform translate-y-8' : 'opacity-100 transform translate-y-0'
-        }`}>
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-            <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
-              <span className="text-2xl">⠠</span>
+        {/* Right Side - Visual Element */}
+        <div className="lg:col-span-5 flex justify-center">
+          <div className="relative">
+            {/* Person-centered image placeholder */}
+            <div className="w-80 h-96 bg-gradient-to-br from-teal-100 to-slate-200 flex items-center justify-center text-slate-600 text-lg font-medium shadow-2xl">
+              [Person reading braille menu]
             </div>
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">Professional Quality</h3>
-            <p className="text-slate-600">Restaurant-grade braille menus printed on durable materials</p>
-          </div>
-          
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
-              <span className="text-2xl">⠏</span>
+            
+            {/* Floating braille sample */}
+            <div className="absolute -top-4 -right-4 bg-white p-6 shadow-lg">
+              <div className="text-3xl font-mono text-teal-700 leading-relaxed">
+                ⠍⠑⠝⠥<br/>
+                ⠍⠑⠝⠥
+              </div>
+              <div className="text-sm text-slate-600 mt-2 font-medium">
+                "MENU" in braille
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">Fast Delivery</h3>
-            <p className="text-slate-600">Your custom braille menus delivered within 5-7 business days</p>
-          </div>
-          
-          <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
-              <span className="text-2xl">⠓</span>
-            </div>
-            <h3 className="text-xl font-semibold text-slate-800 mb-2">Completely Free</h3>
-            <p className="text-slate-600">No hidden costs, no subscriptions - just better accessibility</p>
           </div>
         </div>
       </div>
 
+      {/* Scroll indicator */}
       <button 
         onClick={scrollToNext}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce focus:outline-none focus:ring-4 focus:ring-teal-200 rounded-full p-2"
+        aria-label="Scroll to next section"
       >
-        <ArrowDown className="w-8 h-8 text-slate-500" />
+        <ArrowDown className="w-6 h-6 text-slate-600" />
       </button>
     </section>
   );
