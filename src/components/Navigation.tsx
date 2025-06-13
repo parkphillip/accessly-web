@@ -16,7 +16,7 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
       
       const sections = navItems.map(item => item.id);
       const currentSection = sections.find(section => {
@@ -50,13 +50,13 @@ const Navigation = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-stone-100/95 backdrop-blur-md shadow-lg border-b border-stone-200/50' 
+        ? 'bg-white/80 backdrop-blur-md border-b border-gray-200' 
         : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <span className="text-2xl font-bold font-playfair text-stone-800">
+            <span className="text-2xl font-semibold text-black">
               Accessly
             </span>
           </div>
@@ -66,10 +66,10 @@ const Navigation = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`px-4 py-2 rounded-full transition-all duration-200 font-medium ${
+                className={`px-4 py-2 rounded-lg transition-all duration-200 font-medium text-sm ${
                   activeSection === item.id
-                    ? 'bg-amber-600 text-white'
-                    : 'text-stone-700 hover:text-amber-700 hover:bg-stone-200/50'
+                    ? 'bg-black text-white'
+                    : 'text-gray-600 hover:text-black hover:bg-gray-100'
                 }`}
               >
                 {item.label}
@@ -77,8 +77,8 @@ const Navigation = () => {
             ))}
           </div>
 
-          <button className="md:hidden p-2 rounded-lg hover:bg-stone-200/50 transition-colors duration-200">
-            <Menu className="w-6 h-6 text-stone-700" />
+          <button className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <Menu className="w-5 h-5 text-gray-700" />
           </button>
         </div>
       </div>

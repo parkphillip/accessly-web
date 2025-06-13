@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,8 +20,7 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'playfair': ['Playfair Display', 'serif'],
-				'inter': ['Inter', 'sans-serif'],
+				'sans': ['Inter', 'system-ui', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -92,7 +92,7 @@ export default {
 				'fade-in': {
 					'0%': {
 						opacity: '0',
-						transform: 'translateY(10px)'
+						transform: 'translateY(8px)'
 					},
 					'100%': {
 						opacity: '1',
@@ -101,7 +101,7 @@ export default {
 				},
 				'scale-in': {
 					'0%': {
-						transform: 'scale(0.95)',
+						transform: 'scale(0.98)',
 						opacity: '0'
 					},
 					'100%': {
@@ -111,51 +111,7 @@ export default {
 				},
 				'slide-up': {
 					'0%': {
-						transform: 'translateY(30px)',
-						opacity: '0'
-					},
-					'100%': {
-						transform: 'translateY(0)',
-						opacity: '1'
-					}
-				},
-				'float': {
-					'0%, 100%': {
-						transform: 'translateY(0px)',
-					},
-					'50%': {
-						transform: 'translateY(-10px)',
-					}
-				},
-				'glow': {
-					'0%, 100%': {
-						boxShadow: '0 0 20px rgba(217, 119, 6, 0.3)',
-					},
-					'50%': {
-						boxShadow: '0 0 30px rgba(217, 119, 6, 0.6), 0 0 40px rgba(217, 119, 6, 0.3)',
-					}
-				},
-				'shimmer': {
-					'0%': {
-						backgroundPosition: '-200% 0'
-					},
-					'100%': {
-						backgroundPosition: '200% 0'
-					}
-				},
-				'ripple': {
-					'0%': {
-						transform: 'scale(0)',
-						opacity: '0.8'
-					},
-					'100%': {
-						transform: 'scale(4)',
-						opacity: '0'
-					}
-				},
-				'text-reveal': {
-					'0%': {
-						transform: 'translateY(100%)',
+						transform: 'translateY(16px)',
 						opacity: '0'
 					},
 					'100%': {
@@ -167,14 +123,9 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.6s ease-out',
+				'fade-in': 'fade-in 0.5s ease-out',
 				'scale-in': 'scale-in 0.3s ease-out',
-				'slide-up': 'slide-up 0.8s ease-out',
-				'float': 'float 3s ease-in-out infinite',
-				'glow': 'glow 2s ease-in-out infinite',
-				'shimmer': 'shimmer 2s infinite',
-				'ripple': 'ripple 0.6s ease-out',
-				'text-reveal': 'text-reveal 0.8s ease-out forwards'
+				'slide-up': 'slide-up 0.6s ease-out'
 			}
 		}
 	},
