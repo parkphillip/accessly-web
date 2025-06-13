@@ -53,14 +53,14 @@ const Navigation = () => {
         ? 'bg-cream/95 backdrop-blur-lg shadow-paper border-b border-warm-gray/20' 
         : 'bg-transparent'
     }`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-sage/20 border-2 border-sage/40 rounded-lg flex items-center justify-center transform rotate-2 shadow-paper">
-              <Book className="w-5 h-5 text-sage" />
+      <div className="max-w-8xl mx-auto px-8 lg:px-16">
+        <div className="flex items-center justify-between h-24">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-sage/20 border-2 border-sage/40 rounded-lg flex items-center justify-center transform rotate-2 shadow-paper">
+              <Book className="w-6 h-6 text-sage" />
             </div>
             <div className="relative">
-              <span className="text-2xl font-serif font-bold text-charcoal">
+              <span className="text-3xl font-serif font-bold text-charcoal">
                 Accessly
               </span>
               {/* Handwritten underline */}
@@ -68,12 +68,12 @@ const Navigation = () => {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`relative px-6 py-3 rounded-full transition-all duration-300 group font-medium ${
+                className={`relative px-8 py-4 rounded-full transition-all duration-300 group font-medium text-lg ${
                   activeSection === item.id
                     ? 'bg-sage text-cream shadow-paper transform -rotate-1'
                     : 'text-charcoal hover:text-sage hover:bg-warm-tan/50'
@@ -87,8 +87,8 @@ const Navigation = () => {
             ))}
           </div>
 
-          <button className="md:hidden p-3 rounded-xl hover:bg-warm-tan/50 transition-colors group transform hover:rotate-2">
-            <Menu className="w-6 h-6 text-charcoal group-hover:text-sage transition-colors" />
+          <button className="md:hidden p-4 rounded-xl hover:bg-warm-tan/50 transition-colors group transform hover:rotate-2">
+            <Menu className="w-7 h-7 text-charcoal group-hover:text-sage transition-colors" />
           </button>
         </div>
       </div>
