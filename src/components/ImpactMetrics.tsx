@@ -1,69 +1,60 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Users, MapPin, Book } from 'lucide-react';
-
 const ImpactMetrics = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [counts, setCounts] = useState({ restaurants: 0, customers: 0, menus: 0 });
+  const [counts, setCounts] = useState({
+    restaurants: 0,
+    customers: 0,
+    menus: 0
+  });
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  const finalCounts = { restaurants: 847, customers: 12500, menus: 3240 };
-
+  const finalCounts = {
+    restaurants: 847,
+    customers: 12500,
+    menus: 3240
+  };
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+      }
+    }, {
+      threshold: 0.3
+    });
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-
     return () => observer.disconnect();
   }, []);
-
   useEffect(() => {
     if (isVisible) {
       const duration = 2000;
       const steps = 60;
       const stepDuration = duration / steps;
-
       let step = 0;
       const interval = setInterval(() => {
         step++;
         const progress = step / steps;
-        
         setCounts({
           restaurants: Math.floor(finalCounts.restaurants * progress),
           customers: Math.floor(finalCounts.customers * progress),
-          menus: Math.floor(finalCounts.menus * progress),
+          menus: Math.floor(finalCounts.menus * progress)
         });
-
         if (step >= steps) {
           clearInterval(interval);
           setCounts(finalCounts);
         }
       }, stepDuration);
-
       return () => clearInterval(interval);
     }
   }, [isVisible]);
-
-  return (
-    <section id="impact" className="py-24 bg-warm-tan/30">
+  return <section id="impact" className="py-24 bg-warm-tan/30 bg-stone-200">
       <div className="max-w-7xl mx-auto px-8">
         <div ref={sectionRef} className="text-center mb-20 relative">
           {/* Hand-drawn circle around title */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <svg width="400" height="200" className="text-sage/20">
-              <ellipse cx="200" cy="100" rx="180" ry="80" 
-                stroke="currentColor" strokeWidth="3" fill="none" 
-                strokeDasharray="5,5" opacity="0.4" 
-                transform="rotate(-2 200 100)"/>
+              <ellipse cx="200" cy="100" rx="180" ry="80" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="5,5" opacity="0.4" transform="rotate(-2 200 100)" />
             </svg>
           </div>
           
@@ -120,10 +111,7 @@ const ImpactMetrics = () => {
               </div>
               {/* Scribbled circle around number */}
               <svg className="absolute -inset-4 w-full h-full pointer-events-none" viewBox="0 0 100 60">
-                <ellipse cx="50" cy="30" rx="45" ry="25" 
-                  stroke="#6b7c94" strokeWidth="2" fill="none" 
-                  strokeDasharray="3,2" opacity="0.3"
-                  transform="rotate(5 50 30)"/>
+                <ellipse cx="50" cy="30" rx="45" ry="25" stroke="#6b7c94" strokeWidth="2" fill="none" strokeDasharray="3,2" opacity="0.3" transform="rotate(5 50 30)" />
               </svg>
             </div>
             
@@ -137,8 +125,8 @@ const ImpactMetrics = () => {
               <span>Growing daily!</span>
               <div className="w-12 h-6 relative">
                 <svg viewBox="0 0 48 24" className="absolute inset-0">
-                  <path d="M2 20 Q 24 8 42 16" stroke="#8a9a7d" strokeWidth="2" fill="none" strokeLinecap="round"/>
-                  <polygon points="40,14 42,16 40,18" fill="#8a9a7d"/>
+                  <path d="M2 20 Q 24 8 42 16" stroke="#8a9a7d" strokeWidth="2" fill="none" strokeLinecap="round" />
+                  <polygon points="40,14 42,16 40,18" fill="#8a9a7d" />
                 </svg>
               </div>
             </div>
@@ -203,8 +191,6 @@ const ImpactMetrics = () => {
           <div className="absolute -bottom-3 -right-3 w-6 h-10 bg-dusty-blue/20 shadow-paper rounded transform -rotate-12 opacity-70"></div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ImpactMetrics;
