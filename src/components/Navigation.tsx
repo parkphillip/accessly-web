@@ -50,33 +50,41 @@ const Navigation = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-slate-100/95 backdrop-blur-md shadow-lg' 
+        ? 'bg-slate-900/95 backdrop-blur-xl border-b border-slate-800/50 shadow-2xl' 
         : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
-            <span className="text-xl font-bold text-slate-800">Accessly</span>
+            <div className="relative">
+              <span className="text-2xl font-bold bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+                Accessly
+              </span>
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600/20 to-teal-600/20 rounded-lg blur opacity-30"></div>
+            </div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`px-3 py-2 rounded-full transition-all duration-200 ${
+                className={`relative px-6 py-3 rounded-full transition-all duration-300 group ${
                   activeSection === item.id
-                    ? 'bg-teal-600 text-white shadow-md'
-                    : 'text-slate-700 hover:text-teal-700 hover:bg-slate-200/50'
+                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                 }`}
               >
-                {item.label}
+                <span className="relative z-10 font-medium">{item.label}</span>
+                {activeSection !== item.id && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-teal-600/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                )}
               </button>
             ))}
           </div>
 
-          <button className="md:hidden p-2 rounded-lg hover:bg-slate-200/50 transition-colors">
-            <Menu className="w-6 h-6 text-slate-700" />
+          <button className="md:hidden p-3 rounded-xl hover:bg-slate-800/50 transition-colors group">
+            <Menu className="w-6 h-6 text-slate-300 group-hover:text-white transition-colors" />
           </button>
         </div>
       </div>
