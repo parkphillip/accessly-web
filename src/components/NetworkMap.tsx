@@ -16,22 +16,22 @@ const NetworkMap = () => {
   ];
 
   return (
-    <section id="network" className="py-20 bg-gradient-to-b from-stone-50 to-amber-50">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-6">
+    <section id="network" className="py-24 bg-slate-900">
+      <div className="max-w-7xl mx-auto px-8">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-8 tracking-tight">
             Our Growing Network
           </h2>
-          <p className="text-xl text-stone-600 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
             From coast to coast, restaurants are joining the accessibility movement. 
             See where you can find braille menus and discover how your community is becoming more inclusive.
           </p>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
-          <div className="relative w-full h-96 bg-gradient-to-br from-stone-100 to-amber-100 rounded-xl overflow-hidden">
+        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-12 shadow-2xl">
+          <div className="relative w-full h-96 bg-slate-900/50 border border-slate-700/50 rounded-xl overflow-hidden">
             {/* Simplified US map background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-stone-200 to-stone-300 opacity-30"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-800/30 to-slate-900/30"></div>
             
             {restaurants.map((restaurant, index) => (
               <div
@@ -40,10 +40,10 @@ const NetworkMap = () => {
                 style={{ left: `${restaurant.x}%`, top: `${restaurant.y}%` }}
               >
                 <div className="relative">
-                  <div className="w-4 h-4 bg-amber-600 rounded-full shadow-lg animate-pulse group-hover:scale-150 transition-transform"></div>
-                  <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-stone-800 text-white px-3 py-2 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                    <div className="font-semibold">{restaurant.name}</div>
-                    <div className="text-xs text-stone-300">{restaurant.city}</div>
+                  <div className="w-4 h-4 bg-blue-400 rounded-full shadow-lg animate-pulse group-hover:scale-150 transition-transform duration-300"></div>
+                  <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-slate-700/50 text-white px-4 py-3 rounded-xl text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap z-10 shadow-2xl">
+                    <div className="font-semibold text-blue-300">{restaurant.name}</div>
+                    <div className="text-xs text-slate-400">{restaurant.city}</div>
                   </div>
                 </div>
               </div>
@@ -58,9 +58,9 @@ const NetworkMap = () => {
                   cy={`${restaurant.y}%`}
                   r="20"
                   fill="none"
-                  stroke="#d97706"
+                  stroke="#60a5fa"
                   strokeWidth="1"
-                  opacity="0.3"
+                  opacity="0.2"
                   className="animate-ping"
                   style={{ animationDelay: `${index * 0.5}s` }}
                 />
@@ -68,27 +68,32 @@ const NetworkMap = () => {
             </svg>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl">
-              <MapPin className="w-8 h-8 text-amber-600 mx-auto mb-3" />
-              <div className="font-semibold text-stone-800 mb-2">47 States</div>
-              <div className="text-sm text-stone-600">Nationwide coverage expanding daily</div>
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-xl shadow-lg hover:bg-slate-800/70 transition-colors duration-300">
+              <div className="w-12 h-12 bg-blue-500/20 border border-blue-500/30 rounded-lg flex items-center justify-center mb-6">
+                <MapPin className="w-6 h-6 text-blue-400" />
+              </div>
+              <div className="text-3xl font-bold text-white mb-3 font-mono">47</div>
+              <div className="text-lg font-semibold text-blue-300 mb-3">States</div>
+              <div className="text-slate-400 text-sm leading-relaxed">Nationwide coverage expanding daily</div>
             </div>
             
-            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
-              <div className="w-8 h-8 bg-blue-600 rounded-full mx-auto mb-3 flex items-center justify-center">
-                <span className="text-white text-xs font-bold">24</span>
+            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-xl shadow-lg hover:bg-slate-800/70 transition-colors duration-300">
+              <div className="w-12 h-12 bg-blue-500/20 border border-blue-500/30 rounded-lg flex items-center justify-center mb-6">
+                <span className="text-blue-400 text-lg font-bold">24</span>
               </div>
-              <div className="font-semibold text-stone-800 mb-2">24/7 Service</div>
-              <div className="text-sm text-stone-600">Order processing around the clock</div>
+              <div className="text-3xl font-bold text-white mb-3 font-mono">24/7</div>
+              <div className="text-lg font-semibold text-blue-300 mb-3">Service</div>
+              <div className="text-slate-400 text-sm leading-relaxed">Order processing around the clock</div>
             </div>
             
-            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
-              <div className="w-8 h-8 bg-green-600 rounded-full mx-auto mb-3 flex items-center justify-center">
-                <span className="text-white text-xs">✓</span>
+            <div className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-xl shadow-lg hover:bg-slate-800/70 transition-colors duration-300">
+              <div className="w-12 h-12 bg-blue-500/20 border border-blue-500/30 rounded-lg flex items-center justify-center mb-6">
+                <span className="text-blue-400 text-lg">✓</span>
               </div>
-              <div className="font-semibold text-stone-800 mb-2">100% Free</div>
-              <div className="text-sm text-stone-600">No hidden costs or commitments</div>
+              <div className="text-3xl font-bold text-white mb-3 font-mono">100%</div>
+              <div className="text-lg font-semibold text-blue-300 mb-3">Free</div>
+              <div className="text-slate-400 text-sm leading-relaxed">No hidden costs or commitments</div>
             </div>
           </div>
         </div>
