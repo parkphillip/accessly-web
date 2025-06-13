@@ -55,10 +55,7 @@ const Navigation = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-teal-600 to-blue-700 rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-slate-100 rounded-full opacity-80"></div>
-            </div>
+          <div className="flex items-center">
             <span className="text-xl font-bold text-slate-800">Accessly</span>
           </div>
 
