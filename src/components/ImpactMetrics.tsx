@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Users, MapPin, BookOpenCheck } from 'lucide-react';
-
 const ImpactMetrics = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [counts, setCounts] = useState({
@@ -8,15 +7,12 @@ const ImpactMetrics = () => {
     customers: 0,
     menus: 0
   });
-  
   const sectionRef = useRef<HTMLDivElement>(null);
-  
   const finalCounts = {
     restaurants: 847,
     customers: 12500,
     menus: 3240
   };
-
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
@@ -25,43 +21,34 @@ const ImpactMetrics = () => {
     }, {
       threshold: 0.3
     });
-
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-
     return () => observer.disconnect();
   }, []);
-
   useEffect(() => {
     if (isVisible) {
       const duration = 2000;
       const steps = 60;
       const stepDuration = duration / steps;
       let step = 0;
-
       const interval = setInterval(() => {
         step++;
         const progress = step / steps;
-
         setCounts({
           restaurants: Math.floor(finalCounts.restaurants * progress),
           customers: Math.floor(finalCounts.customers * progress),
           menus: Math.floor(finalCounts.menus * progress)
         });
-
         if (step >= steps) {
           clearInterval(interval);
           setCounts(finalCounts);
         }
       }, stepDuration);
-
       return () => clearInterval(interval);
     }
   }, [isVisible]);
-
-  return (
-    <section id="impact" className="py-24 bg-subtle-gray/50">
+  return <section id="impact" className="py-24 bg-subtle-gray/50 bg-gray-300">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div ref={sectionRef} className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-serif font-bold text-dark-text mb-4">
@@ -137,8 +124,6 @@ const ImpactMetrics = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ImpactMetrics;
