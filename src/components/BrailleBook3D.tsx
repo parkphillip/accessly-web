@@ -31,35 +31,50 @@ const BookPage: React.FC<BookPageProps> = ({
   hoveredChar
 }) => {
   const pageRef = useRef<THREE.Group>(null);
-  const { raycaster, camera } = useThree();
+  const { raycaster, camera, gl } = useThree();
   const [mouse] = useState(new THREE.Vector2());
 
   const handlePointerMove = (event: any) => {
-    if (!isCurrentPage) return;
+    if (!isCurrentPage || !pageRef.current) return;
     
-    // Update mouse coordinates
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    console.log('Pointer move detected on page', pageNumber);
+    
+    // Get the canvas bounds
+    const rect = gl.domElement.getBoundingClientRect();
+    
+    // Calculate mouse position in normalized device coordinates (-1 to +1)
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    
+    console.log('Mouse position:', mouse.x, mouse.y);
     
     // Update raycaster
     raycaster.setFromCamera(mouse, camera);
     
-    // Find intersected braille characters
-    if (pageRef.current) {
-      const intersects = raycaster.intersectObjects(pageRef.current.children, true);
+    // Find intersected objects
+    const intersects = raycaster.intersectObjects(pageRef.current.children, true);
+    console.log('Intersects found:', intersects.length);
+    
+    if (intersects.length > 0) {
+      // Find the closest braille character based on position
+      let closestChar: BrailleChar | null = null;
+      let minDistance = Infinity;
       
-      if (intersects.length > 0) {
-        // Find the closest braille character
-        const closestChar = brailleChars.find((char) => {
-          const worldPos = new THREE.Vector3(...char.position);
-          pageRef.current?.localToWorld(worldPos);
-          return worldPos.distanceTo(intersects[0].point) < 0.02;
-        });
+      brailleChars.forEach((char) => {
+        const charWorldPos = new THREE.Vector3(...char.position);
+        pageRef.current?.localToWorld(charWorldPos);
+        const distance = charWorldPos.distanceTo(intersects[0].point);
         
-        onHover(closestChar || null);
-      } else {
-        onHover(null);
-      }
+        if (distance < 0.05 && distance < minDistance) {
+          minDistance = distance;
+          closestChar = char;
+        }
+      });
+      
+      console.log('Closest char:', closestChar?.english);
+      onHover(closestChar);
+    } else {
+      onHover(null);
     }
   };
 
@@ -87,8 +102,8 @@ const BookPage: React.FC<BookPageProps> = ({
             position={char.position}
             fontSize={0.03}
             color={isHovered ? "#2c5282" : "#343a40"}
-            anchorX="left"
-            anchorY="top"
+            anchorX="center"
+            anchorY="center"
             font="/fonts/JetBrainsMono-Regular.woff"
             material-transparent
             material-opacity={1}
@@ -103,8 +118,8 @@ const BookPage: React.FC<BookPageProps> = ({
         position={[0, -0.9, 0.01]}
         fontSize={0.02}
         color="#6c757d"
-        anchorX="middle"
-        anchorY="middle"
+        anchorX="center"
+        anchorY="center"
       >
         {pageNumber + 1}
       </Text>
@@ -130,6 +145,9 @@ const Book3D: React.FC<BrailleBook3DProps> = ({ pages, currentPage, onPageChange
       { data: pages[currentPage + 1] || [], index: currentPage + 1, isLeft: false }
     ].filter(page => page.data.length > 0);
   }, [pages, currentPage]);
+
+  console.log('Rendering Book3D with pages:', visiblePages.length);
+  console.log('Current hovered char:', hoveredChar?.english);
 
   return (
     <group ref={bookRef}>
@@ -157,6 +175,8 @@ const Book3D: React.FC<BrailleBook3DProps> = ({ pages, currentPage, onPageChange
 };
 
 const BrailleBook3D: React.FC<BrailleBook3DProps> = (props) => {
+  console.log('BrailleBook3D component rendering');
+  
   return (
     <div className="w-full h-[500px] bg-gradient-to-b from-subtle-gray to-light-bg rounded-lg overflow-hidden">
       <Canvas
