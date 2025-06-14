@@ -3,7 +3,7 @@ import React from 'react';
 import Navigation from '../components/Navigation';
 import Hero from '../components/Hero';
 import ImpactMetrics from '../components/ImpactMetrics';
-import BrailleWorkshop from '../components/BrailleWorkshop';
+import BrailleMenuBook from '../components/BrailleMenuBook';
 import BrailleMenuPreview from '../components/BrailleMenuPreview';
 import NetworkMap from '../components/NetworkMap';
 import OrderForm from '../components/OrderForm';
@@ -15,7 +15,7 @@ const Index = () => {
       <Navigation />
       <Hero />
       <ImpactMetrics />
-      <BrailleWorkshop />
+      <BrailleMenuBook />
       <BrailleMenuPreview />
       <NetworkMap />
       <OrderForm />

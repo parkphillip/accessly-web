@@ -7,6 +7,7 @@
 
 .book-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 600px;
@@ -18,25 +19,43 @@
   width: 700px;
   height: 500px;
   transform-style: preserve-3d;
-  transition: transform 0.6s ease-in-out;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .book.flipping {
-  transform: rotateY(-10deg);
+  transform: rotateY(-3deg) translateZ(5px);
 }
 
 .book-spine {
   position: absolute;
-  left: -8px;
+  left: -12px;
   top: 0;
-  width: 16px;
+  width: 24px;
   height: 100%;
-  background: linear-gradient(to right, #2c5282, #3d68a0);
+  background: linear-gradient(to right, 
+    #1a365d 0%, 
+    #2c5282 50%, 
+    #3d68a0 100%
+  );
   transform: rotateY(-90deg);
   transform-origin: right center;
-  border-radius: 2px 0 0 2px;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.3);
+  border-radius: 4px 0 0 4px;
+  box-shadow: 
+    -3px 0 10px rgba(0,0,0,0.3),
+    inset 2px 0 4px rgba(255,255,255,0.1);
   z-index: 1;
+}
+
+.book-spine::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: calc(100% - 40px);
+  background: rgba(255,255,255,0.2);
+  border-radius: 1px;
 }
 
 .page {
@@ -45,14 +64,15 @@
   height: 100%;
   background: #ffffff;
   border: 1px solid #e9ecef;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 12px 12px 0;
   box-shadow: 
-    inset -1px 0 2px rgba(0,0,0,0.05),
-    2px 4px 12px rgba(0,0,0,0.1),
-    4px 8px 20px rgba(0,0,0,0.08);
+    inset -2px 0 4px rgba(0,0,0,0.03),
+    3px 6px 20px rgba(0,0,0,0.08),
+    6px 12px 30px rgba(0,0,0,0.06);
   overflow: hidden;
   transform-style: preserve-3d;
   backface-visibility: hidden;
+  transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .page::before {
@@ -60,35 +80,54 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 2px;
+  width: 3px;
   height: 100%;
   background: linear-gradient(to bottom, 
-    rgba(220, 220, 220, 0.3) 0%,
+    rgba(220, 220, 220, 0.2) 0%,
+    rgba(220, 220, 220, 0.6) 30%,
     rgba(220, 220, 220, 0.8) 50%,
-    rgba(220, 220, 220, 0.3) 100%
+    rgba(220, 220, 220, 0.6) 70%,
+    rgba(220, 220, 220, 0.2) 100%
+  );
+}
+
+.page::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 20px;
+  width: 1px;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(220, 220, 220, 0.3) 20%,
+    rgba(220, 220, 220, 0.5) 50%,
+    rgba(220, 220, 220, 0.3) 80%,
+    transparent 100%
   );
 }
 
 .current-page {
   z-index: 10;
-  transform: translateZ(2px);
+  transform: translateZ(3px);
 }
 
 .next-page {
   z-index: 9;
-  transform: translateZ(1px) translateX(2px);
-  opacity: 0.95;
+  transform: translateZ(1px) translateX(3px) rotateY(1deg);
+  opacity: 0.92;
 }
 
 .page-content {
-  padding: 2.5rem;
+  padding: 3rem;
   height: 100%;
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, 
     rgba(255,255,255,1) 0%,
-    rgba(248,249,250,0.8) 100%
+    rgba(248,249,250,0.9) 100%
   );
+  position: relative;
 }
 
 .page-header {
@@ -98,6 +137,17 @@
   padding-bottom: 1rem;
   margin-bottom: 2rem;
   border-bottom: 2px solid #e9ecef;
+  position: relative;
+}
+
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, #e07a5f, transparent);
 }
 
 .page-number {
@@ -105,23 +155,43 @@
   font-size: 0.875rem;
   color: #6c757d;
   font-weight: 500;
+  letter-spacing: 0.05em;
 }
 
 .braille-indicator {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #2c5282;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.2em;
+  font-weight: 500;
 }
 
 .braille-content {
   flex: 1;
   overflow-y: auto;
-  line-height: 1.8;
+  line-height: 1.9;
   padding-right: 1rem;
 }
 
-/* Custom scrollbar for braille content */
+.braille-line {
+  position: relative;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.braille-line:hover {
+  background: rgba(44, 82, 130, 0.02);
+  transform: translateX(2px);
+}
+
+.braille-line span {
+  display: block;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  letter-spacing: 0.1em;
+}
+
+/* Custom scrollbar */
 .braille-content::-webkit-scrollbar {
   width: 6px;
 }
@@ -134,17 +204,52 @@
 .braille-content::-webkit-scrollbar-thumb {
   background: #dee2e6;
   border-radius: 3px;
+  transition: background 0.3s ease;
 }
 
 .braille-content::-webkit-scrollbar-thumb:hover {
   background: #ced4da;
 }
 
+/* Enhanced hover effects */
+.book:hover {
+  transform: translateZ(8px) rotateY(-1deg);
+}
+
+.book:hover .current-page {
+  box-shadow: 
+    inset -2px 0 4px rgba(0,0,0,0.03),
+    5px 10px 30px rgba(0,0,0,0.12),
+    10px 20px 40px rgba(0,0,0,0.08);
+}
+
+.book:hover .next-page {
+  transform: translateZ(2px) translateX(4px) rotateY(2deg);
+  opacity: 0.88;
+}
+
+/* Flipping animation enhancement */
+.book.flipping .current-page {
+  animation: pageFlip 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+@keyframes pageFlip {
+  0% {
+    transform: translateZ(3px) rotateY(0deg);
+  }
+  50% {
+    transform: translateZ(10px) rotateY(-15deg) scale(1.02);
+  }
+  100% {
+    transform: translateZ(3px) rotateY(0deg);
+  }
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .book-container {
     padding: 1rem;
-    min-height: 500px;
+    min-height: 450px;
   }
   
   .book {
@@ -154,11 +259,15 @@
   }
   
   .page-content {
-    padding: 1.5rem;
+    padding: 2rem;
   }
   
   .braille-content {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+  }
+  
+  .braille-line span {
+    font-size: 1rem;
   }
 }
 
@@ -168,29 +277,42 @@
   }
   
   .page-content {
-    padding: 1rem;
+    padding: 1.5rem;
   }
   
   .braille-content {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .braille-line span {
+    font-size: 0.9rem;
   }
 }
 
 /* Focus styles for accessibility */
+.book-container:focus {
+  outline: 2px solid #2c5282;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
 .page-content *:focus {
   outline: 2px solid #2c5282;
   outline-offset: 2px;
   border-radius: 2px;
 }
 
-/* Hover effects */
-.book:hover {
-  transform: translateZ(5px);
-}
-
-.book:hover .current-page {
-  box-shadow: 
-    inset -1px 0 2px rgba(0,0,0,0.05),
-    4px 8px 20px rgba(0,0,0,0.15),
-    8px 16px 32px rgba(0,0,0,0.1);
+/* Paper texture enhancement */
+.page-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
+  background-size: 20px 20px;
+  pointer-events: none;
+  opacity: 0.3;
 }
