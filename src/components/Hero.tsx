@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowDown, Edit3 } from 'lucide-react';
 import alee from '/public/placeholder.svg';
+
 const Hero = () => {
   const [currentText, setCurrentText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -56,7 +57,8 @@ const Hero = () => {
       });
     }
   };
-  return <section id="hero" className="min-h-screen flex items-center bg-light-bg py-32 md:py-24">
+  return (
+    <section id="hero" className="relative min-h-screen flex items-center bg-light-bg py-32 md:py-24">
       <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
         {/* Left Side - Content */}
@@ -111,11 +113,17 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <button onClick={scrollToNext} className="absolute bottom-8 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 text-medium-text hover:text-dark-text transition-colors" aria-label="Scroll to next section">
+      {/* Scroll indicator - Fixed positioning for better full screen support */}
+      <button 
+        onClick={scrollToNext} 
+        className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 text-medium-text hover:text-dark-text transition-colors z-10" 
+        aria-label="Scroll to next section"
+      >
         <span className="font-sans text-sm py-0 my-0 text-center font-normal">Explore</span>
         <ArrowDown className="w-5 h-5 animate-bounce" />
       </button>
-    </section>;
+    </section>
+  );
 };
+
 export default Hero;
