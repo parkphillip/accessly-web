@@ -103,8 +103,8 @@ const BookPage: React.FC<BookPageProps> = ({
         position={[0, -0.9, 0.01]}
         fontSize={0.02}
         color="#6c757d"
-        anchorX="center"
-        anchorY="center"
+        anchorX="middle"
+        anchorY="middle"
       >
         {pageNumber + 1}
       </Text>
