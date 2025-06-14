@@ -4,7 +4,6 @@ import Navigation from '../components/Navigation';
 import Hero from '../components/Hero';
 import ImpactMetrics from '../components/ImpactMetrics';
 import BrailleMenuBook from '../components/BrailleMenuBook';
-import BrailleMenuPreview from '../components/BrailleMenuPreview';
 import NetworkMap from '../components/NetworkMap';
 import OrderForm from '../components/OrderForm';
 import Footer from '../components/Footer';
@@ -16,7 +15,6 @@ const Index = () => {
       <Hero />
       <ImpactMetrics />
       <BrailleMenuBook />
-      <BrailleMenuPreview />
       <NetworkMap />
       <OrderForm />
       <Footer />
