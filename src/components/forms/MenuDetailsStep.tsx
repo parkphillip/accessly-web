@@ -13,15 +13,16 @@ interface MenuDetailsStepProps {
 
 const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({ formData, onInputChange }) => {
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-6 animate-fade-in">
       <div>
-        <label className="block text-lg font-serif font-semibold text-charcoal mb-4">
-          What type of menu? *
+        <label htmlFor="menuType" className="form-label">
+          What type of menu do you need?
         </label>
         <select
+          id="menuType"
           value={formData.menuType}
           onChange={(e) => onInputChange('menuType', e.target.value)}
-          className="w-full p-5 bg-cream/80 border-2 border-warm-gray/50 rounded-2xl text-charcoal focus:border-sage/60 focus:outline-none transition-all duration-200 font-light linen-texture"
+          className="form-input"
         >
           <option value="full-menu">Complete Menu (most popular)</option>
           <option value="dinner-only">Dinner Menu Only</option>
@@ -31,20 +32,21 @@ const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({ formData, onInputChan
         </select>
       </div>
 
-      <div className="relative">
-        <label className="block text-lg font-serif font-semibold text-charcoal mb-4">
-          Your menu content *
+      <div>
+        <label htmlFor="menuContent" className="form-label">
+          Provide your menu content
         </label>
         <textarea
+          id="menuContent"
           required
           value={formData.menuContent}
           onChange={(e) => onInputChange('menuContent', e.target.value)}
-          className="w-full p-5 bg-cream/80 border-2 border-warm-gray/50 rounded-2xl text-charcoal placeholder-pencil/60 focus:border-sage/60 focus:outline-none transition-all duration-200 h-48 resize-none font-light leading-relaxed linen-texture"
-          placeholder="Paste your menu here, or just describe what you'd like included. We'll work together to make it perfect for braille reading!"
+          className="form-input min-h-[150px] resize-y"
+          placeholder="Paste your menu here, or provide a link. We will format it for braille conversion."
         />
-        <div className="absolute -right-12 top-1/2 font-script text-dusty-blue text-sm transform rotate-6">
-          Don't worry about formatting!
-        </div>
+        <p className="text-xs text-medium-text mt-2">
+          Don't worry about formatting. We'll handle the conversion to make it clear and readable in braille.
+        </p>
       </div>
     </div>
   );

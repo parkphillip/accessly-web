@@ -14,46 +14,37 @@ interface FormStepProps {
 
 const FormStep: React.FC<FormStepProps> = ({ steps, currentStep }) => {
   return (
-    <div className="bg-cream/80 border-b-2 border-warm-gray/30 p-8 linen-texture">
-      <div className="flex items-center justify-between mb-6">
+    <div className="border-b border-light-gray p-6 md:p-8">
+      <div className="flex items-start justify-between">
         {steps.map((step, index) => {
           const Icon = step.icon;
+          const isActive = currentStep === step.number;
+          const isCompleted = currentStep > step.number;
+
           return (
-            <div key={step.number} className="flex items-center">
-              <div className="text-center">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border-2 transition-all duration-500 transform ${
-                  currentStep >= step.number 
-                    ? 'bg-sage border-sage/60 text-cream shadow-paper rotate-3' 
-                    : 'bg-paper border-warm-gray/50 text-pencil'
+            <React.Fragment key={step.number}>
+              <div className="flex flex-col items-center text-center w-24">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                  isCompleted
+                    ? 'bg-brand-navy border-brand-navy text-off-white'
+                    : isActive 
+                    ? 'bg-off-white border-brand-navy text-brand-navy'
+                    : 'bg-off-white border-light-gray text-medium-text'
                 }`}>
-                  {currentStep > step.number ? (
-                    <Check className="w-6 h-6" />
-                  ) : (
-                    <Icon className="w-6 h-6" />
-                  )}
+                  {isCompleted ? <Check className="w-6 h-6" /> : <Icon className="w-5 h-5" />}
                 </div>
-                <div className="mt-2 font-script text-sm text-pencil transform rotate-1">
-                  {step.note}
+                <div className="mt-2">
+                    <p className={`font-serif text-sm font-semibold ${isCompleted || isActive ? 'text-dark-text' : 'text-medium-text'}`}>{step.title}</p>
+                    <p className="text-xs text-medium-text">{step.note}</p>
                 </div>
               </div>
-              {index < 3 && (
-                <div className={`w-16 h-1 mx-4 transition-all duration-500 rounded-full ${
-                  currentStep > step.number 
-                    ? 'bg-sage shadow-sm transform rotate-1' 
-                    : 'bg-warm-gray/50'
-                }`}></div>
+              
+              {index < steps.length - 1 && (
+                <div className={`flex-1 h-0.5 mt-6 transition-all duration-300 ${isCompleted ? 'bg-brand-navy' : 'bg-light-gray'}`}></div>
               )}
-            </div>
+            </React.Fragment>
           );
         })}
-      </div>
-      <div className="text-center">
-        <h3 className="text-2xl font-serif font-semibold text-charcoal">
-          {steps[currentStep - 1].title}
-        </h3>
-        <div className="font-script text-sage mt-1">
-          Step {currentStep} of 4
-        </div>
       </div>
     </div>
   );

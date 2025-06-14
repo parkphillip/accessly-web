@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Heart } from 'lucide-react';
+import { Heart, ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface FormNavigationProps {
   currentStep: number;
@@ -16,42 +16,34 @@ const FormNavigation: React.FC<FormNavigationProps> = ({
   onSubmit 
 }) => {
   return (
-    <div className="flex justify-between mt-12 pt-8 border-t-2 border-warm-gray/30">
+    <div className="flex justify-between items-center mt-12 pt-8 border-t border-light-gray">
       <button
         type="button"
         onClick={onPrevStep}
-        className={`px-8 py-4 rounded-2xl font-serif font-semibold transition-all duration-300 ${
-          currentStep === 1 
-            ? 'bg-warm-gray/30 text-pencil/50 cursor-not-allowed border-2 border-warm-gray/30' 
-            : 'bg-paper text-charcoal hover:bg-cream/80 border-2 border-warm-gray/50 hover:border-dusty-blue/50 shadow-paper hover:shadow-paper-lift transform hover:-rotate-1'
-        }`}
+        className="secondary-button disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
         disabled={currentStep === 1}
       >
-        ← Go Back
+        <ArrowLeft className="w-4 h-4 mr-2" />
+        Go Back
       </button>
 
       {currentStep < 4 ? (
         <button
           type="button"
           onClick={onNextStep}
-          className="bg-gradient-to-r from-sage to-dusty-blue text-cream px-8 py-4 rounded-2xl font-serif font-semibold hover:shadow-paper-lift transition-all duration-300 flex items-center gap-3 shadow-paper transform hover:rotate-1 relative"
+          className="primary-button flex items-center"
         >
-          <span>Continue →</span>
-          <div className="absolute -top-2 -right-2 font-script text-xs text-sage/70 transform rotate-12">
-            Keep going!
-          </div>
+          Continue
+          <ArrowRight className="w-4 h-4 ml-2" />
         </button>
       ) : (
         <button
           type="button"
           onClick={onSubmit}
-          className="bg-gradient-to-r from-coffee to-sage text-cream px-10 py-4 rounded-2xl font-serif font-semibold hover:shadow-paper-lift transition-all duration-300 flex items-center gap-3 shadow-paper transform hover:-rotate-1 relative"
+          className="primary-button bg-brand-terracotta hover:bg-brand-terracotta/90 flex items-center"
         >
-          <Heart className="w-5 h-5" />
-          <span>Send My Request</span>
-          <div className="absolute -top-3 -right-3 font-script text-xs text-coffee/70 transform rotate-12">
-            Let's do this!
-          </div>
+          <Heart className="w-4 h-4 mr-2" />
+          Submit Request
         </button>
       )}
     </div>

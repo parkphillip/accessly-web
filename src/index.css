@@ -109,6 +109,13 @@
   .secondary-button {
     @apply bg-off-white text-brand-navy px-8 py-3 text-base font-medium rounded-md border border-light-gray hover:bg-light-bg transition-colors duration-300 shadow-subtle hover:shadow-medium focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2;
   }
+
+  .form-input {
+    @apply w-full p-3 bg-off-white border border-light-gray text-dark-text rounded-md text-base focus:border-brand-navy focus:ring-1 focus:ring-brand-navy focus:outline-none transition-colors shadow-inner-subtle;
+  }
+  .form-label {
+    @apply block text-base font-medium text-dark-text mb-2;
+  }
 }
 
 /* Simple underline for headlines */
