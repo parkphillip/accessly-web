@@ -1,9 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, Book } from 'lucide-react';
+
 const Navigation = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const navItems = [{
     id: 'hero',
     label: 'Home'
@@ -20,9 +23,11 @@ const Navigation = () => {
     id: 'order',
     label: 'Get Started'
   }];
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      
       const sections = navItems.map(item => item.id);
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
@@ -32,44 +37,88 @@ const Navigation = () => {
         }
         return false;
       });
+      
       if (currentSection) {
         setActiveSection(currentSection);
       }
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
-  return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-off-white/95 backdrop-blur-sm shadow-subtle border-b border-light-gray' : 'bg-transparent'}`}>
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled 
+        ? 'bg-off-white/95 backdrop-blur-sm shadow-subtle border-b border-light-gray' 
+        : 'bg-transparent'
+    }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <a href="#hero" className="flex items-center space-x-3" onClick={() => scrollToSection('hero')}>
+          {/* Logo with improved badge separation */}
+          <div className="flex items-center space-x-4">
+            <a 
+              href="#hero" 
+              className="flex items-center space-x-3" 
+              onClick={() => scrollToSection('hero')}
+            >
+              <span className="text-2xl font-serif font-bold text-dark-text">
+                Accessly
+              </span>
+            </a>
             
-            <span className="text-2xl font-serif font-bold text-dark-text">
-              Accessly
-            </span>
-          </a>
-
-          <div className="hidden md:flex items-center space-x-2">
-            {navItems.map(item => <button key={item.id} onClick={() => scrollToSection(item.id)} className={`relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-sm ${activeSection === item.id ? 'text-brand-navy' : 'text-medium-text hover:text-dark-text hover:bg-subtle-gray/70'}`}>
-                {item.label}
-                {activeSection === item.id && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-1 bg-brand-terracotta rounded-full"></div>}
-              </button>)}
+            {/* Separated badge with better contrast */}
+            <div className="hidden sm:block">
+              <div className="bg-brand-navy text-off-white inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full shadow-subtle border border-brand-navy/20">
+                <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
+                Free Braille Menus
+              </div>
+            </div>
           </div>
 
+          {/* Navigation Menu */}
+          <div className="hidden md:flex items-center space-x-2">
+            {navItems.map(item => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-sm ${
+                  activeSection === item.id 
+                    ? 'text-brand-navy' 
+                    : 'text-medium-text hover:text-dark-text hover:bg-subtle-gray/70'
+                }`}
+              >
+                {item.label}
+                {activeSection === item.id && (
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-1 bg-brand-terracotta rounded-full"></div>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile Menu Button */}
           <button className="md:hidden p-2 rounded-md hover:bg-subtle-gray transition-colors">
             <Menu className="w-6 h-6 text-dark-text" />
           </button>
         </div>
+        
+        {/* Mobile badge for small screens */}
+        <div className="sm:hidden pb-3">
+          <div className="bg-brand-navy text-off-white inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full shadow-subtle">
+            <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
+            Free Braille Menus for Restaurants
+          </div>
+        </div>
       </div>
-    </nav>;
+    </nav>
+  );
 };
+
 export default Navigation;

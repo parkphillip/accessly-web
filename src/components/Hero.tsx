@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { ArrowDown, Edit3 } from 'lucide-react';
 import alee from '/public/placeholder.svg';
+
 const Hero = () => {
   const [currentText, setCurrentText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -9,6 +11,7 @@ const Hero = () => {
   // Braille and English text
   const brailleText = '⠑⠧⠑⠗⠽ ⠍⠑⠝⠥ ⠞⠑⠇⠇⠎ ⠁ ⠎⠞⠕⠗⠽';
   const englishText = 'every menu tells a story';
+
   useEffect(() => {
     const typingSequence = async () => {
       setIsTyping(true);
@@ -26,6 +29,7 @@ const Hero = () => {
       // Clear and type English
       setCurrentText('');
       await new Promise(resolve => setTimeout(resolve, 200));
+      
       for (let i = 0; i <= englishText.length; i++) {
         setCurrentText(englishText.substring(0, i));
         await new Promise(resolve => setTimeout(resolve, 60));
@@ -35,6 +39,7 @@ const Hero = () => {
       await new Promise(resolve => setTimeout(resolve, 3000));
       setIsTyping(false);
     };
+
     const interval = setInterval(typingSequence, 8000);
     typingSequence(); // Start immediately
 
@@ -48,24 +53,20 @@ const Hero = () => {
     }, 500);
     return () => clearInterval(cursorInterval);
   }, []);
+
   const scrollToNext = () => {
     const element = document.getElementById('impact');
     if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth'
-      });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
-  return <section id="hero" className="min-h-screen flex items-center bg-light-bg py-24 md:py-0">
+
+  return (
+    <section id="hero" className="min-h-screen flex items-center bg-light-bg py-32 md:py-24">
       <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
         {/* Left Side - Content */}
         <div className="space-y-8 z-10">
-          <div className="bg-brand-navy text-off-white inline-flex items-center gap-2 text-sm font-medium px-3 py-1 rounded-full">
-            <span className="w-2 h-2 bg-brand-terracotta rounded-full"></span>
-            Free Braille Menus for Restaurants
-          </div>
-
           <h1 className="text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-dark-text leading-tight">
             Dignity on the Menu.
             <span className="block text-brand-navy">Accessibility for All.</span>
@@ -89,15 +90,17 @@ const Hero = () => {
 
           {/* Call to Action */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <button onClick={() => document.getElementById('order')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="primary-button">
+            <button 
+              onClick={() => document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' })} 
+              className="primary-button"
+            >
               Get Your Free Menus
             </button>
             
-            <button onClick={() => document.getElementById('impact')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="secondary-button">
+            <button 
+              onClick={() => document.getElementById('impact')?.scrollIntoView({ behavior: 'smooth' })} 
+              className="secondary-button"
+            >
               See Our Impact
             </button>
           </div>
@@ -105,22 +108,32 @@ const Hero = () => {
 
         {/* Right Side - Visual */}
         <div className="relative flex justify-center items-center h-full">
-            <div className="relative w-[320px] h-[400px] lg:w-[400px] lg:h-[500px]">
-              <div className="absolute inset-0 bg-subtle-gray rounded-2xl transform -rotate-3"></div>
-              <img src={alee} alt="Person reading a braille menu in a restaurant" className="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-strong" />
-              <div className="absolute -bottom-8 -right-8 structured-card p-4 text-center">
-                <div className="text-4xl font-mono text-brand-navy tracking-widest">⠍⠑⠝⠥</div>
-                <div className="text-sm font-medium text-medium-text mt-2">"Menu" in Braille</div>
-              </div>
+          <div className="relative w-[320px] h-[400px] lg:w-[400px] lg:h-[500px]">
+            <div className="absolute inset-0 bg-subtle-gray rounded-2xl transform -rotate-3"></div>
+            <img 
+              src={alee} 
+              alt="Person reading a braille menu in a restaurant" 
+              className="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-strong" 
+            />
+            <div className="absolute -bottom-8 -right-8 structured-card p-4 text-center">
+              <div className="text-4xl font-mono text-brand-navy tracking-widest">⠍⠑⠝⠥</div>
+              <div className="text-sm font-medium text-medium-text mt-2">"Menu" in Braille</div>
             </div>
+          </div>
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <button onClick={scrollToNext} className="absolute bottom-8 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 text-medium-text hover:text-dark-text transition-colors" aria-label="Scroll to next section">
+      <button 
+        onClick={scrollToNext} 
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 text-medium-text hover:text-dark-text transition-colors" 
+        aria-label="Scroll to next section"
+      >
         <span className="font-sans text-sm">Explore</span>
         <ArrowDown className="w-5 h-5 animate-bounce" />
       </button>
-    </section>;
+    </section>
+  );
 };
+
 export default Hero;
