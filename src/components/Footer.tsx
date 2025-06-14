@@ -1,31 +1,35 @@
-
 import React from 'react';
 import { Book, Mail, Phone } from 'lucide-react';
-
 const Footer = () => {
   const scrollToSection = (sectionId: string) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(sectionId)?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
-  
-  const links = [
-    { id: 'hero', label: 'Home' },
-    { id: 'impact', label: 'Impact' },
-    { id: 'workshop', label: 'Workshop' },
-    { id: 'network', label: 'Network' },
-    { id: 'order', label: 'Get Started' },
-  ];
-
-  return (
-    <footer className="bg-dark-text text-light-bg">
+  const links = [{
+    id: 'hero',
+    label: 'Home'
+  }, {
+    id: 'impact',
+    label: 'Impact'
+  }, {
+    id: 'workshop',
+    label: 'Workshop'
+  }, {
+    id: 'network',
+    label: 'Network'
+  }, {
+    id: 'order',
+    label: 'Get Started'
+  }];
+  return <footer className="bg-dark-text text-light-bg">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
           {/* Brand section */}
           <div className="md:col-span-5">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 bg-brand-terracotta/20 border border-brand-terracotta/30 rounded-lg flex items-center justify-center">
-                <Book className="w-6 h-6 text-brand-terracotta" />
-              </div>
-              <span className="text-3xl font-serif font-bold text-off-white">Accessly</span>
+              
+              <span className="text-3xl font-serif font-bold text-off-white text-justify mx-0">Accessly</span>
             </div>
             <p className="text-base text-light-gray leading-relaxed mb-6 max-w-md">
               Providing free, high-quality braille menus to restaurants to foster a more inclusive and accessible dining experience for everyone.
@@ -36,16 +40,11 @@ const Footer = () => {
           <div className="md:col-span-2">
             <h3 className="text-lg font-semibold mb-4 text-off-white">Menu</h3>
             <ul className="space-y-3">
-              {links.map(link => (
-                <li key={link.id}>
-                  <button 
-                    onClick={() => scrollToSection(link.id)}
-                    className="text-light-gray hover:text-brand-terracotta transition-colors duration-300"
-                  >
+              {links.map(link => <li key={link.id}>
+                  <button onClick={() => scrollToSection(link.id)} className="text-light-gray hover:text-brand-terracotta transition-colors duration-300">
                     {link.label}
                   </button>
-                </li>
-              ))}
+                </li>)}
             </ul>
           </div>
 
@@ -79,8 +78,6 @@ const Footer = () => {
           <p>© {new Date().getFullYear()} Accessly. All rights reserved. A non-profit initiative dedicated to accessibility.</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
