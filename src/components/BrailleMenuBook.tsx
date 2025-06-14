@@ -4,11 +4,16 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille } from '../utils/brailleUtils';
 
 const BrailleMenuBook = () => {
-  const [currentPage, setCurrentPage] = useState(0);
+  // Start at page 1 to show an open book initially.
+  // The first page in the array is a blank left page.
+  const [currentPage, setCurrentPage] = useState(1);
   const [isFlipping, setIsFlipping] = useState(false);
-  const [hoveredWord, setHoveredWord] = useState<{ line: number; word: number } | null>(null);
+  // Use a unique string ID for each word to fix the hover bug
+  const [hoveredWordId, setHoveredWordId] = useState<string | null>(null);
 
   const bookPages = [
+    // Add a blank page to serve as the inside of the front cover.
+    { type: 'page', title: '', content: [] },
     {
       type: 'cover',
       title: "The Grill House",
@@ -41,10 +46,13 @@ const BrailleMenuBook = () => {
         "Fresh Fruit Tart - $8.50"
       ]
     },
+     // Add a blank page at the end for a clean final page
+    { type: 'page', title: '', content: [] },
   ];
 
   const totalPages = bookPages.length;
-  const canGoBack = currentPage > 0;
+  // Don't allow flipping back before the first page (cover).
+  const canGoBack = currentPage > 1;
   const canGoForward = currentPage < totalPages - 1;
 
   const flipPage = useCallback((direction: 'next' | 'prev') => {
@@ -69,20 +77,27 @@ const BrailleMenuBook = () => {
     }
   };
 
-  const Word = ({ text, lineIdx, wordIdx }: { text: string, lineIdx: number, wordIdx: number }) => {
-    const isHovered = hoveredWord?.line === lineIdx && hoveredWord?.word === wordIdx;
+  const Word = ({ text, pageIdx, lineIdx, wordIdx }: { text: string, pageIdx: number, lineIdx: number, wordIdx: number }) => {
+    const wordId = `${pageIdx}-${lineIdx}-${wordIdx}`;
+    const isHovered = hoveredWordId === wordId;
     const displayText = isHovered ? text : translateToBraille(text);
 
     return (
       <span
-        onMouseEnter={() => setHoveredWord({ line: lineIdx, word: wordIdx })}
-        onMouseLeave={() => setHoveredWord(null)}
+        onMouseEnter={() => setHoveredWordId(wordId)}
+        onMouseLeave={() => setHoveredWordId(null)}
         className={`braille-word ${isHovered ? 'translated' : ''}`}
       >
         {displayText}
       </span>
     );
   };
+  
+  const DisplayedPageNumber = () => {
+    if (currentPage === 1) return "Cover";
+    if (currentPage === totalPages - 1) return "Back";
+    return `Page ${currentPage - 1}`;
+  }
   
   return (
     <section id="braille-book" className="py-24 bg-light-bg">
@@ -113,15 +128,17 @@ const BrailleMenuBook = () => {
               >
                 <div className="page-face front">
                   <div className="page-content">
-                    <h3 className={`text-3xl font-serif font-bold mb-8 ${page.type === 'cover' ? 'text-center' : ''}`}>
-                      {page.title}
-                    </h3>
+                    {page.title && (
+                      <h3 className={`text-3xl font-serif font-bold mb-8 ${page.type === 'cover' ? 'text-center' : ''}`}>
+                        {page.title}
+                      </h3>
+                    )}
                     <div className="space-y-4">
                       {page.content.map((line, lineIndex) => (
                         <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
                           {line.split(' ').map((word, wordIndex) => (
                             <React.Fragment key={wordIndex}>
-                              <Word text={word} lineIdx={lineIndex} wordIdx={wordIndex} />
+                              <Word text={word} pageIdx={index} lineIdx={lineIndex} wordIdx={wordIndex} />
                               {' '}
                             </React.Fragment>
                           ))}
@@ -150,7 +167,7 @@ const BrailleMenuBook = () => {
             
             <div className="text-center">
               <div className="text-2xl font-serif font-bold text-dark-text">
-                Page {currentPage + 1} of {totalPages}
+                <DisplayedPageNumber />
               </div>
             </div>
             
