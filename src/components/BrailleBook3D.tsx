@@ -31,7 +31,7 @@ const BookPage: React.FC<BookPageProps> = ({
   hoveredChar
 }) => {
   const pageRef = useRef<THREE.Group>(null);
-  const { raycaster, camera, scene } = useThree();
+  const { raycaster, camera } = useThree();
   const [mouse] = useState(new THREE.Vector2());
 
   const handlePointerMove = (event: any) => {
@@ -50,7 +50,7 @@ const BookPage: React.FC<BookPageProps> = ({
       
       if (intersects.length > 0) {
         // Find the closest braille character
-        const closestChar = brailleChars.find((char, index) => {
+        const closestChar = brailleChars.find((char) => {
           const worldPos = new THREE.Vector3(...char.position);
           pageRef.current?.localToWorld(worldPos);
           return worldPos.distanceTo(intersects[0].point) < 0.02;
