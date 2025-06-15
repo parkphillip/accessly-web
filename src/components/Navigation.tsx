@@ -1,10 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, ArrowRight } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-
-const navItems: { id: string; label: string; href?: string }[] = [{
+const navItems: {
+  id: string;
+  label: string;
+  href?: string;
+}[] = [{
   id: 'hero',
   label: 'Home'
 }, {
@@ -22,18 +24,15 @@ const navItems: { id: string; label: string; href?: string }[] = [{
   label: 'Fund Our Mission',
   href: '/fund'
 }];
-
 const Navigation = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const [activeSection, setActiveSection] = useState(isHomePage ? 'hero' : '');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-      
       const sections = navItems.map(item => item.id);
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
@@ -43,14 +42,11 @@ const Navigation = () => {
         }
         return false;
       });
-      
       if (currentSection) {
         setActiveSection(currentSection);
       }
     };
-
     const handleOtherPageScroll = () => setIsScrolled(window.scrollY > 20);
-
     if (isHomePage) {
       window.addEventListener('scroll', handleScroll);
       handleScroll();
@@ -59,7 +55,6 @@ const Navigation = () => {
       window.addEventListener('scroll', handleOtherPageScroll);
       handleOtherPageScroll();
     }
-
     return () => {
       if (isHomePage) {
         window.removeEventListener('scroll', handleScroll);
@@ -68,82 +63,46 @@ const Navigation = () => {
       }
     };
   }, [isHomePage]);
-
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
   };
-
-  return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-off-white/95 backdrop-blur-sm shadow-subtle border-b border-light-gray' 
-        : 'bg-transparent'
-    }`}>
+  return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-off-white/95 backdrop-blur-sm shadow-subtle border-b border-light-gray' : 'bg-transparent'}`}>
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-4">
-            {isHomePage ? (
-              <button 
-                onClick={() => scrollToSection('hero')}
-                className="flex items-center space-x-3" 
-              >
+            {isHomePage ? <button onClick={() => scrollToSection('hero')} className="flex items-center space-x-3">
+                <span className="font-heading font-bold text-dark-text text-xl">
+                  Accessly
+                </span>
+              </button> : <Link to="/" className="flex items-center space-x-3">
                 <span className="text-2xl font-heading font-bold text-dark-text">
                   Accessly
                 </span>
-              </button>
-            ) : (
-              <Link to="/" className="flex items-center space-x-3">
-                <span className="text-2xl font-heading font-bold text-dark-text">
-                  Accessly
-                </span>
-              </Link>
-            )}
+              </Link>}
           </div>
 
           {/* Navigation Menu */}
           <div className="hidden md:flex items-center space-x-2">
             {navItems.map(item => {
-              if (item.href) {
-                return (
-                  <Link
-                    key={item.id}
-                    to={item.href}
-                    className="relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base text-medium-text hover:text-dark-text hover:bg-subtle-gray/70"
-                  >
+            if (item.href) {
+              return <Link key={item.id} to={item.href} className="relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base text-medium-text hover:text-dark-text hover:bg-subtle-gray/70">
                     {item.label}
-                  </Link>
-                );
-              }
-              
-              return isHomePage ? (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base ${
-                    activeSection === item.id 
-                      ? 'text-brand-navy' 
-                      : 'text-medium-text hover:text-dark-text hover:bg-subtle-gray/70'
-                  }`}
-                >
+                  </Link>;
+            }
+            return isHomePage ? <button key={item.id} onClick={() => scrollToSection(item.id)} className={`relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base ${activeSection === item.id ? 'text-brand-navy' : 'text-medium-text hover:text-dark-text hover:bg-subtle-gray/70'}`}>
                   {item.label}
-                  {activeSection === item.id && (
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-1 bg-brand-terracotta rounded-full"></div>
-                  )}
-                </button>
-              ) : (
-                <Link
-                  key={item.id}
-                  to={`/#${item.id}`}
-                  className="relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base text-medium-text hover:text-dark-text hover:bg-subtle-gray/70"
-                >
+                  {activeSection === item.id && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-1 bg-brand-terracotta rounded-full"></div>}
+                </button> : <Link key={item.id} to={`/#${item.id}`} className="relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base text-medium-text hover:text-dark-text hover:bg-subtle-gray/70">
                   {item.label}
-                </Link>
-              );
-            })}
+                </Link>;
+          })}
              <div className="pl-2">
                 <Link to="/partner">
                   <Button className="group">
@@ -160,8 +119,6 @@ const Navigation = () => {
           </button>
         </div>
       </div>
-    </nav>
-  );
+    </nav>;
 };
-
 export default Navigation;
