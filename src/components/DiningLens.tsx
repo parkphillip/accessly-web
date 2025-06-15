@@ -89,7 +89,7 @@ const DiningLens = () => {
     useEffect(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
 
-        // Set initial state - first card starts in position, others start from bottom
+        // Set initial state - first card starts in position, others start with small peek
         cardsRef.current.forEach((card, index) => {
             if (card) {
                 if (index === 0) {
@@ -100,9 +100,9 @@ const DiningLens = () => {
                         opacity: 1,
                     });
                 } else {
-                    // Other cards start from bottom of screen
+                    // Other cards start with just a small peek visible (40px showing)
                     gsap.set(card, {
-                        y: '100vh',
+                        y: `calc(100vh - 40px)`,
                         rotate: index % 2 === 0 ? '-4deg' : '4deg',
                         opacity: 1,
                     });
@@ -114,7 +114,7 @@ const DiningLens = () => {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.current,
-                start: 'top top',
+                start: 'top+=20% top',
                 end: `+=${cardsData.length * 150}%`,
                 pin: true,
                 scrub: 1,
