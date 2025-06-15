@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, User, BookOpen, Heart } from 'lucide-react';
 import FormStep from './forms/FormStep';
@@ -110,14 +109,14 @@ const OrderForm = () => {
   };
 
   return (
-    <section id="order" className="py-24 bg-light-bg">
+    <section className="py-24 bg-light-bg">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-heading font-bold text-dark-text mb-4 headline-underline">
-            Get Your Free Braille Menus
+            Partner with Us
           </h2>
           <p className="text-lg text-medium-text max-w-3xl mx-auto">
-            Join hundreds of restaurants in making dining more accessible. The process is quick, simple, and completely free.
+            Join hundreds of restaurants in making dining more accessible. Let's make an impact together.
           </p>
         </div>
 

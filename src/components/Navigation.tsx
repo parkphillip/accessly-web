@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, ArrowRight } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const navItems = [{
   id: 'hero',
@@ -10,11 +10,11 @@ const navItems = [{
   id: 'impact',
   label: 'Impact'
 }, {
+  id: 'process',
+  label: 'Our Process'
+}, {
   id: 'network',
   label: 'Network'
-}, {
-  id: 'order',
-  label: 'Get Started'
 }];
 
 const Navigation = () => {
@@ -134,6 +134,14 @@ const Navigation = () => {
                 </Link>
               )
             ))}
+             <div className="pl-2">
+                <Link to="/partner">
+                  <Button className="group">
+                    Partner With Us
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}

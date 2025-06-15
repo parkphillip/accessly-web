@@ -1,13 +1,12 @@
 
-
 import React from 'react';
 import Navigation from '../components/Navigation';
 import Hero from '../components/Hero';
 import ImpactMetrics from '../components/ImpactMetrics';
 import NetworkMap from '../components/NetworkMap';
-import OrderForm from '../components/OrderForm';
 import Footer from '../components/Footer';
 import Marquee from '../components/Marquee';
+import ProcessSection from '../components/ProcessSection';
 
 const Index = () => {
   return (
@@ -16,8 +15,8 @@ const Index = () => {
       <Hero />
       <Marquee />
       <ImpactMetrics />
+      <ProcessSection />
       <NetworkMap />
-      <OrderForm />
       <Footer />
     </div>
   );

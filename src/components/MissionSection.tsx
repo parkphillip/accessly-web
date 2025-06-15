@@ -44,13 +44,13 @@ const MissionSection = () => {
       >
         Accessly provides free, high-quality braille menus to restaurants. We
         believe access shouldn't be an afterthought but built into hospitality.
-        Discover how our simple process makes it happen.
+        Our simple process above makes it happen.
       </motion.p>
 
       <motion.div variants={fadeInVariants}>
-        <Link to="/process">
+        <Link to="/partner">
           <Button size="lg" className="group">
-            See Our Process
+            Partner With Us
             <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Button>
         </Link>
