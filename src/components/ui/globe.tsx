@@ -1,3 +1,4 @@
+
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
@@ -16,23 +17,8 @@ declare module "@react-three/fiber" {
 extend({ ThreeGlobe: ThreeGlobe });
 
 const RING_PROPAGATION_SPEED = 3;
+const aspect = 1.2;
 const cameraZ = 300;
-
-const isLand = (lon: number, lat: number, polygons: number[][][]): boolean => {
-  for (const polygon of polygons) {
-    let isInside = false;
-    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      const xi = polygon[i][0], yi = polygon[i][1];
-      const xj = polygon[j][0], yj = polygon[j][1];
-      const intersect = ((yi > lat) !== (yj > lat)) && (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi);
-      if (intersect) {
-        isInside = !isInside;
-      }
-    }
-    if (isInside) return true;
-  }
-  return false;
-};
 
 type Position = {
   order: number;
@@ -138,67 +124,6 @@ export function Globe({ globeConfig, data }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
   const groupRef = useRef();
   const [isInitialized, setIsInitialized] = useState(false);
-  const [landPolygons, setLandPolygons] = useState<number[][][] | null>(null);
-  const [landPoints, setLandPoints] = useState<{lat: number, lng: number, size: number, color: string}[]>([]);
-
-  useEffect(() => {
-    const landURL = "https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json";
-    fetch(landURL)
-      .then(res => res.json())
-      .then(topoData => {
-        if (!topoData.objects.land || !topoData.transform) return;
-
-        const { land } = topoData.objects;
-        const { arcs: allArcs, transform } = topoData;
-        const { scale, translate } = transform;
-        
-        const decodedArcs = allArcs.map((arc: [number, number][]) => {
-          let x = 0, y = 0;
-          return arc.map(([dx, dy]: [number, number]) => {
-            x += dx;
-            y += dy;
-            return [x, y];
-          });
-        });
-        
-        const polygons = land.geometries.map((geom: { arcs: number[][] }) => 
-          geom.arcs.map((arcIndices: number[]) => 
-            arcIndices.map((arcIndex: number) => {
-              const arc = decodedArcs[arcIndex < 0 ? ~arcIndex : arcIndex];
-              const points = arc.map((point: [number, number]) => [
-                point[0] * scale[0] + translate[0],
-                point[1] * scale[1] + translate[1],
-              ]);
-              return arcIndex < 0 ? points.slice().reverse() : points;
-            }).flat()
-          )
-        ).flat();
-
-        setLandPolygons(polygons);
-      }).catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    if (!landPolygons) return;
-
-    const points: {lat: number, lng: number, size: number, color: string}[] = [];
-    const navy = '#2c5282';
-    
-    const resolution = 2.0; // degrees
-    for (let lat = -90; lat <= 90; lat += resolution) {
-        for (let lng = -180; lng <= 180; lng += resolution) {
-            if (isLand(lng, lat, landPolygons)) {
-                points.push({
-                    lat,
-                    lng,
-                    size: 0.5, // custom property to differentiate land points
-                    color: navy
-                });
-            }
-        }
-    }
-    setLandPoints(points);
-  }, [landPolygons]);
 
   const defaultProps = {
     pointSize: 1,
@@ -250,40 +175,46 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
   // Build data when globe is initialized or when data changes
   useEffect(() => {
-    if (!globeRef.current || !isInitialized) return;
+    if (!globeRef.current || !isInitialized || !data) return;
 
-    let allPoints: any[] = [];
-    if (data) {
-        const arcPoints: any[] = [];
-        data.forEach(arc => {
-            arcPoints.push({
-                lat: arc.startLat,
-                lng: arc.startLng,
-                size: defaultProps.pointSize,
-                color: arc.color,
-                order: arc.order,
-            });
-            arcPoints.push({
-                lat: arc.endLat,
-                lng: arc.endLng,
-                size: defaultProps.pointSize,
-                color: arc.color,
-                order: arc.order
-            });
-        });
-        const filteredArcPoints = arcPoints.filter(
-          (v, i, a) =>
-            a.findIndex((v2) =>
-              v2.lat === v.lat && v2.lng === v.lng
-            ) === i,
-        );
-        allPoints = [...landPoints, ...filteredArcPoints];
+    const arcs = data;
+    let points = [];
+    for (let i = 0; i < arcs.length; i++) {
+      const arc = arcs[i];
+      points.push({
+        size: defaultProps.pointSize,
+        order: arc.order,
+        color: arc.color,
+        lat: arc.startLat,
+        lng: arc.startLng,
+      });
+      points.push({
+        size: defaultProps.pointSize,
+        order: arc.order,
+        color: arc.color,
+        lat: arc.endLat,
+        lng: arc.endLng,
+      });
     }
 
+    // remove duplicates for same lat and lng
+    const filteredPoints = points.filter(
+      (v, i, a) =>
+        a.findIndex((v2) =>
+          ["lat", "lng"].every(
+            (k) => v2[k as "lat" | "lng"] === v[k as "lat" | "lng"],
+          ),
+        ) === i,
+    );
+
     globeRef.current
+      .hexPolygonsData(countries.features)
+      .hexPolygonResolution(3)
+      .hexPolygonMargin(0.7)
       .showAtmosphere(defaultProps.showAtmosphere)
       .atmosphereColor(defaultProps.atmosphereColor)
-      .atmosphereAltitude(defaultProps.atmosphereAltitude);
+      .atmosphereAltitude(defaultProps.atmosphereAltitude)
+      .hexPolygonColor(() => defaultProps.polygonColor);
 
     globeRef.current
       .arcsData(data)
@@ -300,13 +231,11 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .arcDashAnimateTime(() => defaultProps.arcTime);
 
     globeRef.current
-      .pointsData(allPoints)
-      .pointLat((d: any) => d.lat)
-      .pointLng((d: any) => d.lng)
-      .pointColor((d: any) => d.color)
+      .pointsData(filteredPoints)
+      .pointColor((e) => (e as { color: string }).color)
       .pointsMerge(true)
       .pointAltitude(0.0)
-      .pointRadius((d: any) => (d.size === 0.5 ? 0.1 : 0.2));
+      .pointRadius(2);
 
     globeRef.current
       .ringsData([])
@@ -319,7 +248,6 @@ export function Globe({ globeConfig, data }: WorldProps) {
   }, [
     isInitialized,
     data,
-    landPoints,
     defaultProps.pointSize,
     defaultProps.showAtmosphere,
     defaultProps.atmosphereColor,
@@ -334,7 +262,30 @@ export function Globe({ globeConfig, data }: WorldProps) {
   // Handle rings animation with cleanup
   useEffect(() => {
     if (!globeRef.current || !isInitialized || !data) return;
-    // Removed interval logic for pulsating rings
+
+    const interval = setInterval(() => {
+      if (!globeRef.current) return;
+
+      const newNumbersOfRings = genRandomNumbers(
+        0,
+        data.length,
+        Math.floor((data.length * 4) / 5),
+      );
+
+      const ringsData = data
+        .filter((d, i) => newNumbersOfRings.includes(i))
+        .map((d) => ({
+          lat: d.startLat,
+          lng: d.startLng,
+          color: d.color,
+        }));
+
+      globeRef.current.ringsData(ringsData);
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [isInitialized, data]);
 
   return <group ref={groupRef} />;
@@ -347,16 +298,17 @@ export function WebGLRendererConfig() {
     gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
     gl.setClearColor(0xffffff, 0);
-  }, [gl, size]);
+  }, []);
 
   return null;
 }
 
 export function World(props: WorldProps) {
   const { globeConfig } = props;
+  const scene = new Scene();
+  scene.fog = new Fog(0xffffff, 400, 2000);
   return (
-    <Canvas camera={{ fov: 50, near: 180, far: 1800, position: [0, 0, cameraZ] }}>
-      <fog attach="fog" args={[0xffffff, 400, 2000]} />
+    <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
       <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
       <directionalLight

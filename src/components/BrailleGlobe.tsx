@@ -1,9 +1,6 @@
-import React, { useRef, useMemo, Suspense } from 'react';
+import React, { useRef, useMemo, Suspense, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import world110 from "@/data/world110.json";
 
 const vertexShader = `
   attribute float size;
@@ -25,33 +22,90 @@ const fragmentShader = `
   }
 `;
 
-function topoArcsToLonLat(topo: any) {
-  if (!topo || !topo.transform || !topo.arcs) {
-    return [];
-  }
-  const { scale, translate } = topo.transform;
-  return topo.arcs
-    .filter(Boolean) // Safely handle any invalid arc entries
-    .flatMap((arc: number[][]) => {
-      let lastX = 0;
-      let lastY = 0;
-      return arc.map(([dx, dy]: number[]) => {
-        lastX += dx;
-        lastY += dy;
-        return [
-          lastX * scale[0] + translate[0],
-          lastY * scale[1] + translate[1],
-        ];
-      });
-  });
-}
+// Lat/Lon bounding boxes for continents (approximate)
+const continents = [
+  // North America
+  { lon: [-168, -55], lat: [15, 75] },
+  // South America
+  { lon: [-81, -34], lat: [-55, 12] },
+  // Europe & Asia
+  { lon: [-10, 140], lat: [10, 75] },
+  // Africa
+  { lon: [-17, 51], lat: [-34, 37] },
+  // Australia
+  { lon: [113, 153], lat: [-43, -10] },
+  // Antarctica
+  { lon: [-180, 180], lat: [-85, -65] },
+];
 
-const landLonLat = topoArcsToLonLat(world110).slice(); // Use slice for a shallow copy as requested
+const isLand = (lon: number, lat: number, polygons: number[][][]): boolean => {
+  for (const polygon of polygons) {
+    let isInside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      const xi = polygon[i][0], yi = polygon[i][1];
+      const xj = polygon[j][0], yj = polygon[j][1];
+      const intersect = ((yi > lat) !== (yj > lat)) && (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi);
+      if (intersect) {
+        isInside = !isInside;
+      }
+    }
+    if (isInside) return true;
+  }
+  return false;
+};
 
 const GlobeDots = () => {
   const ref = useRef<THREE.Points>(null!);
+  const [landPolygons, setLandPolygons] = useState<number[][][] | null>(null);
+
+  useEffect(() => {
+    const landURL = "https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json";
+    fetch(landURL)
+      .then(res => res.json())
+      .then(topoData => {
+        if (!topoData.objects.land || !topoData.transform) return;
+
+        const { land } = topoData.objects;
+        const { arcs: allArcs, transform } = topoData;
+        const { scale, translate } = transform;
+        
+        const decodedArcs = allArcs.map((arc: [number, number][]) => {
+          let x = 0, y = 0;
+          return arc.map(([dx, dy]: [number, number]) => {
+            x += dx;
+            y += dy;
+            return [x, y];
+          });
+        });
+        
+        const polygons = land.geometries.map((geom: { arcs: number[][] }) => 
+          geom.arcs.map((arcIndices: number[]) => 
+            arcIndices.map((arcIndex: number) => {
+              const arc = decodedArcs[arcIndex < 0 ? ~arcIndex : arcIndex];
+              const points = arc.map((point: [number, number]) => [
+                point[0] * scale[0] + translate[0],
+                point[1] * scale[1] + translate[1],
+              ]);
+              return arcIndex < 0 ? points.slice().reverse() : points;
+            }).flat()
+          )
+        ).flat();
+
+        setLandPolygons(polygons);
+      }).catch(console.error);
+  }, []);
 
   const { positions, colors, sizes, pulseIndexes } = useMemo(() => {
+    if (!landPolygons) {
+        return {
+            positions: new Float32Array(),
+            colors: new Float32Array(),
+            sizes: new Float32Array(),
+            pulseIndexes: [],
+        };
+    }
+
+    const maxPoints = 9000;
     const radius = 2.5;
 
     const tempPositions: number[] = [];
@@ -64,33 +118,42 @@ const GlobeDots = () => {
     const yellow = new THREE.Color('#fbbf24'); // Warm yellow
 
     let pointIndex = 0;
+    
+    continents.forEach(continent => {
+        const density = Math.abs(continent.lon[1] - continent.lon[0]) * Math.abs(continent.lat[1] - continent.lat[0]);
+        const numPoints = Math.floor(density * 0.06);
 
-    landLonLat.forEach(([lon, lat], i) => {
-      // down-sample: keep 1 of every 4 points to avoid millions
-      if (i % 4 !== 0) return;
+        for (let i = 0; i < numPoints && pointIndex < maxPoints; i++) {
+            const lon = THREE.MathUtils.randFloat(continent.lon[0], continent.lon[1]);
+            const lat = THREE.MathUtils.randFloat(continent.lat[0], continent.lat[1]);
+            
+            if (!isLand(lon, lat, landPolygons)) {
+                continue;
+            }
+            
+            const latRad = lat * (Math.PI / 180);
+            const lonRad = lon * (Math.PI / 180);
 
-      const latR = THREE.MathUtils.degToRad(lat);
-      const lonR = THREE.MathUtils.degToRad(lon);
+            const x = radius * Math.cos(latRad) * Math.cos(lonRad);
+            const y = radius * Math.sin(latRad);
+            const z = radius * Math.cos(latRad) * Math.sin(lonRad);
+            
+            tempPositions.push(x, y, z);
 
-      const x = radius * Math.cos(latR) * Math.cos(lonR);
-      const y = radius * Math.sin(latR);
-      const z = radius * Math.cos(latR) * Math.sin(lonR);
-
-      tempPositions.push(x, y, z);
-
-      let color;
-      const rand = Math.random();
-      if (rand > 0.985) {
-        color = yellow;
-        if (rand > 0.995) pulseIndexes.push(pointIndex);
-      } else if (rand > 0.97) {
-        color = white;
-      } else {
-        color = navy;
-      }
-      tempColors.push(color.r, color.g, color.b);
-      tempSizes.push(Math.random() * 1.5 + 0.8);
-      pointIndex++;
+            let color;
+            const rand = Math.random();
+            if (rand > 0.985) {
+                color = yellow;
+                if (rand > 0.995) pulseIndexes.push(pointIndex);
+            } else if (rand > 0.97) {
+                color = white;
+            } else {
+                color = navy;
+            }
+            tempColors.push(color.r, color.g, color.b);
+            tempSizes.push(Math.random() * 1.5 + 0.8);
+            pointIndex++;
+        }
     });
 
     const positions = new Float32Array(tempPositions);
@@ -98,7 +161,7 @@ const GlobeDots = () => {
     const sizes = new Float32Array(tempSizes);
 
     return { positions, colors, sizes, pulseIndexes };
-  }, []);
+  }, [landPolygons]);
 
   useFrame((state, delta) => {
     ref.current.rotation.y += delta * 0.05;
