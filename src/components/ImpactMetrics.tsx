@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ImpactStats } from './ImpactStats';
+
 const itemVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -32,21 +33,7 @@ const ImpactMetrics = () => {
         </motion.div>
 
         <div className="mb-24">
-            <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true,
-          amount: 0.3
-        }} transition={{
-          duration: 0.8,
-          ease: "easeOut"
-        }}>
-              <ImpactStats />
-            </motion.div>
+            <ImpactStats />
         </div>
 
         <motion.div className="bg-black/20 border border-white/10 text-off-white p-12 rounded-lg" initial="hidden" whileInView="visible" viewport={{
