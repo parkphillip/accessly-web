@@ -35,9 +35,9 @@ export default function GlobeDemo() {
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [44 / 255, 82 / 255, 130 / 255], // brand-navy for land
-      markerColor: [224 / 255, 122 / 255, 95 / 255], // Terracotta orange
-      glowColor: [1, 0.7, 0.5], // Warm orange glow
+      baseColor: [0.5, 0.7, 0.9], // Lighter blue for land
+      markerColor: [224 / 255, 122 / 255, 95 / 255], // Terracotta orange for markers
+      glowColor: [0.4, 0.6, 1.0], // Blue glow
       markers: [
         // Extracted from previous sample data
         { location: [-19.885592, -43.951191], size: 0.05 },
