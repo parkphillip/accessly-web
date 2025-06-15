@@ -1,86 +1,61 @@
 
 "use client";
+import { useEffect, useRef } from "react";
+import createGlobe from "cobe";
 
-import { World } from "@/components/ui/globe";
-
-const globeConfig = {
-  pointSize: 1,
-  globeColor: "#062056",
-  showAtmosphere: true,
-  atmosphereColor: "#38bdf8",
-  atmosphereAltitude: 0.1,
-  emissive: "#062056",
-  emissiveIntensity: 0.1,
-  shininess: 0.9,
-  polygonColor: "rgba(255,255,255,0.7)",
-  ambientLight: "#38bdf8",
-  directionalLeftLight: "#ffffff",
-  directionalTopLight: "#ffffff",
-  pointLight: "#ffffff",
-  arcTime: 1000,
-  arcLength: 0.9,
-  rings: 1,
-  maxRings: 3,
-  initialPosition: { lat: 22.3193, lng: 114.1694 },
-  autoRotate: true,
-  autoRotateSpeed: 0.5,
-};
-
-const colors = ["#06b6d4", "#3b82f6", "#6366f1"];
-const sampleArcs = [
-  {
-    order: 1,
-    startLat: -19.885592,
-    startLng: -43.951191,
-    endLat: 28.6139,
-    endLng: 77.209,
-    arcAlt: 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 1,
-    startLat: 51.5072,
-    startLng: -0.1276,
-    endLat: 1.3521,
-    endLng: 103.8198,
-    arcAlt: 0.5,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 2,
-    startLat: -33.8688,
-    startLng: 151.2093,
-    endLat: 34.0522,
-    endLng: -118.2437,
-    arcAlt: 0.7,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 2,
-    startLat: 37.5665,
-    startLng: 126.978,
-    endLat: 37.7595,
-    endLng: -122.4367,
-    arcAlt: 0.2,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-  {
-    order: 3,
-    startLat: 40.7128,
-    startLng: -74.006,
-    endLat: 37.5665,
-    endLng: 126.978,
-    arcAlt: 0.5,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  },
-];
+// Based on: https://github.com/shuding/cobe
 
 export default function GlobeDemo() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    let phi = 0;
+
+    if (!canvasRef.current) return;
+
+    const globe = createGlobe(canvasRef.current, {
+      devicePixelRatio: 2,
+      width: 600 * 2,
+      height: 600 * 2,
+      phi: 0,
+      theta: 0.3,
+      dark: 1,
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 6,
+      baseColor: [6 / 255, 32 / 255, 86 / 255], // #062056 from previous globe
+      markerColor: [0.1, 0.8, 1], // A nice light blue
+      glowColor: [0.22, 0.74, 0.97], // #38bdf8 from previous globe
+      markers: [
+        // Extracted from previous sample data
+        { location: [-19.885592, -43.951191], size: 0.05 },
+        { location: [28.6139, 77.209], size: 0.05 },
+        { location: [1.3521, 103.8198], size: 0.05 },
+        { location: [51.5072, -0.1276], size: 0.05 },
+        { location: [-33.8688, 151.2093], size: 0.05 },
+        { location: [34.0522, -118.2437], size: 0.05 },
+        { location: [37.5665, 126.978], size: 0.05 },
+        { location: [40.7128, -74.006], size: 0.1 },
+        { location: [37.7595, -122.4367], size: 0.1 },
+      ],
+      onRender: (state) => {
+        // Called on every animation frame.
+        state.phi = phi;
+        phi += 0.005;
+      },
+    });
+
+    return () => {
+      globe.destroy();
+    };
+  }, []);
+
   return (
-    <div className="w-full h-full flex justify-center items-center filter drop-shadow-[0_20px_20px_rgba(128,128,128,0.3)]">
-      <div style={{ width: 600, height: 600 }}>
-        <World globeConfig={globeConfig} data={sampleArcs} />
-      </div>
+    <div className="w-full h-full flex justify-center items-center">
+      <canvas
+        ref={canvasRef}
+        style={{ width: 600, height: 600, maxWidth: "100%", aspectRatio: 1 }}
+      />
     </div>
   );
 }

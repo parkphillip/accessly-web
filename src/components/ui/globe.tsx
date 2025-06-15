@@ -177,7 +177,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .pointColor((e) => (e as { color: string }).color)
       .pointsMerge(true)
       .pointAltitude(0.0)
-      .pointRadius(0.5);
+      .pointRadius(2);
 
     globeRef.current
       .ringsData([])
