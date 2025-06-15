@@ -1,8 +1,6 @@
-
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ImpactStats } from './ImpactStats';
-import { Image as ImageIcon } from 'lucide-react';
 
 const itemVariants: Variants = {
   hidden: {
@@ -22,10 +20,13 @@ const itemVariants: Variants = {
 const ImpactMetrics = () => {
   return <section id="impact" className="py-24 bg-[#111827]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div className="text-center mb-20" initial="hidden" whileInView="visible" viewport={{
-        once: true,
-        amount: 0.3
-      }} variants={itemVariants}>
+        <motion.div 
+          className="text-center mb-20" 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, amount: 0.3 }} 
+          variants={itemVariants}
+        >
           <h2 className="text-4xl lg:text-5xl font-heading font-bold text-off-white mb-4">
             Dining Through a Different Lens
           </h2>
@@ -34,50 +35,24 @@ const ImpactMetrics = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 xl:gap-16 items-center mb-24">
-            <motion.div className="lg:col-span-2 min-h-[480px]" initial={{
-          opacity: 0,
-          y: 20
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true,
-          amount: 0.2
-        }} transition={{
-          duration: 0.8,
-          ease: "easeOut"
-        }}>
-              <div className="relative h-full w-full bg-gray-900/25 bg-subtle-dots p-8 rounded-2xl flex flex-col justify-center items-center text-center backdrop-blur-sm border border-gray-700/50">
-                  <ImageIcon className="w-20 h-20 text-gray-500 mb-6" strokeWidth={0.75} />
-                  <h3 className="text-3xl font-heading text-off-white mb-3">The Accessibility Gap</h3>
-                  <p className="text-slate-400 max-w-md">
-                    This space is reserved for a creative visual that powerfully illustrates the challenges faced by diners with vision impairments.
-                  </p>
-              </div>
-            </motion.div>
-            <motion.div className="lg:col-span-1" initial={{
-          opacity: 0,
-          y: 20
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true,
-          amount: 0.3
-        }} transition={{
-          duration: 0.8,
-          ease: "easeOut",
-          delay: 0.2
-        }}>
+        <div className="mb-24">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
+              viewport={{ once: true, amount: 0.3 }} 
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
               <ImpactStats />
             </motion.div>
         </div>
 
-        <motion.div className="structured-card bg-brand-navy text-off-white p-12 rounded-lg" initial="hidden" whileInView="visible" viewport={{
-        once: true,
-        amount: 0.5
-      }} variants={itemVariants}>
+        <motion.div 
+          className="structured-card bg-brand-navy text-off-white p-12 rounded-lg" 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, amount: 0.5 }} 
+          variants={itemVariants}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
             <div className="lg:col-span-2">
               <h3 className="text-3xl font-heading font-bold mb-4 headline-underline after:bg-blue-400">
