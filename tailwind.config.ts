@@ -76,10 +76,9 @@ export default {
 				}
 			},
 			fontFamily: {
-				'serif': ['Crimson Pro', 'serif'],
+				'heading': ['Manrope', 'sans-serif'],
 				'sans': ['Inter', 'sans-serif'],
 				'mono': ['JetBrains Mono', 'monospace'],
-				'script': ['Kalam', 'cursive'], // Kept for very limited, intentional use
 			},
 			backgroundImage: {
 				// Simplified textures

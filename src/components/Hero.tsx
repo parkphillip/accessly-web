@@ -19,7 +19,7 @@ const Hero = () => {
         {/* Left Column: Text Content */}
         <div className="text-center lg:text-left">
           <div className="max-w-3xl">
-            <h1 className="text-5xl lg:text-7xl font-serif font-bold text-dark-text leading-tight tracking-tight">
+            <h1 className="text-5xl lg:text-7xl font-heading font-extrabold text-dark-text leading-tight tracking-tight">
               Building an <AnimatedText text={"Accessible"} className="text-brand-navy font-mono" />
               <span className="text-brand-navy font-mono" style={{ display: 'block', lineHeight: '1.1', minHeight: '1.2em' }}>
                 World

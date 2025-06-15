@@ -19,7 +19,7 @@ const Marquee = () => {
       <div className="marquee-track flex gap-12 whitespace-nowrap">
         {extendedItems.map((item, index) => (
           <div key={index} className="flex items-center gap-12">
-            <span className="text-xl font-serif italic">{item}</span>
+            <span className="text-xl font-heading italic">{item}</span>
             <span className="text-brand-terracotta text-2xl font-bold">•</span>
           </div>
         ))}
