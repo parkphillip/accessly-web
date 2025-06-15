@@ -136,6 +136,12 @@ export default {
 				'blink': {
 					'50%': { borderColor: 'transparent' }
 				},
+        'blob': {
+          '0%': { transform: 'translate(0px, 0px) scale(1)' },
+          '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+          '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+          '100%': { transform: 'translate(0px, 0px) scale(1)' },
+        },
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -144,6 +150,7 @@ export default {
 				'scale-in': 'scale-in 0.3s ease-out',
 				'typewriter': 'typewriter 3s steps(30) infinite',
 				'blink': 'blink 1s step-end infinite',
+        'blob': 'blob 7s infinite ease-in-out',
 			},
 			boxShadow: {
 				'subtle': '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)',

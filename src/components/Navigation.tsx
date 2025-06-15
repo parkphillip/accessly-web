@@ -74,7 +74,7 @@ const Navigation = () => {
             <div className="hidden sm:block">
               <div className="bg-brand-navy text-off-white inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full shadow-subtle border border-brand-navy/20">
                 <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
-                Free Braille Menus
+                Now Accepting Partners
               </div>
             </div>
           </div>
@@ -109,7 +109,7 @@ const Navigation = () => {
         <div className="sm:hidden pb-3">
           <div className="bg-brand-navy text-off-white inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full shadow-subtle">
             <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
-            Free Braille Menus for Restaurants
+            Now Accepting Partners
           </div>
         </div>
       </div>

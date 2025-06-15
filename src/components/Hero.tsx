@@ -13,14 +13,19 @@ const Hero = () => {
     }
   };
   return (
-    <section id="hero" className="relative min-h-screen flex items-center bg-gradient-to-b from-white to-subtle-gray/20 py-32 md:py-24">
+    <section id="hero" className="relative min-h-screen flex items-center bg-gradient-to-b from-white to-subtle-gray/20 py-32 md:py-24 overflow-hidden">
+      {/* Soft Gradient Aura */}
+      <div className="absolute top-0 -left-1/4 w-96 h-96 lg:w-[32rem] lg:h-[32rem] bg-brand-terracotta/10 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
+      <div style={{ animationDelay: '2s' }} className="absolute top-1/4 -right-1/4 w-96 h-96 lg:w-[32rem] lg:h-[32rem] bg-brand-navy/10 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
+      <div style={{ animationDelay: '4s' }} className="absolute bottom-0 left-1/4 w-96 h-96 lg:w-[32rem] lg:h-[32rem] bg-subtle-gray/20 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
+
       <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
         {/* Left Side - Content */}
         <div className="space-y-8 z-10">
           <h1 className="text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-dark-text leading-tight">
             Braille Menus
-            <span className="block text-brand-navy">on <span className="italic text-brand-terracotta">Every</span> Table.</span>
+            <span className="block text-brand-navy">on <span className="italic">Every</span> Table.</span>
           </h1>
           
           <p className="text-lg lg:text-xl text-medium-text max-w-xl leading-relaxed">
