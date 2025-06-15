@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
@@ -34,7 +33,7 @@ const BrailleMenuBook = () => {
       { type: 'page', title: '', content: [] }, // Inside front cover
       {
         type: 'cover',
-        title: "The Grill House",
+        title: "Accessly Menus",
         content: ["Your Custom Menu", "Est. 2024"]
       },
       ...contentPages,
@@ -80,15 +79,15 @@ const BrailleMenuBook = () => {
   const Word = ({ text, pageIdx, lineIdx, wordIdx }: { text: string, pageIdx: number, lineIdx: number, wordIdx: number }) => {
     const wordId = `${pageIdx}-${lineIdx}-${wordIdx}`;
     const isHovered = hoveredWordId === wordId;
-    const displayText = isHovered ? text : translateToBraille(text);
 
     return (
       <span
         onMouseEnter={() => setHoveredWordId(wordId)}
         onMouseLeave={() => setHoveredWordId(null)}
         className={`braille-word ${isHovered ? 'translated' : ''}`}
+        data-english={text}
       >
-        {displayText}
+        {translateToBraille(text)}
       </span>
     );
   };
@@ -140,7 +139,7 @@ const BrailleMenuBook = () => {
                         <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
                           {line.split(' ').map((word, wordIndex) => (
                             <span key={wordIndex}>
-                              <Word text={word} pageIdx={index} lineIdx={lineIndex} wordIdx={wordIndex} />
+                              <Word text={word} pageIdx={index} lineIdx={lineIndex} wordIdx={wordIdx} />
                               {' '}
                             </span>
                           ))}

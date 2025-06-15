@@ -1,4 +1,3 @@
-
 /* --- 3D Book Experience --- */
 .book-container {
   display: flex;
@@ -100,27 +99,54 @@
 }
 
 .braille-word {
+  position: relative;
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.2rem;
   letter-spacing: 0.2em;
-  color: #6c757d; /* Softer color for a more subtle look */
+  color: #6c757d;
   cursor: pointer;
-  transition: all 0.3s ease; /* Transition all properties */
   display: inline-block;
   
-  /* New, more realistic embossed effect */
+  /* More realistic embossed effect */
   text-shadow: 
     0.5px 0.5px 1px rgba(255, 255, 255, 0.9),  /* Top-left highlight */
     -1px -1px 2px rgba(0, 0, 0, 0.2),      /* Bottom-right shadow for depth */
     1px 1px 3px rgba(0,0,0,0.1);           /* Softer drop shadow */
+
+  /* Transition for the fade-out effect */
+  transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
 }
 
-.braille-word.translated {
+/* The English translation, which fades in */
+.braille-word::after {
+  content: attr(data-english);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  
   font-family: 'Inter', sans-serif;
   font-weight: 500;
+  font-size: 1rem;
   color: #e07a5f; /* Terracotta for emphasis */
   text-shadow: none;
   letter-spacing: normal;
+  line-height: 1;
+
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+/* When translated, hide original braille and show English */
+.braille-word.translated {
+  color: transparent;
+  text-shadow: none;
+}
+
+.braille-word.translated::after {
+  opacity: 1;
 }
 
 .page.cover .page-content {
