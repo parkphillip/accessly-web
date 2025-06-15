@@ -2,7 +2,7 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
 import Hero from '../components/Hero';
-import ImpactMetrics from '../components/ImpactMetrics';
+import DiningLens from '../components/DiningLens';
 import CostOfInaccessibility from '../components/CostOfInaccessibility';
 import Footer from '../components/Footer';
 import Marquee from '../components/Marquee';
@@ -14,7 +14,7 @@ const Index = () => {
       <Navigation />
       <Hero />
       <Marquee />
-      <ImpactMetrics />
+      <DiningLens />
       <CostOfInaccessibility />
       <ProcessSection />
       <Footer />
