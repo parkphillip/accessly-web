@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
-import BrailleGlobe from './BrailleGlobe';
+import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
 
 const Hero = () => {
@@ -52,7 +51,7 @@ const Hero = () => {
         
         {/* Right Column: Globe */}
         <div className="hidden lg:flex justify-center items-center relative w-full h-[500px]">
-          <BrailleGlobe />
+          <GlobeDemo />
         </div>
       </div>
 
