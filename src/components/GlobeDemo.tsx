@@ -9,9 +9,21 @@ export default function GlobeDemo() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    let phi = 0;
-
     if (!canvasRef.current) return;
+
+    let phi = 0;
+    let targetPhi = 0;
+    let lastScrollY = window.scrollY;
+
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollY;
+      // Adjust target rotation based on scroll. The multiplier controls sensitivity.
+      targetPhi += scrollDelta * 0.003;
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     const globe = createGlobe(canvasRef.current, {
       devicePixelRatio: 2,
@@ -39,14 +51,15 @@ export default function GlobeDemo() {
         { location: [37.7595, -122.4367], size: 0.1 },
       ],
       onRender: (state) => {
-        // Called on every animation frame.
+        // Smoothly interpolate to the target rotation set by scrolling.
+        phi += (targetPhi - phi) * 0.05;
         state.phi = phi;
-        phi += 0.005;
       },
     });
 
     return () => {
       globe.destroy();
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
