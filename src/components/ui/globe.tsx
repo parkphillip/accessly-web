@@ -16,9 +16,9 @@ declare module "@react-three/fiber" {
 
 extend({ ThreeGlobe: ThreeGlobe });
 
-const RING_PROPAGATION_SPEED = 2;
+const RING_PROPAGATION_SPEED = 3;
 const aspect = 1.2;
-const cameraZ = 250;
+const cameraZ = 300;
 
 type Position = {
   order: number;
@@ -61,7 +61,6 @@ interface WorldProps {
   data: Position[];
 }
 
-// Mock countries data with basic continent shapes
 const countries = {
   features: [
     // North America
@@ -121,27 +120,25 @@ const countries = {
   ]
 };
 
-let numbersOfRings = [0];
-
 export function Globe({ globeConfig, data }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
   const groupRef = useRef();
   const [isInitialized, setIsInitialized] = useState(false);
 
   const defaultProps = {
-    pointSize: 2,
+    pointSize: 1,
     atmosphereColor: "#ffffff",
     showAtmosphere: true,
     atmosphereAltitude: 0.1,
-    polygonColor: "rgba(255,255,255,0.8)",
-    globeColor: "#2c5282",
-    emissive: "#062056",
+    polygonColor: "rgba(255,255,255,0.7)",
+    globeColor: "#1d072e",
+    emissive: "#000000",
     emissiveIntensity: 0.1,
     shininess: 0.9,
-    arcTime: 3000,
+    arcTime: 2000,
     arcLength: 0.9,
     rings: 1,
-    maxRings: 2,
+    maxRings: 3,
     ...globeConfig,
   };
 
@@ -212,8 +209,8 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
     globeRef.current
       .hexPolygonsData(countries.features)
-      .hexPolygonResolution(6)
-      .hexPolygonMargin(0.3)
+      .hexPolygonResolution(3)
+      .hexPolygonMargin(0.7)
       .showAtmosphere(defaultProps.showAtmosphere)
       .atmosphereColor(defaultProps.atmosphereColor)
       .atmosphereAltitude(defaultProps.atmosphereAltitude)
@@ -227,7 +224,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .arcEndLng((d) => (d as { endLng: number }).endLng * 1)
       .arcColor((e: any) => (e as { color: string }).color)
       .arcAltitude((e) => (e as { arcAlt: number }).arcAlt * 1)
-      .arcStroke(() => 0.5)
+      .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
       .arcDashLength(defaultProps.arcLength)
       .arcDashInitialGap((e) => (e as { order: number }).order * 1)
       .arcDashGap(15)
@@ -237,12 +234,12 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .pointsData(filteredPoints)
       .pointColor((e) => (e as { color: string }).color)
       .pointsMerge(true)
-      .pointAltitude(0.01)
-      .pointRadius(1.5);
+      .pointAltitude(0.0)
+      .pointRadius(2);
 
     globeRef.current
       .ringsData([])
-      .ringColor(() => "rgba(255,255,255,0.4)")
+      .ringColor(() => defaultProps.polygonColor)
       .ringMaxRadius(defaultProps.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
       .ringRepeatPeriod(
@@ -262,7 +259,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     defaultProps.maxRings,
   ]);
 
-  // Handle rings animation with cleanup - more subtle
+  // Handle rings animation with cleanup
   useEffect(() => {
     if (!globeRef.current || !isInitialized || !data) return;
 
@@ -272,7 +269,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
       const newNumbersOfRings = genRandomNumbers(
         0,
         data.length,
-        Math.floor((data.length * 2) / 5), // Fewer rings
+        Math.floor((data.length * 4) / 5),
       );
 
       const ringsData = data
@@ -280,11 +277,11 @@ export function Globe({ globeConfig, data }: WorldProps) {
         .map((d) => ({
           lat: d.startLat,
           lng: d.startLng,
-          color: "rgba(255,255,255,0.3)",
+          color: d.color,
         }));
 
       globeRef.current.ringsData(ringsData);
-    }, 4000); // Slower pulse
+    }, 2000);
 
     return () => {
       clearInterval(interval);
@@ -300,7 +297,7 @@ export function WebGLRendererConfig() {
   useEffect(() => {
     gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
-    gl.setClearColor(0x000000, 0);
+    gl.setClearColor(0xffffff, 0);
   }, []);
 
   return null;
@@ -313,21 +310,19 @@ export function World(props: WorldProps) {
   return (
     <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
-      <ambientLight color={globeConfig.ambientLight} intensity={0.8} />
+      <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
         position={new Vector3(-400, 100, 400)}
-        intensity={1}
       />
       <directionalLight
         color={globeConfig.directionalTopLight}
         position={new Vector3(-200, 500, 200)}
-        intensity={0.8}
       />
       <pointLight
         color={globeConfig.pointLight}
         position={new Vector3(-200, 500, 200)}
-        intensity={0.6}
+        intensity={0.8}
       />
       <Globe {...props} />
       <OrbitControls
@@ -335,7 +330,7 @@ export function World(props: WorldProps) {
         enableZoom={false}
         minDistance={cameraZ}
         maxDistance={cameraZ}
-        autoRotateSpeed={globeConfig.autoRotateSpeed || 0.3}
+        autoRotateSpeed={globeConfig.autoRotateSpeed}
         autoRotate={globeConfig.autoRotate}
         minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI - Math.PI / 3}
