@@ -1,4 +1,6 @@
+
 /* --- 3D Book Experience --- */
+/* ... keep existing code (.book-container, .book, .book-spine) */
 .book-container {
   display: flex;
   flex-direction: column;
@@ -39,7 +41,7 @@
   top: 0;
   right: 0;
   transform-origin: left center;
-  transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), box-shadow 0.8s cubic-bezier(0.65, 0, 0.35, 1);
   transform-style: preserve-3d;
   background-color: #f8f9fa; /* Page color */
   border-radius: 0 8px 8px 0;
@@ -49,6 +51,7 @@
 }
 
 .page.flipped {
+/* ... keep existing code */
   transform: rotateY(-180deg);
   box-shadow: 
     inset 0 0 20px rgba(0,0,0,0.05),
@@ -56,6 +59,7 @@
   border-radius: 8px 0 0 8px;
 }
 
+/* ... keep existing code (from .page-face to the end of the file) */
 .page-face {
   position: absolute;
   width: 100%;
