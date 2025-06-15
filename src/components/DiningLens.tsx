@@ -28,7 +28,7 @@ const cardsData = [
 type CardData = typeof cardsData[0];
 
 const LeftColumn = () => (
-    <div className="max-w-md text-center lg:text-left">
+    <div className="max-w-lg text-center lg:text-left">
         <h2 className="text-4xl lg:text-5xl font-heading font-bold text-dark-text mb-6 leading-tight tracking-tight">
             Dining Through a Different Lens
         </h2>
@@ -63,16 +63,41 @@ const LeftColumn = () => (
 
 const AnimatedCard = ({ card, i, scrollYProgress }: { card: CardData, i: number, scrollYProgress: MotionValue<number> }) => {
     const totalCards = cardsData.length;
-    const y = useTransform(scrollYProgress, [i / totalCards, (i + 1) / totalCards], ['25%', `-${i * 5}%`]);
-    const scale = useTransform(scrollYProgress, [i / totalCards, (i + 1) / totalCards], [0.9, 1]);
-    const opacity = useTransform(scrollYProgress, [i / totalCards, i / totalCards + 0.1], [0, 1]);
+
+    // Card 0 is the base card and is always visible.
+    if (i === 0) {
+        return (
+            <motion.div
+                style={{ zIndex: 0 }}
+                className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
+            >
+                <div className="bg-off-white p-4 pb-6 rounded-lg shadow-strong w-full max-w-md">
+                    <img src={card.image} alt={card.title} className="w-full h-56 object-cover rounded-md mb-4 bg-subtle-gray" />
+                    <h3 className="font-heading font-bold text-xl text-dark-text">{card.title}</h3>
+                    <p className="text-medium-text text-base mt-1">{card.description}</p>
+                </div>
+            </motion.div>
+        );
+    }
+    
+    // For subsequent cards (i > 0), they animate in.
+    // Each card's animation is triggered in a segment of the scroll progress.
+    const startProgress = (i - 1) / (totalCards - 1);
+    const endProgress = i / (totalCards - 1);
+    
+    // Animate `y` from below the container to its final stacked position.
+    const y = useTransform(scrollYProgress, [startProgress, endProgress], ['40%', `${-i * 25}px`]);
+    // Fade in the card as it starts to animate.
+    const opacity = useTransform(scrollYProgress, [startProgress, startProgress + 0.15], [0, 1]);
+    // Scale up slightly for a more dynamic entry.
+    const scale = useTransform(scrollYProgress, [startProgress, endProgress], [0.95, 1]);
 
     return (
         <motion.div
-            style={{ y, scale, opacity, zIndex: totalCards - i }}
+            style={{ y, scale, opacity, zIndex: i }}
             className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
         >
-            <div className="bg-off-white p-4 pb-6 rounded-lg shadow-strong w-full max-w-sm">
+            <div className="bg-off-white p-4 pb-6 rounded-lg shadow-strong w-full max-w-md">
                 <img src={card.image} alt={card.title} className="w-full h-56 object-cover rounded-md mb-4 bg-subtle-gray" />
                 <h3 className="font-heading font-bold text-xl text-dark-text">{card.title}</h3>
                 <p className="text-medium-text text-base mt-1">{card.description}</p>
@@ -99,13 +124,13 @@ const DiningLens = () => {
     return (
         <section id="impact" ref={targetRef} className="relative h-auto lg:h-[300vh] bg-slate-50">
             <div className="sticky top-0 h-auto lg:h-screen flex items-center justify-center overflow-hidden">
-                <div className="max-w-7xl w-full mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8 lg:gap-16 items-center py-24 lg:py-0">
+                <div className="max-w-7xl w-full mx-auto px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 lg:gap-24 items-center py-24 lg:py-0">
                     <LeftColumn />
                     {/* Right Column: responsive handling */}
                     <div className="lg:hidden flex flex-col gap-8 mt-8">
                         {cardsData.map(card => <MobileCard key={card.id} card={card} />)}
                     </div>
-                    <div className="hidden lg:block relative h-[600px] w-full">
+                    <div className="hidden lg:block relative h-[700px] w-full">
                         {cardsData.map((card, i) => (
                             <AnimatedCard key={card.id} card={card} i={i} scrollYProgress={scrollYProgress} />
                         ))}
