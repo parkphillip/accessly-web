@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
@@ -17,7 +16,7 @@ interface Leaf {
 
 const BrailleMenuBook = () => {
   const [leaves, setLeaves] = useState<Leaf[]>([]);
-  const [currentLeafIndex, setCurrentLeafIndex] = useState(1); // Start with the book open
+  const [currentLeafIndex, setCurrentLeafIndex] = useState(0); // Start at 0 to show first spread
   const [isFlipping, setIsFlipping] = useState(false);
 
   const generateLeaves = useCallback((text: string): Leaf[] => {
@@ -29,31 +28,29 @@ const BrailleMenuBook = () => {
       const chunk = lines.slice(i, i + linesPerPage);
       contentPages.push({
         type: 'page',
-        title: '', // Titles are handled differently now or can be added if needed
+        title: '', 
         content: chunk,
       });
     }
 
     const pages: Page[] = [
-      { type: 'page', title: '', content: [] }, // Inside front cover (pages[0])
       {
         type: 'cover',
         title: "Accessly Menus",
         content: ["Your Custom Menu", "Est. 2024"]
-      }, // Cover (pages[1])
+      }, // Cover (pages[0])
+      { type: 'page', title: '', content: [] }, // Inside front cover (pages[1])
       ...contentPages,
       { type: 'page', title: '', content: [] }, // Final blank page for back cover
     ];
 
     const generatedLeaves: Leaf[] = [];
-    // Leaf 0: Cover. Front is page 1, back is page 0.
-    generatedLeaves.push({ front: pages[1], back: pages[0] });
-
-    // Content leaves
-    for (let i = 2; i < pages.length; i += 2) {
+    
+    // Create leaves with proper left/right page assignment
+    for (let i = 0; i < pages.length; i += 2) {
       generatedLeaves.push({
-        front: pages[i],
-        back: pages[i + 1], // will be undefined for the last page if odd number of content pages
+        front: pages[i],      // Left page
+        back: pages[i + 1],   // Right page
       });
     }
 
@@ -66,12 +63,12 @@ const BrailleMenuBook = () => {
 
   const handleMenuUpdate = (text: string) => {
     setLeaves(generateLeaves(text));
-    setCurrentLeafIndex(1); // Reset to first page when menu updates
+    setCurrentLeafIndex(0); // Reset to first spread when menu updates
   };
 
   const totalLeaves = leaves.length;
   const canGoBack = currentLeafIndex > 0;
-  const canGoForward = currentLeafIndex < totalLeaves;
+  const canGoForward = currentLeafIndex < totalLeaves - 1;
 
   const flipPage = useCallback((direction: 'next' | 'prev') => {
     if (isFlipping) return;
@@ -132,15 +129,9 @@ const BrailleMenuBook = () => {
   };
 
   const DisplayedPageNumber = () => {
-    if (currentLeafIndex === 0) return "Cover";
-    if (currentLeafIndex >= totalLeaves) return "Back Cover";
-
-    // When on leaf 1 (cover is flipped), left is inside cover, right is page 1
-    if (currentLeafIndex === 1) {
-        return `Page 1`
-    }
+    if (currentLeafIndex === 0) return "Cover & Page 1";
     
-    const leftPage = ((currentLeafIndex - 1) * 2) - 1;
+    const leftPage = (currentLeafIndex * 2) - 1;
     const rightPage = leftPage + 1;
     return `Pages ${leftPage} - ${rightPage}`;
   }
@@ -166,22 +157,44 @@ const BrailleMenuBook = () => {
           role="application"
           aria-label="Interactive Braille Book"
         >
-          <div className={`book ${currentLeafIndex > 0 ? 'open' : ''}`}>
-            {leaves.map((leaf, index) => (
-              <div
-                key={index}
-                className={`page ${leaf.front.type} ${currentLeafIndex > index ? 'flipped' : ''}`}
-                style={{ zIndex: currentLeafIndex > index ? index + 1 : totalLeaves - index }}
-              >
-                <div className="page-face front">
-                  <PageContent page={leaf.front} />
-                </div>
-                <div className="page-face back">
-                  <PageContent page={leaf.back} />
-                </div>
-              </div>
-            ))}
-             <div className="book-spine"></div>
+          <div className="book open">
+            {leaves.map((leaf, index) => {
+              const isCurrentSpread = index === currentLeafIndex;
+              const zIndex = isCurrentSpread ? 10 : totalLeaves - index;
+              
+              return (
+                <React.Fragment key={index}>
+                  {/* Left page */}
+                  <div
+                    className={`page ${leaf.front.type} ${currentLeafIndex > index ? 'flipped' : ''}`}
+                    style={{ zIndex }}
+                  >
+                    <div className="page-face front">
+                      <PageContent page={leaf.front} />
+                    </div>
+                    <div className="page-face back">
+                      <PageContent page={leaf.back} />
+                    </div>
+                  </div>
+                  
+                  {/* Right page */}
+                  {leaf.back && (
+                    <div
+                      className={`page ${leaf.back.type} ${currentLeafIndex > index ? 'flipped' : ''}`}
+                      style={{ zIndex: zIndex - 0.5 }}
+                    >
+                      <div className="page-face front">
+                        <PageContent page={leaf.back} />
+                      </div>
+                      <div className="page-face back">
+                        {/* Back of right page - could show next page preview */}
+                      </div>
+                    </div>
+                  )}
+                </React.Fragment>
+              );
+            })}
+            <div className="book-spine"></div>
           </div>
           
           <div className="book-navigation flex justify-center items-center gap-8 mt-12">

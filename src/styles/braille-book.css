@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  min-height: 650px; /* Ensure space for the book */
+  min-height: 650px;
 }
 
 .book {
@@ -15,23 +15,27 @@
   transform-style: preserve-3d;
   perspective: 2500px;
   transition: transform 0.5s;
+  transform: translateX(0);
 }
 
-/* When book is open, it appears centered */
+/* Always start centered for the open book layout */
 .book.open {
-  transform: translateX(25%);
+  transform: translateX(0);
 }
 
 .book-spine {
   position: absolute;
-  width: 50px;
+  width: 8px;
   height: 100%;
   left: 50%;
   top: 0;
   transform: translateX(-50%);
   background: linear-gradient(to right, #1a2b42, #2c5282, #1a2b42);
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-  z-index: 0; /* Behind pages */
+  box-shadow: 
+    inset 0 0 10px rgba(0,0,0,0.5),
+    0 0 20px rgba(0,0,0,0.3);
+  z-index: 100;
+  border-radius: 2px;
 }
 
 .page {
@@ -39,29 +43,64 @@
   width: 50%;
   height: 100%;
   top: 0;
-  left: 50%; /* Pages originate from the center spine */
   transform-origin: left center;
   transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
   transform-style: preserve-3d;
   background-color: #f8f9fa;
   border-radius: 0 6px 6px 0;
   box-shadow: 
-    2px 0 5px rgba(0,0,0,0.1);
+    2px 0 15px rgba(0,0,0,0.15),
+    0 0 30px rgba(0,0,0,0.1);
+}
+
+/* Left pages (even indices) - position on the left side */
+.page:nth-child(even) {
+  left: 0;
+  transform-origin: right center;
+  border-radius: 6px 0 0 6px;
+  box-shadow: 
+    -2px 0 15px rgba(0,0,0,0.15),
+    0 0 30px rgba(0,0,0,0.1);
+}
+
+/* Right pages (odd indices) - position on the right side */
+.page:nth-child(odd) {
+  left: 50%;
+  transform-origin: left center;
+  border-radius: 0 6px 6px 0;
 }
 
 .page.flipped {
   transform: rotateY(-180deg);
   box-shadow: 
-    -2px 0 15px rgba(0,0,0,0.25); /* More pronounced shadow for depth */
-  border-radius: 6px 0 0 6px;
+    -2px 0 25px rgba(0,0,0,0.3),
+    0 0 40px rgba(0,0,0,0.2);
+}
+
+/* Left pages when flipped */
+.page:nth-child(even).flipped {
+  transform: rotateY(180deg);
+  border-radius: 0 6px 6px 0;
+  box-shadow: 
+    2px 0 25px rgba(0,0,0,0.3),
+    0 0 40px rgba(0,0,0,0.2);
 }
 
 .page.cover {
-  background-color: #2c5282; /* Cover color */
+  background: linear-gradient(45deg, #2c5282, #3a6ea5);
   border-radius: 0 8px 8px 0;
 }
+
+.page.cover:nth-child(even) {
+  border-radius: 8px 0 0 8px;
+}
+
 .page.cover.flipped {
   border-radius: 8px 0 0 8px;
+}
+
+.page.cover:nth-child(even).flipped {
+  border-radius: 0 8px 8px 0;
 }
 
 .page-face {
@@ -104,6 +143,28 @@
   background-size: 30px 30px;
   opacity: 0.8;
   pointer-events: none;
+}
+
+/* Gutter shadow for realistic binding */
+.page-content::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(to right, rgba(0,0,0,0.1), transparent);
+  pointer-events: none;
+}
+
+/* Right pages - shadow on the left */
+.page:nth-child(odd) .page-content::after {
+  left: 0;
+}
+
+/* Left pages - shadow on the right */
+.page:nth-child(even) .page-content::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
 }
 
 .braille-line {
@@ -171,9 +232,11 @@
   align-items: center;
   text-align: center;
 }
+
 .page.cover h3 {
   font-size: 3rem;
 }
+
 .page.cover .braille-line {
   font-size: 1.5rem;
 }
@@ -192,11 +255,9 @@
   }
   .book {
     width: 100%;
-    max-width: 600px; /* Example width */
-    height: 400px;   /* Maintain aspect ratio */
-  }
-  .book.open {
-    transform: translateX(0); /* Center on smaller screens */
+    max-width: 600px;
+    height: 400px;
+    transform: translateX(0);
   }
   .page-content {
     padding: 2rem;
