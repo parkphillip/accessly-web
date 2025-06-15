@@ -180,17 +180,19 @@ export default function GlobeDemo() {
   }, []);
 
   return (
-    <div className="w-full h-full flex justify-center items-center relative">
-      <canvas
-        ref={globeCanvasRef}
-        style={{ width: 600, height: 600, maxWidth: "100%", aspectRatio: 1 }}
-        className="[filter:drop-shadow(0_10px_20px_rgba(20,50,120,0.6))]"
-      />
-      <canvas
-        ref={arcCanvasRef}
-        style={{ width: 600, height: 600, maxWidth: "100%", aspectRatio: 1, pointerEvents: 'none' }}
-        className="absolute top-0 left-0"
-      />
+    <div className="w-full h-full flex justify-center items-center">
+      <div className="relative" style={{ width: 600, height: 600, maxWidth: "100%" }}>
+        <canvas
+          ref={globeCanvasRef}
+          style={{ width: "100%", height: "100%", aspectRatio: 1 }}
+          className="[filter:drop-shadow(0_10px_20px_rgba(20,50,120,0.6))]"
+        />
+        <canvas
+          ref={arcCanvasRef}
+          style={{ width: "100%", height: "100%", aspectRatio: 1, pointerEvents: 'none' }}
+          className="absolute top-0 left-0"
+        />
+      </div>
     </div>
   );
 }
