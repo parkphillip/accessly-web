@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react';
 import { useInView, motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { Eye, Users, Accessibility } from 'lucide-react';
+import { Eye, UsersRound, Accessibility } from 'lucide-react';
 
 const AnimatedNumber = ({ n, precision = 0 }: { n: number; precision?: number }) => {
   const count = useMotionValue(0);
@@ -29,7 +29,7 @@ export const ImpactStats = () => {
             value: 2.2,
             precision: 1,
             suffix: 'B',
-            description: "people globally have vision impairments",
+            description: "with vision impairments globally",
             icon: Eye,
             color: "text-brand-navy"
         },
@@ -37,15 +37,15 @@ export const ImpactStats = () => {
             value: 90,
             precision: 0,
             suffix: '%',
-            description: "need assistance reading menus while dining",
-            icon: Users,
+            description: "need help reading menus",
+            icon: UsersRound,
             color: "text-brand-terracotta"
         },
         {
             value: 10,
             precision: 0,
             suffix: '%',
-            description: "experience full independence while dining",
+            description: "dine with full independence",
             icon: Accessibility,
             color: "text-brand-navy"
         }
