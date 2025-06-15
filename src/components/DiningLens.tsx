@@ -154,7 +154,7 @@ const DiningLens = () => {
                                 ref={el => cardsRef.current[index] = el}
                                 className="absolute flex items-center justify-center"
                                 style={{
-                                    zIndex: cardsData.length - index, // Higher index cards have higher z-index (stack on top)
+                                    zIndex: index + 1, // First card has z-index 1, second has 2, third has 3
                                     width: CARD_WIDTH,
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
