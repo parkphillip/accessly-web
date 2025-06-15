@@ -50,12 +50,12 @@ const PageContent = ({ page }: { page: Page | undefined }) => {
 
 const BrailleMenuBook = () => {
   const [pages, setPages] = useState<Page[]>([]);
-  const [currentPage, setCurrentPage] = useState(0); // Represents the number of turned sheets
+  const [currentPage, setCurrentPage] = useState(0); // Index of the right-hand page
   const [isFlipping, setIsFlipping] = useState(false);
 
   const generatePages = useCallback((text: string): Page[] => {
     const lines = text.split('\n').filter(line => line.trim() !== '');
-    const linesPerPage = 6;
+    const linesPerPage = 8;
     const contentPages: Page[] = [];
 
     for (let i = 0; i < lines.length; i += linesPerPage) {
@@ -67,23 +67,21 @@ const BrailleMenuBook = () => {
       });
     }
 
-    const finalPages = [
-      { type: 'page', title: '', content: [] }, // Inside front cover
+    const allPages: Page[] = [
       {
         type: 'cover',
         title: "Accessly Menu",
         content: ["Your Custom Braille Menu"]
       },
-      ...contentPages,
-      { type: 'page', title: '', content: [] }, // Final blank page for back cover
+      ...contentPages
     ];
-    
-    // Ensure there's an even number of pages after the cover for complete spreads
-    if ((finalPages.length - 1) % 2 !== 0) {
-      finalPages.push({ type: 'page', title: '', content: [] });
+
+    // Ensure we have an even number of pages after the cover for spreads
+    if ((allPages.length - 1) % 2 !== 0) {
+      allPages.push({ type: 'page', title: '', content: [] });
     }
 
-    return finalPages;
+    return allPages;
   }, []);
 
   useEffect(() => {
@@ -95,34 +93,25 @@ const BrailleMenuBook = () => {
     setCurrentPage(0);
   };
 
-  const pageSpreads: { front: Page; back?: Page; index: number }[] = [];
-  if (pages.length > 1) {
-    // Start at 1 to skip the inside front cover, which is not a flippable page
-    for (let i = 1; i < pages.length; i += 2) {
-      pageSpreads.push({
-        front: pages[i],
-        back: pages[i + 1],
-        index: (i - 1) / 2, // Sheet index (0, 1, 2...)
-      });
-    }
-  }
-  const totalSheets = pageSpreads.length;
+  const totalPages = pages.length;
+  const leftPage = currentPage > 0 ? pages[currentPage - 1] : undefined;
+  const rightPage = currentPage < totalPages ? pages[currentPage] : undefined;
 
   const canGoBack = currentPage > 0;
-  const canGoForward = currentPage < totalSheets;
+  const canGoForward = currentPage + 2 <= totalPages;
 
   const flipPage = useCallback((direction: 'next' | 'prev') => {
     if (isFlipping) return;
 
     if (direction === 'next' && canGoForward) {
       setIsFlipping(true);
-      setCurrentPage(prev => prev + 1);
+      setCurrentPage(prev => prev + 2);
     } else if (direction === 'prev' && canGoBack) {
       setIsFlipping(true);
-      setCurrentPage(prev => prev - 1);
+      setCurrentPage(prev => prev - 2);
     }
 
-    setTimeout(() => setIsFlipping(false), 800); // Match CSS transition duration
+    setTimeout(() => setIsFlipping(false), 800); // Match CSS animation duration
   }, [isFlipping, canGoForward, canGoBack]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -135,17 +124,15 @@ const BrailleMenuBook = () => {
 
   const DisplayedPageNumber = () => {
     if (currentPage === 0) return "Cover";
-    if (currentPage >= totalSheets) return "Back";
+    if (!rightPage || (rightPage.content.length === 0 && !rightPage.title)) return "Back";
     
-    const leftPageNum = (currentPage * 2) - 1;
-    const rightPageNum = currentPage * 2;
-    
-    const currentSpread = pageSpreads[currentPage];
-    if (!currentSpread || !currentSpread.back || currentSpread.back.content.length === 0) {
-      return `Page ${leftPageNum}`;
+    const rightNum = currentPage + 1;
+
+    if (!leftPage || (leftPage.content.length === 0 && !leftPage.title)) {
+        return `Page ${rightNum}`;
     }
 
-    return `Pages ${leftPageNum} - ${rightPageNum}`;
+    return `Pages ${currentPage} - ${rightNum}`;
   }
   
   return (
@@ -156,59 +143,57 @@ const BrailleMenuBook = () => {
             Create a Braille Menu
           </h2>
           <p className="text-lg text-medium-text max-w-3xl mx-auto">
-            Enter text or upload an image. Flip the book. Hover to translate.
+            Enter your menu on the left. See the braille version on the right.
           </p>
         </div>
 
-        <MenuInput onUpdate={handleMenuUpdate} />
+        <div className="flex flex-col lg:flex-row gap-12 items-start">
+          <div className="lg:w-2/5 w-full lg:sticky top-8">
+            <MenuInput onUpdate={handleMenuUpdate} />
+          </div>
 
-        <div 
-          className="book-container"
-          onKeyDown={handleKeyDown}
-          tabIndex={0}
-          role="application"
-          aria-label="Interactive Braille Book"
-        >
-          <div className={`book ${isFlipping ? 'is-flipping' : ''}`}>
-            <div className="book-spine"></div>
-            {pageSpreads.map((sheet) => (
-              <div
-                key={sheet.index}
-                className={`page ${sheet.front.type} ${currentPage > sheet.index ? 'flipped' : ''}`}
-                style={{ zIndex: currentPage > sheet.index ? sheet.index : totalSheets - sheet.index }}
-              >
-                <div className="page-face front">
-                  <PageContent page={sheet.front} />
+          <div className="lg:w-3/5 w-full">
+            <div 
+              className="book-container"
+              onKeyDown={handleKeyDown}
+              tabIndex={0}
+              role="application"
+              aria-label="Interactive Braille Book"
+            >
+              <div className={`book ${isFlipping ? 'is-flipping' : ''}`}>
+                <div className="page left">
+                  <PageContent page={leftPage} />
                 </div>
-                <div className="page-face back">
-                  <PageContent page={sheet.back} />
+                <div className="book-spine"></div>
+                <div className="page right">
+                  <PageContent page={rightPage} />
                 </div>
               </div>
-            ))}
-          </div>
-          
-          <div className="book-navigation flex justify-center items-center gap-4 mt-12">
-            <button
-              onClick={() => flipPage('prev')}
-              disabled={!canGoBack || isFlipping}
-              className="secondary-button p-3 disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Previous page"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            
-            <div className="text-center font-sans text-medium-text w-24">
-                <DisplayedPageNumber />
+              
+              <div className="book-navigation flex justify-center items-center gap-4 mt-12">
+                <button
+                  onClick={() => flipPage('prev')}
+                  disabled={!canGoBack || isFlipping}
+                  className="secondary-button p-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Previous page"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                
+                <div className="text-center font-sans text-medium-text w-32">
+                    <DisplayedPageNumber />
+                </div>
+                
+                <button
+                  onClick={() => flipPage('next')}
+                  disabled={!canGoForward || isFlipping}
+                  className="secondary-button p-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Next page"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-            
-            <button
-              onClick={() => flipPage('next')}
-              disabled={!canGoForward || isFlipping}
-              className="secondary-button p-3 disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Next page"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
         </div>
       </div>

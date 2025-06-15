@@ -1,67 +1,55 @@
-
 /* --- Clean Book Experience --- */
 .book-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 2rem 0; /* Reduced padding for better fit */
   min-height: 600px; /* Ensure space for the book */
 }
 
+/* NEW: Flat, spread-out book view */
 .book {
-  position: relative;
-  width: 900px;
+  display: flex;
+  justify-content: center;
+  position: relative; /* For page-content::before */
+  width: 100%;
+  max-width: 900px;
   height: 600px;
-  /* Removed perspective and transform-style for a flatter, cleaner look */
-  transition: transform 0.5s;
 }
 
 .book-spine {
-  position: absolute;
-  width: 60px;
+  width: 40px;
   height: 100%;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  background: linear-gradient(to right, #e9ecef, #f8f9fa, #e9ecef);
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+  flex-shrink: 0;
+  background: linear-gradient(to right, #e0e0e0, #f8f9fa, #e0e0e0);
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.08);
 }
 
 .page {
-  position: absolute;
   width: 50%;
   height: 100%;
-  top: 0;
-  right: 0;
-  transform-origin: left center;
-  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-  background-color: #ffffff; /* Brighter page color */
-  border-radius: 0 8px 8px 0;
-  box-shadow: 
-    0 4px 15px rgba(0,0,0,0.05),    /* Softer outer shadow */
-    0 1px 3px rgba(0,0,0,0.05);
+  background-color: #ffffff;
 }
 
-.page.flipped {
-  transform: rotateY(-180deg);
-  box-shadow: 
-    -5px 4px 15px rgba(0,0,0,0.08),
-    -1px 1px 3px rgba(0,0,0,0.05);
+@keyframes page-flip-animation {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.2; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.book.is-flipping .page {
+  animation: page-flip-animation 0.8s ease-in-out;
+}
+
+.page.left {
   border-radius: 8px 0 0 8px;
+  box-shadow: -6px 4px 20px rgba(0,0,0,0.07);
 }
 
-.page-face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.page-face.back {
-  transform: rotateY(180deg);
-  background-color: #ffffff; /* Keep back same as front for clean look */
+.page.right {
+  border-radius: 0 8px 8px 0;
+  box-shadow: 6px 4px 20px rgba(0,0,0,0.07);
 }
 
 .page-content {
@@ -163,9 +151,7 @@
 /* Responsive adjustments */
 @media (max-width: 960px) {
   .book {
-    width: 100%;
-    max-width: 600px;
-    height: 400px;
+    height: 450px;
   }
   .page-content {
     padding: 2rem;
@@ -174,8 +160,8 @@
 
 @media (max-width: 640px) {
   .book-container {
-    padding: 1rem;
-    min-height: 500px;
+    padding: 1rem 0;
+    min-height: auto;
   }
   .book {
     height: 450px;
