@@ -89,7 +89,7 @@ const DiningLens = () => {
     useEffect(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
 
-        // Set initial state - first card starts in position, others start with a peek
+        // Set initial state - first card starts in position, others start from bottom
         cardsRef.current.forEach((card, index) => {
             if (card) {
                 if (index === 0) {
@@ -100,9 +100,9 @@ const DiningLens = () => {
                         opacity: 1,
                     });
                 } else {
-                    // Other cards start with just a peek visible (about 80px showing)
+                    // Other cards start from bottom of screen
                     gsap.set(card, {
-                        y: `calc(100vh - 80px)`,
+                        y: '100vh',
                         rotate: index % 2 === 0 ? '-4deg' : '4deg',
                         opacity: 1,
                     });
@@ -119,6 +119,7 @@ const DiningLens = () => {
                 pin: true,
                 scrub: 1,
                 anticipatePin: 1,
+                immediateRender: false,
             },
         });
 
@@ -133,9 +134,9 @@ const DiningLens = () => {
             tl.to(card, {
                 y: finalY,
                 rotate: finalRotate,
-                duration: 0.8,
+                duration: 1,
                 ease: 'power2.out',
-            }, index * 0.6);
+            }, index * 0.3);
         });
 
         return () => {
@@ -160,7 +161,7 @@ const DiningLens = () => {
                                 ref={el => cardsRef.current[index] = el}
                                 className="absolute flex items-center justify-center"
                                 style={{
-                                    zIndex: index + 1,
+                                    zIndex: cardsData.length - index,
                                     width: CARD_WIDTH,
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
