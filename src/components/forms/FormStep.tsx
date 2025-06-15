@@ -34,7 +34,7 @@ const FormStep: React.FC<FormStepProps> = ({ steps, currentStep }) => {
                   {isCompleted ? <Check className="w-6 h-6" /> : <Icon className="w-5 h-5" />}
                 </div>
                 <div className="mt-2">
-                    <p className={`font-serif text-sm font-semibold ${isCompleted || isActive ? 'text-dark-text' : 'text-medium-text'}`}>{step.title}</p>
+                    <p className={`font-sans text-sm font-semibold ${isCompleted || isActive ? 'text-dark-text' : 'text-medium-text'}`}>{step.title}</p>
                     <p className="text-xs text-medium-text">{step.note}</p>
                 </div>
               </div>
