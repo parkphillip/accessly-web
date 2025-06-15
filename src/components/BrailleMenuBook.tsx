@@ -17,7 +17,7 @@ interface Leaf {
 
 const BrailleMenuBook = () => {
   const [leaves, setLeaves] = useState<Leaf[]>([]);
-  const [currentLeafIndex, setCurrentLeafIndex] = useState(0);
+  const [currentLeafIndex, setCurrentLeafIndex] = useState(1); // Start with the book open
   const [isFlipping, setIsFlipping] = useState(false);
 
   const generateLeaves = useCallback((text: string): Leaf[] => {
@@ -66,7 +66,7 @@ const BrailleMenuBook = () => {
 
   const handleMenuUpdate = (text: string) => {
     setLeaves(generateLeaves(text));
-    setCurrentLeafIndex(0);
+    setCurrentLeafIndex(1); // Reset to first page when menu updates
   };
 
   const totalLeaves = leaves.length;
@@ -134,7 +134,13 @@ const BrailleMenuBook = () => {
   const DisplayedPageNumber = () => {
     if (currentLeafIndex === 0) return "Cover";
     if (currentLeafIndex >= totalLeaves) return "Back Cover";
-    const leftPage = (currentLeafIndex * 2);
+
+    // When on leaf 1 (cover is flipped), left is inside cover, right is page 1
+    if (currentLeafIndex === 1) {
+        return `Page 1`
+    }
+    
+    const leftPage = ((currentLeafIndex - 1) * 2) - 1;
     const rightPage = leftPage + 1;
     return `Pages ${leftPage} - ${rightPage}`;
   }
@@ -160,13 +166,12 @@ const BrailleMenuBook = () => {
           role="application"
           aria-label="Interactive Braille Book"
         >
-          <div className={`book ${isFlipping ? 'is-flipping' : ''}`}>
-            <div className="book-spine"></div>
+          <div className={`book ${currentLeafIndex > 0 ? 'open' : ''}`}>
             {leaves.map((leaf, index) => (
               <div
                 key={index}
                 className={`page ${leaf.front.type} ${currentLeafIndex > index ? 'flipped' : ''}`}
-                style={{ zIndex: currentLeafIndex > index ? index : totalLeaves - index }}
+                style={{ zIndex: currentLeafIndex > index ? index + 1 : totalLeaves - index }}
               >
                 <div className="page-face front">
                   <PageContent page={leaf.front} />
@@ -176,6 +181,7 @@ const BrailleMenuBook = () => {
                 </div>
               </div>
             ))}
+             <div className="book-spine"></div>
           </div>
           
           <div className="book-navigation flex justify-center items-center gap-8 mt-12">
