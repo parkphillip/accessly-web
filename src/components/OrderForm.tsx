@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MapPin, User, BookOpen, Heart } from 'lucide-react';
 import FormStep from './forms/FormStep';
@@ -118,7 +119,7 @@ const OrderForm = () => {
           </div>
 
           <form className="p-8 md:p-12">
-            <div className="min-h-[300px]">
+            <div className="h-[36rem] overflow-y-auto pr-2">
               {renderCurrentStep()}
             </div>
             <FormNavigation
