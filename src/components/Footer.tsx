@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Mail, Phone, Instagram, Twitter } from 'lucide-react';
 
@@ -25,10 +24,10 @@ const Footer = () => {
     label: 'Get Started'
   }];
   return <footer className="bg-dark-text text-light-bg">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
           {/* Brand section */}
-          <div className="md:col-span-4">
+          <div className="md:col-span-5">
             <div className="flex items-center space-x-3 mb-4">
               <span className="text-3xl font-serif font-bold text-off-white">Accessly</span>
             </div>
@@ -49,10 +48,10 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="md:col-span-2">
+          {/* Contact & Social */}
+          <div className="md:col-span-3">
             <h3 className="text-lg font-semibold mb-4 text-off-white">Contact Us</h3>
-            <div className="space-y-4">
+            <div className="space-y-4 mb-8">
               <a href="mailto:hello@accessly.org" className="flex items-center space-x-3 group">
                 <Mail className="w-5 h-5 text-light-gray group-hover:text-brand-terracotta transition-colors" />
                 <span className="text-light-gray group-hover:text-brand-terracotta transition-colors">hello@accessly.org</span>
@@ -62,10 +61,6 @@ const Footer = () => {
                 <span className="text-light-gray">1-800-BRAILLE</span>
               </div>
             </div>
-          </div>
-          
-          {/* Social */}
-          <div className="md:col-span-2">
             <h3 className="text-lg font-semibold mb-4 text-off-white">Follow Us</h3>
             <div className="flex items-center space-x-6">
                <a href="#" aria-label="Visit our Instagram page" className="text-light-gray hover:text-brand-terracotta transition-colors duration-300">
