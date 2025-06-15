@@ -82,7 +82,7 @@ const Navigation = () => {
                   Accessly
                 </span>
               </button> : <Link to="/" className="flex items-center space-x-3">
-                <span className="text-2xl font-heading font-bold text-dark-text">
+                <span className="font-heading font-bold text-dark-text text-xl">
                   Accessly
                 </span>
               </Link>}
