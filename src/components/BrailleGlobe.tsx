@@ -95,12 +95,13 @@ const GlobeDots = () => {
       }).catch(console.error);
   }, []);
 
-  const { positions, colors, sizes } = useMemo(() => {
+  const { positions, colors, sizes, pulseIndexes } = useMemo(() => {
     if (!landPolygons) {
         return {
             positions: new Float32Array(),
             colors: new Float32Array(),
             sizes: new Float32Array(),
+            pulseIndexes: [],
         };
     }
 
@@ -110,6 +111,7 @@ const GlobeDots = () => {
     const tempPositions: number[] = [];
     const tempColors: number[] = [];
     const tempSizes: number[] = [];
+    const pulseIndexes: number[] = [];
 
     const navy = new THREE.Color('#2c5282');
     const white = new THREE.Color('#ffffff');
@@ -142,6 +144,7 @@ const GlobeDots = () => {
             const rand = Math.random();
             if (rand > 0.985) {
                 color = yellow;
+                if (rand > 0.995) pulseIndexes.push(pointIndex);
             } else if (rand > 0.97) {
                 color = white;
             } else {
@@ -157,12 +160,22 @@ const GlobeDots = () => {
     const colors = new Float32Array(tempColors);
     const sizes = new Float32Array(tempSizes);
 
-    return { positions, colors, sizes };
+    return { positions, colors, sizes, pulseIndexes };
   }, [landPolygons]);
 
   useFrame((state, delta) => {
     ref.current.rotation.y += delta * 0.05;
     ref.current.rotation.x += delta * 0.02;
+
+    const time = state.clock.getElapsedTime();
+    const sizesAttribute = ref.current.geometry.attributes.size as THREE.BufferAttribute;
+    
+    pulseIndexes.forEach(i => {
+      const initialSize = sizes[i];
+      sizesAttribute.setX(i, initialSize + Math.sin(time * 2 + i) * 0.8);
+    });
+
+    sizesAttribute.needsUpdate = true;
   });
 
   return (
