@@ -20,10 +20,10 @@ const ImpactMetrics = () => {
   };
 
   return (
-    <section id="impact" className="py-24 bg-slate-50">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+    <section id="impact" className="py-32 bg-slate-50">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div 
-          className="text-center mb-20" 
+          className="text-center mb-24" 
           initial="hidden" 
           whileInView="visible" 
           viewport={{
@@ -32,7 +32,7 @@ const ImpactMetrics = () => {
           }} 
           variants={fadeInVariants}
         >
-          <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-6 leading-tight">
+          <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-8 leading-tight">
             Dining Through a<br />Different Lens
           </h2>
           <p className="text-xl text-medium-text max-w-2xl mx-auto leading-relaxed">
@@ -40,9 +40,7 @@ const ImpactMetrics = () => {
           </p>
         </motion.div>
 
-        <div className="mb-20">
-          <ImpactStats />
-        </div>
+        <ImpactStats />
       </div>
     </section>
   );

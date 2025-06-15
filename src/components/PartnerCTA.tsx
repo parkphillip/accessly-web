@@ -20,7 +20,7 @@ const PartnerCTA = () => {
 
   return (
     <motion.div 
-      className="max-w-4xl mx-auto my-24 text-center"
+      className="max-w-4xl mx-auto py-16 text-center"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -37,4 +37,5 @@ const PartnerCTA = () => {
     </motion.div>
   );
 };
+
 export default PartnerCTA;
