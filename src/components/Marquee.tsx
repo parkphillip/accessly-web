@@ -2,12 +2,12 @@
 import React from 'react';
 
 const marqueeItems = [
-  "Dignity in Dining",
-  "Accessibility as Standard",
-  "Independence for All",
-  "Empowering Communities",
-  "Menus for Everyone",
-  "Building an Inclusive World",
+  "Making Menus Accessible",
+  "Starting with Restaurants",
+  "Free Braille Menus for All",
+  "Building Tomorrow's Standard",
+  "One Menu at a Time",
+  "Join the Movement",
 ];
 
 const Marquee = () => {
