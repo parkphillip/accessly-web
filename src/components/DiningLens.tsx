@@ -29,9 +29,12 @@ type CardData = typeof cardsData[0];
 
 const LeftColumn = () => (
     <div className="max-w-lg text-center lg:text-left">
-        <h2 className="text-4xl lg:text-5xl font-heading font-bold text-dark-text mb-6 leading-tight tracking-tight">
+        <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-4 leading-tight tracking-tight">
             Dining Through a Different Lens
         </h2>
+        <p className="text-xl text-medium-text mt-4 mb-8">
+            Every dining experience should be inclusive and independent.
+        </p>
         <p className="text-lg text-neutral-600 mb-10">
             Dining out presents hidden barriers for millions with vision impairments.
         </p>
@@ -81,20 +84,15 @@ const AnimatedCard = ({ card, i, scrollYProgress }: { card: CardData, i: number,
     }
     
     // For subsequent cards (i > 0), they animate in.
-    // Each card's animation is triggered in a segment of the scroll progress.
     const startProgress = (i - 1) / (totalCards - 1);
     const endProgress = i / (totalCards - 1);
     
     // Animate `y` from below the container to its final stacked position.
-    const y = useTransform(scrollYProgress, [startProgress, endProgress], ['40%', `${-i * 25}px`]);
-    // Fade in the card as it starts to animate.
-    const opacity = useTransform(scrollYProgress, [startProgress, startProgress + 0.15], [0, 1]);
-    // Scale up slightly for a more dynamic entry.
-    const scale = useTransform(scrollYProgress, [startProgress, endProgress], [0.95, 1]);
-
+    const y = useTransform(scrollYProgress, [startProgress, endProgress], ['100%', `${-i * 25}px`]);
+    
     return (
         <motion.div
-            style={{ y, scale, opacity, zIndex: i }}
+            style={{ y, zIndex: i }}
             className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
         >
             <div className="bg-off-white p-4 pb-6 rounded-lg shadow-strong w-full max-w-md">
@@ -124,7 +122,7 @@ const DiningLens = () => {
     return (
         <section id="impact" ref={targetRef} className="relative h-auto lg:h-[300vh] bg-slate-50">
             <div className="sticky top-0 h-auto lg:h-screen flex items-center justify-center overflow-hidden">
-                <div className="max-w-7xl w-full mx-auto px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 lg:gap-24 items-center py-24 lg:py-0">
+                <div className="max-w-7xl w-full mx-auto px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
                     <LeftColumn />
                     {/* Right Column: responsive handling */}
                     <div className="lg:hidden flex flex-col gap-8 mt-8">
