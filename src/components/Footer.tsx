@@ -1,6 +1,5 @@
 import React from 'react';
 import { Mail, Phone, Instagram, Twitter } from 'lucide-react';
-
 const Footer = () => {
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({
@@ -58,15 +57,8 @@ const Footer = () => {
                 <span className="text-light-gray">1-800-BRAILLE</span>
               </div>
             </div>
-            <h3 className="text-lg font-semibold mb-4 text-off-white">Follow Us</h3>
-            <div className="flex items-center space-x-6">
-               <a href="#" aria-label="Visit our Instagram page" className="text-light-gray hover:text-brand-terracotta transition-colors duration-300">
-                  <Instagram className="w-6 h-6" />
-                </a>
-                <a href="#" aria-label="Visit our Twitter page" className="text-light-gray hover:text-brand-terracotta transition-colors duration-300">
-                  <Twitter className="w-6 h-6" />
-                </a>
-            </div>
+            
+            
           </div>
 
            {/* Legal */}
