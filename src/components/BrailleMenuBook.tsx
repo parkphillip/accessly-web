@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
@@ -14,7 +13,6 @@ const BrailleMenuBook = () => {
   const [pages, setPages] = useState<Page[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFlipping, setIsFlipping] = useState(false);
-  const [hoveredWordId, setHoveredWordId] = useState<string | null>(null);
 
   const generatePages = useCallback((text: string): Page[] => {
     const lines = text.split('\n').filter(line => line.trim() !== '');
@@ -77,15 +75,10 @@ const BrailleMenuBook = () => {
     }
   };
 
-  const Word = ({ text, pageIdx, lineIdx, wordIdx }: { text: string, pageIdx: number, lineIdx: number, wordIdx: number }) => {
-    const wordId = `${pageIdx}-${lineIdx}-${wordIdx}`;
-    const isHovered = hoveredWordId === wordId;
-
+  const Word = ({ text }: { text: string }) => {
     return (
       <span
-        onMouseEnter={() => setHoveredWordId(wordId)}
-        onMouseLeave={() => setHoveredWordId(null)}
-        className={`braille-word ${isHovered ? 'translated' : ''}`}
+        className="braille-word"
         data-english={text}
       >
         {translateToBraille(text)}
@@ -140,7 +133,7 @@ const BrailleMenuBook = () => {
                         <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
                           {line.split(' ').map((word, wordIndex) => (
                             <span key={wordIndex}>
-                              <Word text={word} pageIdx={index} lineIdx={lineIndex} wordIdx={wordIndex} />
+                              <Word text={word} />
                               {' '}
                             </span>
                           ))}

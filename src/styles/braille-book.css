@@ -11,6 +11,7 @@
 }
 
 .book {
+/* ... keep existing code */
   position: relative;
   width: 900px;
   height: 600px;
@@ -61,6 +62,7 @@
 }
 
 .page-face {
+/* ... keep existing code */
   position: absolute;
   width: 100%;
   height: 100%;
@@ -76,9 +78,8 @@
 }
 
 .page-content {
-/* ... keep existing code */
   width: 100%;
-  height: 100%;
+  /* height: 100%; <-- This was the problem, removing it fixes the bottom margin */
   padding: 4rem; /* Increased padding for margins */
   font-family: 'Inter', sans-serif;
   color: #343a40;
@@ -122,12 +123,13 @@
     1px 1px 3px rgba(0,0,0,0.1);           /* Softer drop shadow */
 
   /* Transition for the fade-out effect */
-  transition: color 0.3s ease-in-out;
-  will-change: color;
+  transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+  will-change: color, text-shadow;
 }
 
 /* The English translation, which fades in */
 .braille-word::after {
+/* ... keep existing code */
   content: attr(data-english);
   position: absolute;
   top: 50%;
@@ -149,14 +151,15 @@
   pointer-events: none;
 }
 
-/* When translated, fade out braille and fade in English */
-/* ... keep existing code */
-.braille-word.translated {
+/* REMOVED .translated class selectors */
+
+/* NEW: On hover, fade out braille and fade in English */
+.braille-word:hover {
   color: transparent;
   text-shadow: none;
 }
 
-.braille-word.translated::after {
+.braille-word:hover::after {
   opacity: 1;
 }
 
@@ -205,3 +208,4 @@
     font-size: 1rem;
   }
 }
+
