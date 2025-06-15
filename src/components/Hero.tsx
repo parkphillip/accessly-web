@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
 import GlobeDemo from './GlobeDemo';
@@ -20,11 +19,11 @@ const Hero = () => {
         <div className="text-center lg:text-left">
           <div className="max-w-3xl">
             <h1 className="text-5xl lg:text-7xl font-heading font-extrabold text-dark-text leading-tight tracking-tight">
-              Building an <AnimatedText text={"Accessible"} className="text-brand-navy font-mono" />
-              <span className="text-brand-navy font-mono" style={{ display: 'block', lineHeight: '1.1', minHeight: '1.2em' }}>
+              Building an <AnimatedText text={"Accessible"} className="text-brand-navy font-heading" />
+              <span className="text-brand-navy font-heading" style={{ display: 'block', lineHeight: '1.1', minHeight: '1.2em' }}>
                 World
               </span>
-              <span className="block text-3xl lg:text-4xl text-medium-text font-normal mt-4">
+              <span className="block text-3xl lg:text-4xl text-medium-text font-normal font-sans mt-4">
                 One Menu at a Time
               </span>
             </h1>
