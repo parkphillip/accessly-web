@@ -11,7 +11,7 @@ const Hero = () => {
   };
   return <section id="hero" className="relative min-h-screen flex items-center bg-off-white overflow-hidden">
       {/* Background Texture */}
-      <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-400"></div>
+      <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 lg:gap-16 items-center">
         
