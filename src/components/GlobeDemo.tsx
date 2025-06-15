@@ -1,3 +1,4 @@
+
 "use client";
 import { useEffect, useRef } from "react";
 import createGlobe from "cobe";
@@ -30,13 +31,13 @@ export default function GlobeDemo() {
       height: 600 * 2,
       phi: 0,
       theta: 0.3,
-      dark: 0,
+      dark: 1,
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 12,
-      baseColor: [0.2, 0.2, 0.25], // Dark greyish-blue for land
-      markerColor: [224 / 255, 122 / 255, 95 / 255], // Terracotta orange for markers
-      glowColor: [0.2, 0.4, 0.8], // Deeper blue glow
+      baseColor: [1, 1, 1], // White for landmass dots
+      markerColor: [0.7, 0.7, 0.7], // Neutral grey for markers
+      glowColor: [0.1, 0.1, 0.15], // Muted glow for a dark grey atmosphere
       markers: [
         // Extracted from previous sample data
         { location: [-19.885592, -43.951191], size: 0.05 },
