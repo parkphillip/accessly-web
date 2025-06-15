@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
 const Hero = () => {
@@ -17,7 +19,7 @@ const Hero = () => {
         {/* Left Column: Text Content */}
         <div className="text-center lg:text-left">
           <div className="max-w-3xl">
-            <h1 className="text-5xl lg:text-7xl font-heading font-extrabold text-dark-text leading-tight tracking-tight">
+            <h1 className="text-5xl lg:text-7xl font-heading font-bold text-dark-text leading-tight tracking-tight">
               Building an <AnimatedText text={"Accessible"} className="text-brand-navy font-mono" />
               <span style={{
               display: 'block',
@@ -35,12 +37,12 @@ const Hero = () => {
           </div>
 
           {/* Call to Action */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-12 justify-center lg:justify-start">
-            <button onClick={() => scrollToNext('order')} className="primary-button text-lg px-10 py-4">
-              Join the Movement
-            </button>
-            <button onClick={() => scrollToNext('impact')} className="secondary-button text-lg px-10 py-4">
-              See Our Impact
+          <div className="flex flex-col sm:flex-row gap-4 mt-12 justify-center lg:justify-start items-center">
+            <Link to="/partner" className="primary-button text-lg px-10 py-4">
+              Apply to be a Partner
+            </Link>
+            <button onClick={() => scrollToNext('impact')} className="font-medium text-brand-navy hover:underline text-lg px-10 py-4">
+              Our Network
             </button>
           </div>
         </div>
