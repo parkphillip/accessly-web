@@ -1,3 +1,4 @@
+
 /* --- Clean Tablet Experience --- */
 .book-container {
   display: flex;
@@ -5,7 +6,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem 0;
-  height: 600px; /* Set fixed height for consistency */
+  height: 100%; /* Fill available space for alignment */
 }
 
 /* NEW: Single-page tablet view */
@@ -29,14 +30,15 @@
 }
 
 @keyframes page-flip-animation {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.2; transform: scale(0.98); }
-  100% { opacity: 1; transform: scale(1); }
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0.05); opacity: 0.5; }
+  100% { transform: scaleX(1); }
 }
 
 /* Animate the page directly when flipping */
 .page.is-flipping {
-  animation: page-flip-animation 0.8s ease-in-out;
+  animation: page-flip-animation 0.6s ease-in-out;
+  transform-origin: center;
 }
 
 .page-content {

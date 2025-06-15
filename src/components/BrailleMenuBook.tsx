@@ -103,7 +103,7 @@ const BrailleMenuBook = () => {
       setCurrentPage(prev => prev - 1);
     }
 
-    setTimeout(() => setIsFlipping(false), 800); // Match CSS animation duration
+    setTimeout(() => setIsFlipping(false), 600); // Match new CSS animation duration
   }, [isFlipping, canGoForward, canGoBack]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
