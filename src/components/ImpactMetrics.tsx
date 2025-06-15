@@ -27,9 +27,7 @@ const ImpactMetrics = () => {
           <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-6 leading-tight">
             Dining Through a<br />Different Lens
           </h2>
-          <p className="text-xl text-medium-text max-w-2xl mx-auto leading-relaxed">
-            For millions with vision impairments, dining out presents hidden barriers.
-          </p>
+          <p className="text-xl text-medium-text max-w-2xl mx-auto leading-relaxed">For millions, dining out presents hidden barriers.</p>
         </motion.div>
 
         <div className="mb-20">
