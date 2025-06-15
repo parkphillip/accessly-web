@@ -5,6 +5,7 @@ import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import countries from "@/data/globe.json";
 
 declare module "@react-three/fiber" {
   interface ThreeElements {
@@ -61,68 +62,9 @@ interface WorldProps {
   data: Position[];
 }
 
-const countries = {
-  features: [
-    // North America
-    {
-      geometry: {
-        coordinates: [[[-140, 60], [-140, 20], [-60, 20], [-60, 70], [-140, 60]]],
-        type: "Polygon"
-      },
-      properties: { name: "North America" },
-      type: "Feature"
-    },
-    // South America
-    {
-      geometry: {
-        coordinates: [[[-80, 10], [-80, -50], [-35, -50], [-35, 10], [-80, 10]]],
-        type: "Polygon"
-      },
-      properties: { name: "South America" },
-      type: "Feature"
-    },
-    // Europe
-    {
-      geometry: {
-        coordinates: [[[-10, 70], [-10, 35], [40, 35], [40, 70], [-10, 70]]],
-        type: "Polygon"
-      },
-      properties: { name: "Europe" },
-      type: "Feature"
-    },
-    // Africa
-    {
-      geometry: {
-        coordinates: [[[-20, 35], [-20, -35], [50, -35], [50, 35], [-20, 35]]],
-        type: "Polygon"
-      },
-      properties: { name: "Africa" },
-      type: "Feature"
-    },
-    // Asia
-    {
-      geometry: {
-        coordinates: [[[40, 70], [40, 0], [140, 0], [140, 70], [40, 70]]],
-        type: "Polygon"
-      },
-      properties: { name: "Asia" },
-      type: "Feature"
-    },
-    // Australia
-    {
-      geometry: {
-        coordinates: [[[110, -10], [110, -45], [155, -45], [155, -10], [110, -10]]],
-        type: "Polygon"
-      },
-      properties: { name: "Australia" },
-      type: "Feature"
-    }
-  ]
-};
-
 export function Globe({ globeConfig, data }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
-  const groupRef = useRef();
+  const groupRef = useRef<THREE.Group>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
   const defaultProps = {
@@ -297,8 +239,8 @@ export function WebGLRendererConfig() {
   useEffect(() => {
     gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
-    gl.setClearColor(0xffffff, 0);
-  }, []);
+    gl.setClearColor(0xffaaff, 0);
+  }, [gl, size]);
 
   return null;
 }
@@ -330,8 +272,8 @@ export function World(props: WorldProps) {
         enableZoom={false}
         minDistance={cameraZ}
         maxDistance={cameraZ}
-        autoRotateSpeed={globeConfig.autoRotateSpeed}
-        autoRotate={globeConfig.autoRotate}
+        autoRotateSpeed={1}
+        autoRotate={true}
         minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI - Math.PI / 3}
       />
