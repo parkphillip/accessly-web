@@ -1,11 +1,11 @@
 
 "use client";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import createGlobe from "cobe";
 
 // Based on: https://github.com/shuding/cobe
 
-export default function GlobeDemo({ size = 600 }: { size?: number }) {
+function GlobeDemo({ size = 600 }: { size?: number }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -76,4 +76,4 @@ export default function GlobeDemo({ size = 600 }: { size?: number }) {
   );
 }
 
-export { GlobeDemo };
+export default React.memo(GlobeDemo);
