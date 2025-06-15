@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ImpactStats } from './ImpactStats';
@@ -16,7 +17,7 @@ const itemVariants: Variants = {
   }
 };
 const ImpactMetrics = () => {
-  return <section id="impact" className="py-24 bg-gray-400">
+  return <section id="impact" className="py-24 bg-brand-navy">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div className="text-center mb-20" initial="hidden" whileInView="visible" viewport={{
         once: true,
@@ -26,7 +27,7 @@ const ImpactMetrics = () => {
             Dining Through a Different Lens
           </h2>
           <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            For millions of people with vision impairments, a simple meal out is filled with hidden barriers. It's more than just reading a menu; it's about dignity, independence, and connection.
+            For millions with vision impairments, dining out presents hidden barriers. We're focused on restoring dignity and independence.
           </p>
         </motion.div>
 
@@ -48,7 +49,7 @@ const ImpactMetrics = () => {
             </motion.div>
         </div>
 
-        <motion.div className="structured-card bg-brand-navy text-off-white p-12 rounded-lg" initial="hidden" whileInView="visible" viewport={{
+        <motion.div className="bg-black/20 border border-white/10 text-off-white p-12 rounded-lg" initial="hidden" whileInView="visible" viewport={{
         once: true,
         amount: 0.5
       }} variants={itemVariants}>
