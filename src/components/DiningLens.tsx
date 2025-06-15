@@ -137,7 +137,7 @@ const DiningLens = () => {
     return (
         <section id="impact" ref={sectionRef} className="relative bg-slate-50">
             <div className="h-screen flex items-center justify-center overflow-hidden">
-                <div className="max-w-7xl w-full mx-auto px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
+                <div className="max-w-7xl w-full mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
                     {/* Left column */}
                     <LeftColumn />
 
