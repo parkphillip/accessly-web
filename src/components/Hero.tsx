@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -41,10 +42,10 @@ const Hero = () => {
               <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
               Apply to be a Partner
             </Link>
-            <button onClick={() => scrollToNext('impact')} className="font-medium text-brand-navy hover:underline text-base flex items-center gap-2 group">
-              Our Network
+            <Link to="/fund" className="font-medium text-brand-navy hover:underline text-base flex items-center gap-2 group">
+              Fund Our Mission
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            </Link>
           </div>
         </div>
         
