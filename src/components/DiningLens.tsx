@@ -115,10 +115,10 @@ const DiningLens = () => {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.current,
-                start: 'top 80%', // Start much earlier - when section is 80% visible
-                end: `+=${cardsData.length * 100}%`, // Shorter scroll distance for faster animation
+                start: 'top center', // Start when section reaches center of viewport
+                end: `+=${cardsData.length * 120}%`, // Moderate scroll distance
                 pin: true,
-                scrub: 0.5, // Reduced scrub value for more responsive animation
+                scrub: 0.8, // Slightly more responsive than default
                 anticipatePin: 1,
                 immediateRender: false,
             },
@@ -137,7 +137,7 @@ const DiningLens = () => {
                 rotate: finalRotate,
                 duration: 1,
                 ease: 'power2.out',
-            }, index * 0.2); // Reduced delay between cards for faster sequence
+            }, index * 0.25); // Balanced timing for smooth sequence
         });
 
         return () => {
