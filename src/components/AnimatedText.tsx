@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { translateToBraille } from '../utils/brailleUtils';
 
 interface AnimatedTextProps {
@@ -8,8 +9,9 @@ interface AnimatedTextProps {
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   const [isBraille, setIsBraille] = useState(false);
-  const [displayedText, setDisplayedText] = useState(text);
   const brailleText = useMemo(() => translateToBraille(text), [text]);
+  const [displayedText, setDisplayedText] = useState(text);
+  const isInitialRender = useRef(true);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -19,16 +21,30 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   }, []);
 
   useEffect(() => {
+    // Don't run the animation on the initial render.
+    // The first animation will be from text to braille after the first interval.
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
+    const sourceText = isBraille ? text : brailleText;
     const targetText = isBraille ? brailleText : text;
+
     let i = 0;
     const interval = setInterval(() => {
-      if (i >= text.length) {
+      if (i > text.length) {
         clearInterval(interval);
+        setDisplayedText(targetText); // Ensure final state is perfect
         return;
       }
-      setDisplayedText(current => targetText.substring(0, i + 1) + text.substring(i + 1));
+      
+      const morphedPart = targetText.substring(0, i);
+      const originalPart = sourceText.substring(i);
+      setDisplayedText(morphedPart + originalPart);
+      
       i++;
-    }, 50); // Speed of character reveal
+    }, 80); // Speed of character "decode"
 
     return () => clearInterval(interval);
   }, [isBraille, text, brailleText]);

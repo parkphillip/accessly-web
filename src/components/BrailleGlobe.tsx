@@ -36,6 +36,7 @@ const GlobeDots = () => {
 
     const navy = new THREE.Color('#2c5282');
     const terracotta = new THREE.Color('#e07a5f');
+    const gray = new THREE.Color('#6c757d');
 
     for (let i = 0; i < count; i++) {
       const phi = Math.acos(-1 + (2 * i) / count);
@@ -47,7 +48,16 @@ const GlobeDots = () => {
 
       positions.set([x, y, z], i * 3);
 
-      const color = new THREE.Color().lerpColors(terracotta, navy, (z + radius) / (2 * radius) * 0.8 + 0.2);
+      let color;
+      const rand = Math.random();
+      if (rand > 0.97) { // 3% accent color
+        color = terracotta;
+      } else if (rand > 0.94) { // 3% second accent color
+        color = gray;
+      }
+      else {
+        color = navy;
+      }
       colors.set([color.r, color.g, color.b], i * 3);
 
       sizes[i] = Math.random() * 1.5 + 0.5;

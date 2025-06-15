@@ -10,41 +10,46 @@ const Hero = () => {
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col justify-center bg-off-white overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center bg-off-white overflow-hidden">
       {/* Background Texture */}
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg"></div>
       
-      {/* 3D Globe */}
-      <BrailleGlobe />
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 lg:gap-16 items-center">
+        
+        {/* Left Column: Text Content */}
+        <div className="text-center lg:text-left">
+          <div className="max-w-3xl">
+            <h1 className="text-5xl lg:text-7xl font-serif font-bold text-dark-text leading-tight tracking-tight">
+              Building an <AnimatedText text="Accessible World" className="text-brand-navy font-mono" />
+              <span className="block text-3xl lg:text-4xl text-medium-text font-normal mt-4">
+                One Menu at a Time
+              </span>
+            </h1>
+            <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              Accessly is a civic startup building a future where access is standard, not special. We're starting with free braille menus for every restaurant.
+            </p>
+          </div>
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 lg:px-8 text-center flex flex-col items-center">
-        <div className="max-w-3xl">
-          <h1 className="text-5xl lg:text-7xl font-serif font-bold text-dark-text leading-tight tracking-tight">
-            Building an <AnimatedText text="Accessible World" className="text-brand-navy font-mono" />
-            <span className="block text-3xl lg:text-4xl text-medium-text font-normal mt-4">
-              One Menu at a Time
-            </span>
-          </h1>
-          <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto leading-relaxed">
-            Accessly is a civic startup building a future where access is standard, not special. We're starting with free braille menus for every restaurant.
-          </p>
+          {/* Call to Action */}
+          <div className="flex flex-col sm:flex-row gap-4 mt-12 justify-center lg:justify-start">
+            <button
+              onClick={() => scrollToNext('order')}
+              className="primary-button text-lg px-10 py-4"
+            >
+              Join the Movement
+            </button>
+            <button
+              onClick={() => scrollToNext('impact')}
+              className="secondary-button text-lg px-10 py-4"
+            >
+              See Our Impact
+            </button>
+          </div>
         </div>
-
-        {/* Call to Action */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-12">
-          <button
-            onClick={() => scrollToNext('order')}
-            className="primary-button text-lg px-10 py-4"
-          >
-            Join the Movement
-          </button>
-          <button
-            onClick={() => scrollToNext('impact')}
-            className="secondary-button text-lg px-10 py-4"
-          >
-            See Our Impact
-          </button>
+        
+        {/* Right Column: Globe */}
+        <div className="hidden lg:flex justify-center items-center relative w-full h-[500px]">
+          <BrailleGlobe />
         </div>
       </div>
 
