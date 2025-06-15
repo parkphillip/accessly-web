@@ -1,5 +1,5 @@
 
-/* --- 3D Book Experience --- */
+/* --- Clean Book Experience --- */
 .book-container {
   display: flex;
   flex-direction: column;
@@ -13,13 +13,9 @@
   position: relative;
   width: 900px;
   height: 600px;
-  transform-style: preserve-3d;
-  perspective: 2000px;
+  /* Removed perspective and transform-style for a flatter, cleaner look */
   transition: transform 0.5s;
-  overflow: hidden; /* Prevent pages from visually escaping the book's bounds */
 }
-
-/* Removed the book:hover selector to prevent tilting glitch */
 
 .book-spine {
   position: absolute;
@@ -27,10 +23,9 @@
   height: 100%;
   left: 50%;
   top: 0;
-  transform: translateX(-50%) rotateY(90deg);
-  transform-origin: center center;
-  background: linear-gradient(to right, #1a2b42, #2c5282, #1a2b42);
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  transform: translateX(-50%);
+  background: linear-gradient(to right, #e9ecef, #f8f9fa, #e9ecef);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
 }
 
 .page {
@@ -40,20 +35,19 @@
   top: 0;
   right: 0;
   transform-origin: left center;
-  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), box-shadow 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-  transform-style: preserve-3d;
-  background-color: #f8f9fa; /* Page color */
+  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+  background-color: #ffffff; /* Brighter page color */
   border-radius: 0 8px 8px 0;
   box-shadow: 
-    inset 0 0 20px rgba(0,0,0,0.05), /* Inner shadow */
-    0 5px 15px rgba(0,0,0,0.1);    /* Outer shadow */
+    0 4px 15px rgba(0,0,0,0.05),    /* Softer outer shadow */
+    0 1px 3px rgba(0,0,0,0.05);
 }
 
 .page.flipped {
   transform: rotateY(-180deg);
   box-shadow: 
-    inset 0 0 20px rgba(0,0,0,0.05),
-    0 5px 15px rgba(0,0,0,0.2);
+    -5px 4px 15px rgba(0,0,0,0.08),
+    -1px 1px 3px rgba(0,0,0,0.05);
   border-radius: 8px 0 0 8px;
 }
 
@@ -63,40 +57,36 @@
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  /* Flex properties removed to allow page-content padding to create margins */
 }
 
 .page-face.back {
   transform: rotateY(180deg);
-  background-color: #f1f2f4; /* Slightly different color for back */
+  background-color: #ffffff; /* Keep back same as front for clean look */
 }
 
 .page-content {
   width: 100%;
-  /* height: 100%; <-- This was the problem, removing it fixes the bottom margin */
-  padding: 4rem; /* Increased padding for margins */
-  font-family: 'Inter', sans-serif;
+  height: 100%;
+  padding: 3rem 4rem; /* Balanced padding */
+  font-family: 'Crimson Pro', serif;
   color: #343a40;
-  position: relative;
   overflow: hidden;
-  box-sizing: border-box; /* Ensures padding is contained */
+  box-sizing: border-box;
 }
 
-/* Paper texture effect */
+/* Subtle paper texture */
 .page-content::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-image: 
-    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0);
   background-size: 25px 25px;
-  opacity: 0.5;
+  opacity: 0.8;
   pointer-events: none;
 }
 
 .braille-line {
-  line-height: 2;
-  transition: background-color 0.2s;
+  line-height: 2.2; /* More breathing room */
 }
 
 .braille-word {
@@ -104,19 +94,17 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.2rem;
   letter-spacing: 0.2em;
-  color: #6c757d;
+  color: #495057; /* Slightly darker for better contrast */
   cursor: pointer;
   display: inline-block;
   
   /* More realistic embossed effect */
   text-shadow: 
-    0.5px 0.5px 1px rgba(255, 255, 255, 0.9),  /* Top-left highlight */
-    -1px -1px 2px rgba(0, 0, 0, 0.2),      /* Bottom-right shadow for depth */
-    1px 1px 3px rgba(0,0,0,0.1);           /* Softer drop shadow */
+    0.5px 0.5px 1px rgba(255, 255, 255, 0.8),  /* Top-left highlight */
+    -0.5px -0.5px 1px rgba(0, 0, 0, 0.15);    /* Bottom-right shadow */
 
-  /* Transition for the fade-out effect - optimized for performance */
-  transition: color 0.3s ease-in-out;
-  will-change: color;
+  transition: color 0.4s ease, text-shadow 0.4s ease;
+  will-change: color, text-shadow;
 }
 
 /* The English translation, which fades in */
@@ -128,26 +116,24 @@
   transform: translate(-50%, -50%);
   width: max-content;
   
-  font-family: 'Crimson Pro', serif; /* Changed font for book aesthetic */
-  font-weight: 600; /* Adjusted for serif readability */
-  font-size: 1.1rem; /* Slightly larger for emphasis */
-  color: #343a40; /* Using dark-text for better contrast */
+  font-family: 'Crimson Pro', serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2c5282; /* Use brand navy for translated text */
   text-shadow: none;
   letter-spacing: normal;
   line-height: 1;
 
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.4s ease;
   will-change: opacity;
   pointer-events: none;
 }
 
-/* REMOVED .translated class selectors */
-
 /* NEW: On hover, fade out braille and fade in English */
 .braille-word:hover {
   color: transparent;
-  text-shadow: none; /* Shadow removed instantly to improve performance */
+  text-shadow: none;
 }
 
 .braille-word:hover::after {
@@ -163,15 +149,15 @@
 }
 .page.cover h3 {
   font-size: 3rem;
+  font-family: 'Crimson Pro', serif;
 }
 .page.cover .braille-line {
   font-size: 1.5rem;
 }
 
-/* NEW: Style for navigation to ensure it's on top */
 .book-navigation {
   position: relative;
-  z-index: 10; /* Ensures buttons are on top of any stray page elements */
+  z-index: 10;
 }
 
 /* Responsive adjustments */

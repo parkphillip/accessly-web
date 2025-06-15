@@ -17,14 +17,14 @@ const BrailleMenuBook = () => {
 
   const generatePages = useCallback((text: string): Page[] => {
     const lines = text.split('\n').filter(line => line.trim() !== '');
-    const linesPerPage = 6; // Reduced from 8 to prevent overflow
+    const linesPerPage = 6;
     const contentPages: Page[] = [];
 
     for (let i = 0; i < lines.length; i += linesPerPage) {
       const chunk = lines.slice(i, i + linesPerPage);
       contentPages.push({
         type: 'page',
-        title: i === 0 ? 'Menu Highlights' : '',
+        title: i === 0 ? 'Menu' : '',
         content: chunk,
       });
     }
@@ -33,8 +33,8 @@ const BrailleMenuBook = () => {
       { type: 'page', title: '', content: [] }, // Inside front cover
       {
         type: 'cover',
-        title: "Accessly Menus",
-        content: ["Your Custom Menu", "Est. 2024"]
+        title: "Accessly Menu",
+        content: ["Your Custom Braille Menu"]
       },
       ...contentPages,
       { type: 'page', title: '', content: [] }, // Final blank page
@@ -97,7 +97,7 @@ const BrailleMenuBook = () => {
     <section id="braille-book" className="py-24 bg-light-bg">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-dark-text mb-4 headline-underline">
+          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-dark-text mb-4">
             Create a Braille Menu
           </h2>
           <p className="text-lg text-medium-text max-w-3xl mx-auto">
@@ -148,30 +148,26 @@ const BrailleMenuBook = () => {
             ))}
           </div>
           
-          <div className="book-navigation flex justify-center items-center gap-8 mt-12">
+          <div className="book-navigation flex justify-center items-center gap-4 mt-12">
             <button
               onClick={() => flipPage('prev')}
               disabled={!canGoBack || isFlipping}
-              className="primary-button flex items-center gap-2 disabled:bg-light-gray disabled:text-medium-text disabled:cursor-not-allowed"
+              className="secondary-button p-3 disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Previous page"
             >
               <ChevronLeft className="w-5 h-5" />
-              Previous
             </button>
             
-            <div className="text-center">
-              <div className="text-2xl font-serif font-bold text-dark-text">
+            <div className="text-center font-sans text-medium-text w-24">
                 <DisplayedPageNumber />
-              </div>
             </div>
             
             <button
               onClick={() => flipPage('next')}
               disabled={!canGoForward || isFlipping}
-              className="primary-button flex items-center gap-2 disabled:bg-light-gray disabled:text-medium-text disabled:cursor-not-allowed"
+              className="secondary-button p-3 disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Next page"
             >
-              Next
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>

@@ -37,11 +37,6 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
 
   return (
     <div className="mb-12 p-8 structured-card max-w-4xl mx-auto">
-      <h3 className="text-2xl font-serif font-bold text-dark-text mb-4">Create Your Menu</h3>
-      <p className="text-medium-text mb-6">
-        Choose your input method. The book will automatically paginate the content. For best results, separate menu items with a new line.
-      </p>
-
       <div className="flex justify-center mb-8">
         <div className="inline-flex items-center bg-subtle-gray p-1 rounded-lg space-x-1">
           <button 
@@ -66,7 +61,7 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Paste your menu here..."
-              className="form-input min-h-[240px] text-base font-sans w-full h-full resize-none"
+              className="form-input min-h-[240px] text-base font-sans w-full h-full resize-none bg-light-bg border-subtle-gray focus:border-brand-navy focus:ring-brand-navy/20"
             />
           </div>
         ) : (
@@ -84,6 +79,7 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
               />
               <UploadCloud className="w-10 h-10 text-gray-400 mb-4" />
               <p className="text-dark-text font-semibold">Click to upload your menu image</p>
+
               <p className="text-sm text-medium-text">PNG, JPG, or WEBP</p>
               {selectedFile && (
                 <p className="text-sm text-green-600 mt-4 bg-green-100 px-3 py-1 rounded-full">
