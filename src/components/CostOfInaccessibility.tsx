@@ -12,15 +12,15 @@ const CostOfInaccessibility = () => {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     >
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-20">
             <h4 className="text-4xl font-heading text-dark-text font-bold mb-4">The Cost of Inaccessibility</h4>
             <div className="w-16 h-1 bg-brand-terracotta mx-auto rounded-full"></div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
             <motion.div 
-              className="relative order-2 lg:order-1 flex justify-center items-center group"
+              className="relative order-2 lg:order-1 flex justify-center items-center group lg:col-span-2"
             >
                 <div className="absolute bg-brand-navy/5 w-[450px] h-[450px] rounded-full blur-3xl transition-all duration-500 group-hover:bg-brand-navy/10"></div>
                 <img 
@@ -30,7 +30,7 @@ const CostOfInaccessibility = () => {
                 />
             </motion.div>
             
-            <div className="space-y-8 order-1 lg:order-2">
+            <div className="space-y-8 order-1 lg:order-2 lg:col-span-3">
                 <p className="text-xl text-dark-text leading-relaxed">
                     Without accessible menus, the dining experience becomes fundamentally different—creating reliance and turning simple pleasure into challenge.
                 </p>
