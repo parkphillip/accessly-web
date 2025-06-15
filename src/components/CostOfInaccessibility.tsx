@@ -23,7 +23,7 @@ const CostOfInaccessibility = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-stretch">
             <div className="order-2 lg:order-1 lg:col-span-2">
               <a href="/accessibility_report.pdf" target="_blank" rel="noopener noreferrer" className="block group h-full">
-                <Card className="overflow-hidden transition-all duration-200 group-hover:shadow-strong group-hover:-translate-y-1 border-2 border-transparent group-hover:border-brand-navy/50 h-full flex flex-col rounded-2xl">
+                <Card className="overflow-hidden transition-all duration-300 group-hover:shadow-xl border-2 border-transparent group-hover:border-brand-navy/50 h-full flex flex-col rounded-2xl">
                   <CardContent className="p-0 flex-grow">
                     <div className="relative h-full">
                       <img 
@@ -46,20 +46,20 @@ const CostOfInaccessibility = () => {
             
             <div className="space-y-8 order-1 lg:order-2 lg:col-span-3">
                 <p className="text-xl text-dark-text leading-relaxed">
-                  Our recent survey of 212 local restaurants revealed a significant accessibility gap: <strong className="text-brand-terracotta font-bold underline decoration-wavy decoration-from-font">none</strong> offered Braille menus.
+                  We surveyed <strong className="text-brand-navy font-bold">230 local restaurants</strong>. Only <strong className="text-brand-navy font-bold">2 had Braille menus</strong>—and both were outdated. That’s a gap we’re here to close.
                 </p>
                 
                 <div className="space-y-6 pt-4">
                     <div className="relative">
                         <div className="flex justify-between items-baseline mb-1">
                             <span className="text-lg font-medium text-dark-text">Restaurants with Braille Menus</span>
-                            <span className="text-4xl font-heading font-bold text-brand-navy">0%</span>
+                            <span className="text-4xl font-heading font-bold text-brand-navy">0.9%</span>
                         </div>
                         <div className="w-full bg-subtle-gray rounded-full h-2.5">
                             <motion.div 
                               className="bg-brand-navy h-2.5 rounded-full" 
                               initial={{ width: '0%' }} 
-                              whileInView={{ width: "0%" }} 
+                              whileInView={{ width: "0.9%" }} 
                               viewport={{ once: true }} 
                               transition={{ duration: 1.5, delay: 0.5 }}
                             ></motion.div>
@@ -68,14 +68,14 @@ const CostOfInaccessibility = () => {
                     
                     <div className="relative">
                         <div className="flex justify-between items-baseline mb-1">
-                            <span className="text-lg font-medium text-dark-text">Opportunity for Inclusive Dining</span>
-                            <span className="text-4xl font-heading font-bold text-brand-terracotta">100%</span>
+                            <span className="text-lg font-medium text-dark-text">Restaurants with Audio Menus for Blind Diners</span>
+                            <span className="text-4xl font-heading font-bold text-brand-terracotta">3.0%</span>
                         </div>
                         <div className="w-full bg-subtle-gray rounded-full h-2.5">
                             <motion.div 
                               className="bg-brand-terracotta h-2.5 rounded-full" 
                               initial={{ width: '0%' }} 
-                              whileInView={{ width: "100%" }} 
+                              whileInView={{ width: "3.0%" }} 
                               viewport={{ once: true }} 
                               transition={{ duration: 1.5, delay: 0.7 }}
                             ></motion.div>
@@ -84,7 +84,7 @@ const CostOfInaccessibility = () => {
                 </div>
 
                 <p className="text-xl text-medium-text leading-relaxed font-medium pt-6 border-t border-light-gray mt-8">
-                  This isn't just a statistic—it's a barrier. We're dedicated to removing it.
+                  These aren't just numbers—they're barriers. We're committed to removing them.
                 </p>
             </div>
         </div>
