@@ -1,13 +1,7 @@
+
 "use client";
 import { useEffect, useRef, useState } from "react";
-import {
-  Color,
-  Scene,
-  Fog,
-  PerspectiveCamera,
-  Vector3,
-  Group,
-} from "three";
+import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
 import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
@@ -70,7 +64,7 @@ interface WorldProps {
 
 export function Globe({ globeConfig, data }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
-  const groupRef = useRef<Group | null>(null);
+  const groupRef = useRef<THREE.Group>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
   const defaultProps = {
