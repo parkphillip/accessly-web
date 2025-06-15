@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Upload, Type, RotateCcw } from 'lucide-react';
 import { brailleMap, translateToBraille, sampleTexts } from '../utils/brailleUtils';
@@ -19,7 +18,7 @@ const BrailleMenuPreview = () => {
 
   // Initialize with sample content
   useEffect(() => {
-    const samplePages = sampleTexts.map((text, index) => ({
+    const samplePages = Object.values(sampleTexts).map((text, index) => ({
       id: index,
       brailleText: translateToBraille(text),
       englishText: text
@@ -227,7 +226,7 @@ const BrailleMenuPreview = () => {
               </span>
               <button
                 onClick={() => {
-                  setPages(sampleTexts.map((text, index) => ({
+                  setPages(Object.values(sampleTexts).map((text, index) => ({
                     id: index,
                     brailleText: translateToBraille(text),
                     englishText: text

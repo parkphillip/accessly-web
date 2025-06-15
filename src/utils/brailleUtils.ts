@@ -1,3 +1,4 @@
+
 // A mapping for lower-case letters only. No spaces or placeholders.
 export const brailleMap: { [key: string]: string } = {
   'a': '⠁', 'b': '⠃', 'c': '⠉', 'd': '⠙', 'e': '⠑', 'f': '⠋', 'g': '⠛', 'h': '⠓',
@@ -20,10 +21,16 @@ export function lineToBraille(line: string): string[] {
 
 // Added to fix build errors from read-only files
 export const translateToBraille = (text: string): string => {
-  return text.split('').map(char => brailleMap[char.toLowerCase()] || ' ').join('');
+  return text.split('').map(char => {
+    const lowerChar = char.toLowerCase();
+    if (brailleMap[lowerChar]) {
+      return brailleMap[lowerChar];
+    }
+    return char === ' ' ? ' ' : ''; // Keep spaces, remove unknown chars
+  }).join('');
 };
 
-export const sampleTexts: { [key: string]: string } = {
-  'Sample Menu 1': 'Item 1\nItem 2\nItem 3',
-  'Sample Menu 2': 'Drink A\nDrink B\nDrink C',
-};
+export const sampleTexts: string[] = [
+  "Starters\nGarlic Bread - 4.50\nBruschetta - 6.00\n\nMain Courses\nMargherita Pizza - 12.00\nSpaghetti Carbonara - 14.50",
+  "Desserts\nTiramisu - 7.00\nCheesecake - 6.50\n\nDrinks\nWater - 2.00\nCola - 2.50"
+];

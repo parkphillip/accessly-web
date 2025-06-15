@@ -1,8 +1,10 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { translateToBraille } from '../utils/brailleUtils';
 
 // A set of characters for the scramble effect
 const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const BRAILLE_CHARS = '⠁⠃⠉⠙⠑⠋⠛⠓⠊⠚⠅⠇⠍⠝⠕⠏⠟⠗⠎⠞⠥⠧⠺⠭⠽⠵';
 
 interface AnimatedTextProps {
   text: string; // Expects a string, e.g., "Accessible\nWorld"
@@ -11,56 +13,86 @@ interface AnimatedTextProps {
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   const [displayedText, setDisplayedText] = useState('');
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [isBraille, setIsBraille] = useState(false);
+  
+  const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const toggleIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // This effect runs the scramble animation
+  // Memoize braille translation to avoid re-computation
+  const brailleText = useMemo(() => {
+    return text
+      .split('\n')
+      .map(line => translateToBraille(line))
+      .join('\n');
+  }, [text]);
+
+  // This effect runs the scramble animation whenever `isBraille` changes.
   useEffect(() => {
-    // Set initial text to empty to avoid flash of final text
-    setDisplayedText(text.split('\n').map(line => ' '.repeat(line.length)).join('\n'));
+    const targetText = isBraille ? brailleText : text;
+    const scrambleChars = isBraille ? BRAILLE_CHARS : SCRAMBLE_CHARS;
+    
+    const targetLines = targetText.split('\n');
+    const maxLen = Math.max(...targetLines.map(l => l.length));
+
     let iteration = 0;
     
-    if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+    if (animationIntervalRef.current) {
+        clearInterval(animationIntervalRef.current);
     }
 
-    // Start animation after a short delay
-    const startTimeout = setTimeout(() => {
-      const targetLines = text.split('\n');
-      const maxLen = Math.max(...targetLines.map(l => l.length));
+    animationIntervalRef.current = setInterval(() => {
+      const newText = targetLines
+        .map((line) => {
+          return [...line]
+            .map((letter, index) => {
+              if (index < iteration) {
+                return line[index];
+              }
+              if (letter === ' ') return ' ';
+              return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+            })
+            .join('');
+        })
+        .join('\n');
 
-      intervalRef.current = setInterval(() => {
-        const newText = targetLines
-          .map((line) => {
-            return [...line]
-              .map((letter, index) => {
-                if (index < iteration) {
-                  return line[index];
-                }
-                if (letter === ' ') return ' ';
-                // Return a random character for the scramble effect
-                return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-              })
-              .join('');
-          })
-          .join('\n');
+      setDisplayedText(newText);
 
-        setDisplayedText(newText);
+      if (iteration >= maxLen) {
+        if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
+        setDisplayedText(targetText); // Cleanly finish on the target text
+      }
 
-        if (iteration >= maxLen) {
-          if (intervalRef.current) clearInterval(intervalRef.current);
-          setDisplayedText(text); // Ensure it cleanly ends on the correct text
-        }
+      iteration += 1 / 3; // Animation speed
+    }, 35); // Frame rate
 
-        iteration += 1 / 3; // Controls the speed of the reveal
-      }, 35); // ms between each frame update
-    }, 500); // ms delay before starting animation
-
-    // Cleanup on component unmount
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      clearTimeout(startTimeout);
+      if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
     };
-  }, [text]);
+  }, [isBraille, text, brailleText]);
+
+  // This effect toggles between English and Braille modes.
+  useEffect(() => {
+    // Initial display: empty
+    setDisplayedText(text.split('\n').map(line => ' '.repeat(line.length)).join('\n'));
+    
+    // Start with English text animation after a delay
+    const initialTimeout = setTimeout(() => {
+        setIsBraille(false);
+        
+        // Then, set up the recurring toggle
+        if (toggleIntervalRef.current) clearInterval(toggleIntervalRef.current);
+        toggleIntervalRef.current = setInterval(() => {
+            setIsBraille(prev => !prev);
+        }, 4000); // Switch every 4 seconds
+
+    }, 500); // Delay before starting the very first animation
+
+    return () => {
+      clearTimeout(initialTimeout);
+      if (toggleIntervalRef.current) clearInterval(toggleIntervalRef.current);
+      if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
+    };
+  }, [text]); // Only depends on the base text prop
 
   return (
     <span className={className ? `${className} whitespace-pre-wrap` : 'whitespace-pre-wrap'}>
@@ -71,13 +103,11 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
           style={{ 
             display: 'block',
             lineHeight: '1.1',
+            minHeight: '1.2em', // Prevent layout shift on empty lines
             marginBottom: i === 0 ? '4px' : 0, 
           }}
         >
-          {/* We let the parent component control font-size, color, etc. via className */}
-          <span style={{ letterSpacing: '1px' }}>
-            {line}
-          </span>
+          {line}
         </div>
       ))}
     </span>
