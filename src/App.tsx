@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Partner from "./pages/Partner";
 import Network from "./pages/Network";
 import Fund from "./pages/Fund";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/partner" element={<Partner />} />
