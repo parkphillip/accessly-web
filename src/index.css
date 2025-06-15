@@ -99,15 +99,15 @@
 /* New structured card for a professional feel */
 @layer components {
   .structured-card {
-    @apply bg-off-white shadow-medium border border-subtle-gray/50 rounded-lg;
+    @apply bg-off-white shadow-medium border border-subtle-gray/50 rounded-xl;
   }
   
   .primary-button {
-    @apply bg-brand-navy text-off-white px-8 py-3 text-base font-medium rounded-md hover:bg-brand-navy/90 transition-colors duration-300 shadow-subtle hover:shadow-medium focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2;
+    @apply bg-brand-navy text-off-white px-8 py-3 text-base font-medium rounded-xl hover:bg-brand-navy/90 transition-colors duration-300 shadow-medium hover:shadow-strong focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2;
   }
 
   .secondary-button {
-    @apply bg-off-white text-brand-navy px-8 py-3 text-base font-medium rounded-md border border-light-gray hover:bg-light-bg transition-colors duration-300 shadow-subtle hover:shadow-medium focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2;
+    @apply bg-off-white text-brand-navy px-8 py-3 text-base font-medium rounded-xl border border-light-gray hover:bg-light-bg transition-colors duration-300 shadow-medium hover:shadow-strong focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2;
   }
 
   .form-input {

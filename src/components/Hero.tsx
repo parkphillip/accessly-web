@@ -1,54 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowDown, Edit3 } from 'lucide-react';
+
+import React from 'react';
+import { ArrowDown } from 'lucide-react';
 import alee from '/public/placeholder.svg';
 
 const Hero = () => {
-  const [currentText, setCurrentText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [showCursor, setShowCursor] = useState(true);
-
-  // Braille and English text
-  const brailleText = '⠑⠧⠑⠗⠽ ⠍⠑⠝⠥ ⠞⠑⠇⠇⠎ ⠁ ⠎⠞⠕⠗⠽';
-  const englishText = 'every menu tells a story';
-  useEffect(() => {
-    const typingSequence = async () => {
-      setIsTyping(true);
-      setCurrentText('');
-
-      // Type braille text
-      for (let i = 0; i <= brailleText.length; i++) {
-        setCurrentText(brailleText.substring(0, i));
-        await new Promise(resolve => setTimeout(resolve, 80));
-      }
-
-      // Pause
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Clear and type English
-      setCurrentText('');
-      await new Promise(resolve => setTimeout(resolve, 200));
-      for (let i = 0; i <= englishText.length; i++) {
-        setCurrentText(englishText.substring(0, i));
-        await new Promise(resolve => setTimeout(resolve, 60));
-      }
-
-      // Pause before restarting
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      setIsTyping(false);
-    };
-    const interval = setInterval(typingSequence, 8000);
-    typingSequence(); // Start immediately
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Cursor blink effect
-  useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 500);
-    return () => clearInterval(cursorInterval);
-  }, []);
   const scrollToNext = () => {
     const element = document.getElementById('impact');
     if (element) {
@@ -64,25 +19,13 @@ const Hero = () => {
         {/* Left Side - Content */}
         <div className="space-y-8 z-10">
           <h1 className="text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-dark-text leading-tight">
-            Dignity for Diners.
-            <span className="block text-brand-navy">Accessibility for All.</span>
+            Braille Menus
+            <span className="block text-brand-navy">on <span className="italic text-brand-terracotta">Every</span> Table.</span>
           </h1>
           
           <p className="text-lg lg:text-xl text-medium-text max-w-xl leading-relaxed">
-            We provide high-quality, durable braille menus to restaurants, empowering visually impaired diners with independence. No cost, no catch—just a commitment to a more inclusive world.
+            Accessly is a civic startup making public spaces accessible—starting with braille menus. We're building toward a future where access is standard, not special.
           </p>
-          
-          {/* Typing Animation */}
-          <div className="structured-card p-4">
-            <div className="h-12 flex items-center border-b border-light-gray mb-3">
-              <Edit3 className="w-5 h-5 text-medium-text mr-3 shrink-0" />
-              <span className="text-base font-mono text-dark-text tracking-wider overflow-x-hidden whitespace-nowrap">
-                {currentText}
-                <span className="inline-block w-px h-5 bg-dark-text ml-1 animate-blink border border-dark-text" />
-              </span>
-            </div>
-            <div className="text-xs text-medium-text font-mono">Grade 2 Braille Translation</div>
-          </div>
 
           {/* Call to Action */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
