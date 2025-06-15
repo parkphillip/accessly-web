@@ -60,14 +60,14 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Paste your menu here..."
-              className="form-input min-h-[240px] text-base font-sans w-full h-full resize-none bg-light-bg border-subtle-gray focus:border-brand-navy focus:ring-brand-navy/20"
+              className="form-input text-base font-sans w-full h-full resize-none bg-light-bg border-subtle-gray focus:border-brand-navy focus:ring-brand-navy/20"
             />
           </div>
         ) : (
           <div className="animate-fade-in h-full">
             <div
               onClick={handleUploadAreaClick}
-              className="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed border-subtle-gray rounded-lg cursor-pointer hover:bg-light-bg/50 hover:border-brand-navy transition-colors min-h-[240px] h-full bg-light-bg"
+              className="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed border-subtle-gray rounded-lg cursor-pointer hover:bg-light-bg/50 hover:border-brand-navy transition-colors h-full bg-light-bg"
             >
               <input
                 type="file"

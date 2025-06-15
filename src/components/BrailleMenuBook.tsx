@@ -62,7 +62,7 @@ const BrailleMenuBook = () => {
       const chunk = lines.slice(i, i + linesPerPage);
       contentPages.push({
         type: 'page',
-        title: i === 0 ? 'Menu' : '',
+        title: '', // Removed "Menu" title from content pages
         content: chunk,
       });
     }
