@@ -20,16 +20,16 @@ const CostOfInaccessibility = () => {
             <div className="w-16 h-1 bg-brand-terracotta mx-auto rounded-full"></div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-stretch">
             <div className="order-2 lg:order-1 lg:col-span-2">
-              <a href="/accessibility_report.pdf" target="_blank" rel="noopener noreferrer" className="block group">
-                <Card className="overflow-hidden transition-all duration-300 group-hover:shadow-strong group-hover:-translate-y-2 border-2 border-transparent group-hover:border-brand-navy/50">
-                  <CardContent className="p-0">
-                    <div className="relative">
+              <a href="/accessibility_report.pdf" target="_blank" rel="noopener noreferrer" className="block group h-full">
+                <Card className="overflow-hidden transition-all duration-200 group-hover:shadow-strong group-hover:-translate-y-1 border-2 border-transparent group-hover:border-brand-navy/50 h-full flex flex-col rounded-2xl">
+                  <CardContent className="p-0 flex-grow">
+                    <div className="relative h-full">
                       <img 
                         src="/lovable-uploads/c7975745-76c2-4e5f-bc18-09cedfa14dfb.png" 
                         alt="Braille document representing an accessibility report" 
-                        className="w-full h-auto object-cover aspect-[4/5]"
+                        className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                       <div className="absolute bottom-0 left-0 p-6 w-full">
