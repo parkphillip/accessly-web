@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { translateToBraille } from '../utils/brailleUtils';
 import BrailleChar from './BrailleChar';
 
-// A mix of characters for the scramble effect - now only braille for consistency.
-const SCRAMBLE_CHARS = '⠁⠃⠉⠙⠑⠋⠛⠓⠊⠚⠅⠇⠍⠝⠕⠏⠟⠗⠎⠞⠥⠧⠺⠭⠽⠵';
+// Character sets for the scramble effect
+const BRAILLE_SCRAMBLE_CHARS = '⠁⠃⠉⠙⠑⠋⠛⠓⠊⠚⠅⠇⠍⠝⠕⠏⠟⠗⠎⠞⠥⠧⠺⠭⠽⠵';
+const ENGLISH_SCRAMBLE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
 
 interface AnimatedTextProps {
   text: string;
@@ -38,6 +40,10 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     const targetText = isBraille ? brailleText : text;
     const targetLines = targetText.split('\n');
     
+    // Choose scramble characters based on the animation direction.
+    // To Braille -> use Braille chars. To English -> use English chars.
+    const scrambleChars = isBraille ? BRAILLE_SCRAMBLE_CHARS : ENGLISH_SCRAMBLE_CHARS;
+    
     let iteration = 0;
     
     if (animationIntervalRef.current) {
@@ -52,7 +58,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
               if (index < iteration) {
                 return line[index];
               }
-              return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+              return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
             })
             .join('');
         })
