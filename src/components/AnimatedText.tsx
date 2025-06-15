@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { translateToBraille } from '../utils/brailleUtils';
 import BrailleChar from './BrailleChar';
@@ -111,8 +110,9 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
         style={{ 
           display: 'block',
           lineHeight: '1.1',
-          height: '1.3em',
-          marginBottom: lineIndex === 0 ? '4px' : 0, 
+          height: '1.2em', // Adjusted for better vertical alignment
+          whiteSpace: 'nowrap', // Prevent the line from wrapping
+          overflow: 'hidden', // Hide any content that overflows
         }}
       >
         {[...line].map((char, j) => {
