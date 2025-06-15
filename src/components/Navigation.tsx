@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
 
@@ -85,7 +86,7 @@ const Navigation = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-sm ${
+                className={`relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base ${
                   activeSection === item.id 
                     ? 'text-brand-navy' 
                     : 'text-medium-text hover:text-dark-text hover:bg-subtle-gray/70'
