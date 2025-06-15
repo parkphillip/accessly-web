@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import { Eye, UsersRound, Accessibility } from 'lucide-react';
 import gsap from 'gsap';
@@ -114,10 +115,10 @@ const DiningLens = () => {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.current,
-                start: 'top top',
-                end: `+=${cardsData.length * 150}%`,
+                start: 'top 80%', // Start much earlier - when section is 80% visible
+                end: `+=${cardsData.length * 100}%`, // Shorter scroll distance for faster animation
                 pin: true,
-                scrub: 1,
+                scrub: 0.5, // Reduced scrub value for more responsive animation
                 anticipatePin: 1,
                 immediateRender: false,
             },
@@ -136,7 +137,7 @@ const DiningLens = () => {
                 rotate: finalRotate,
                 duration: 1,
                 ease: 'power2.out',
-            }, index * 0.3);
+            }, index * 0.2); // Reduced delay between cards for faster sequence
         });
 
         return () => {
