@@ -147,7 +147,7 @@ const BrailleMenuBook = () => {
             ))}
           </div>
           
-          <div className="flex justify-center items-center gap-8 mt-12">
+          <div className="book-navigation flex justify-center items-center gap-8 mt-12">
             <button
               onClick={() => flipPage('prev')}
               disabled={!canGoBack || isFlipping}
