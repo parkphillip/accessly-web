@@ -52,7 +52,9 @@ const Hero = () => {
         
         {/* Right Column: Globe */}
         <div className="hidden lg:flex justify-center items-center relative w-full h-[500px]">
-          <GlobeDemo />
+          <div className="w-full h-full relative bottom-8">
+            <GlobeDemo />
+          </div>
         </div>
       </div>
 

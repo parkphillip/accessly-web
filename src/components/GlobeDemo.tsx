@@ -397,7 +397,7 @@ export default function GlobeDemo() {
   return (
     <div className="w-full h-full relative">
       <Suspense fallback={<GlobePlaceholder />}>
-        <div className="w-full h-[600px]">
+        <div className="w-full h-full">
           <World data={sampleArcs} globeConfig={globeConfig} />
         </div>
       </Suspense>
