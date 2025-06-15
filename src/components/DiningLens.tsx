@@ -79,7 +79,7 @@ const CARD_WIDTH = '420px';
 const CARD_HEIGHT = '520px';
 const IMAGE_HEIGHT = '320px';
 const CARD_PADDING = '2.5rem';
-const STACK_OFFSET = 40; // Reduced offset for tighter stacking
+const STACK_OFFSET = 20; // Tighter stacking for better layering effect
 
 const DiningLens = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -116,7 +116,8 @@ const DiningLens = () => {
         cardsRef.current.forEach((card, index) => {
             if (!card) return;
             
-            const finalY = -index * STACK_OFFSET; // Stack upward from baseline
+            // Cards stack upward, with each new card going higher
+            const finalY = -index * STACK_OFFSET;
             const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
             
             tl.to(card, {
@@ -124,7 +125,7 @@ const DiningLens = () => {
                 rotate: finalRotate,
                 duration: 0.8,
                 ease: 'power2.out',
-            }, index * 0.3); // Sequential timing
+            }, index * 0.3);
         });
 
         return () => {
@@ -137,59 +138,26 @@ const DiningLens = () => {
             <div className="h-screen flex items-center justify-center overflow-hidden">
                 <div className="max-w-7xl w-full mx-auto px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
                     {/* Left column */}
-                    <div className="flex flex-col justify-center h-full">
-                        <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-4 leading-tight tracking-tight">
-                            Dining Through a Different Lens
-                        </h2>
-                        <p className="text-xl text-medium-text mt-4 mb-8">
-                            Every dining experience should be inclusive and independent.
-                        </p>
-                        <p className="text-lg text-neutral-600 mb-10">
-                            Dining out presents hidden barriers for millions with vision impairments.
-                        </p>
-                        <div className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-8 sm:space-y-0 sm:space-x-8">
-                            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
-                                <Eye className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                                <div className="text-left sm:text-center">
-                                    <p className="text-3xl font-bold text-brand-navy">2.2B</p>
-                                    <p className="text-sm text-medium-text">people with vision impairments</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
-                                <UsersRound className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                                <div className="text-left sm:text-center">
-                                    <p className="text-3xl font-bold text-brand-navy">90%</p>
-                                    <p className="text-sm text-medium-text">need menu assistance</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
-                                <Accessibility className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                                <div className="text-left sm:text-center">
-                                    <p className="text-3xl font-bold text-brand-navy">10%</p>
-                                    <p className="text-sm text-medium-text">dine independently</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <LeftColumn />
 
                     {/* Right Column: responsive handling */}
                     <div className="lg:hidden flex flex-col gap-8 mt-8">
                         {cardsData.map(card => <MobileCard key={card.id} card={card} />)}
                     </div>
 
-                    {/* Desktop cards container - centered with flexbox */}
-                    <div ref={cardsContainerRef} className="hidden lg:flex items-center justify-center relative w-full min-h-[600px]">
+                    {/* Desktop cards container */}
+                    <div ref={cardsContainerRef} className="hidden lg:flex items-center justify-center relative w-full">
                         {cardsData.map((card, index) => (
                             <div
                                 key={card.id}
                                 ref={el => cardsRef.current[index] = el}
                                 className="absolute flex items-center justify-center"
                                 style={{
-                                    zIndex: cardsData.length - index, // Higher z-index for cards that should be on top
+                                    zIndex: index + 1, // Higher index cards have higher z-index (stack on top)
                                     width: CARD_WIDTH,
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
-                                    pointerEvents: index === cardsData.length - 1 ? 'auto' : 'none',
+                                    pointerEvents: 'auto',
                                 }}
                             >
                                 <div
