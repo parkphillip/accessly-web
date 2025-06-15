@@ -23,7 +23,7 @@ const CostOfInaccessibility = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-stretch">
             <div className="order-2 lg:order-1 lg:col-span-2">
               <a href="/accessibility_report.pdf" target="_blank" rel="noopener noreferrer" className="block group h-full">
-                <Card className="overflow-hidden transition-all duration-300 group-hover:shadow-xl border-2 border-transparent h-full flex flex-col rounded-2xl">
+                <Card className="overflow-hidden transition-all duration-500 ease-in-out group-hover:shadow-xl border-2 border-transparent h-full flex flex-col rounded-2xl">
                   <CardContent className="p-0 flex-grow">
                     <div className="relative h-full">
                       <img 
