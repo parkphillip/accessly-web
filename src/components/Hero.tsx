@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -19,7 +20,7 @@ const Hero = () => {
         <div className="text-center lg:text-left">
           <div className="max-w-3xl">
             <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight">
-              Building an <AnimatedText text={"Accessible"} className="text-dark-text font-mono" />
+              Building an <AnimatedText text={"Accessible"} className="text-brand-navy font-mono" />
               <span style={{
               display: 'block',
               lineHeight: '1.1',
