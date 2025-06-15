@@ -64,7 +64,7 @@ const Hero = () => {
         {/* Left Side - Content */}
         <div className="space-y-8 z-10">
           <h1 className="text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-dark-text leading-tight">
-            Dignity on the Menu.
+            Dignity for Diners.
             <span className="block text-brand-navy">Accessibility for All.</span>
           </h1>
           
