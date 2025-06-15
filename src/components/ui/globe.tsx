@@ -16,9 +16,9 @@ declare module "@react-three/fiber" {
 
 extend({ ThreeGlobe: ThreeGlobe });
 
-const RING_PROPAGATION_SPEED = 3;
+const RING_PROPAGATION_SPEED = 2;
 const aspect = 1.2;
-const cameraZ = 300;
+const cameraZ = 250;
 
 type Position = {
   order: number;
@@ -61,15 +61,61 @@ interface WorldProps {
   data: Position[];
 }
 
-// Mock countries data since we don't have the JSON file
+// Mock countries data with basic continent shapes
 const countries = {
   features: [
+    // North America
     {
       geometry: {
-        coordinates: [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]],
+        coordinates: [[[-140, 60], [-140, 20], [-60, 20], [-60, 70], [-140, 60]]],
         type: "Polygon"
       },
-      properties: { name: "World" },
+      properties: { name: "North America" },
+      type: "Feature"
+    },
+    // South America
+    {
+      geometry: {
+        coordinates: [[[-80, 10], [-80, -50], [-35, -50], [-35, 10], [-80, 10]]],
+        type: "Polygon"
+      },
+      properties: { name: "South America" },
+      type: "Feature"
+    },
+    // Europe
+    {
+      geometry: {
+        coordinates: [[[-10, 70], [-10, 35], [40, 35], [40, 70], [-10, 70]]],
+        type: "Polygon"
+      },
+      properties: { name: "Europe" },
+      type: "Feature"
+    },
+    // Africa
+    {
+      geometry: {
+        coordinates: [[[-20, 35], [-20, -35], [50, -35], [50, 35], [-20, 35]]],
+        type: "Polygon"
+      },
+      properties: { name: "Africa" },
+      type: "Feature"
+    },
+    // Asia
+    {
+      geometry: {
+        coordinates: [[[40, 70], [40, 0], [140, 0], [140, 70], [40, 70]]],
+        type: "Polygon"
+      },
+      properties: { name: "Asia" },
+      type: "Feature"
+    },
+    // Australia
+    {
+      geometry: {
+        coordinates: [[[110, -10], [110, -45], [155, -45], [155, -10], [110, -10]]],
+        type: "Polygon"
+      },
+      properties: { name: "Australia" },
       type: "Feature"
     }
   ]
@@ -83,19 +129,19 @@ export function Globe({ globeConfig, data }: WorldProps) {
   const [isInitialized, setIsInitialized] = useState(false);
 
   const defaultProps = {
-    pointSize: 1,
+    pointSize: 2,
     atmosphereColor: "#ffffff",
     showAtmosphere: true,
     atmosphereAltitude: 0.1,
-    polygonColor: "rgba(255,255,255,0.7)",
+    polygonColor: "rgba(255,255,255,0.8)",
     globeColor: "#2c5282",
     emissive: "#062056",
     emissiveIntensity: 0.1,
     shininess: 0.9,
-    arcTime: 2000,
+    arcTime: 3000,
     arcLength: 0.9,
     rings: 1,
-    maxRings: 3,
+    maxRings: 2,
     ...globeConfig,
   };
 
@@ -166,8 +212,8 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
     globeRef.current
       .hexPolygonsData(countries.features)
-      .hexPolygonResolution(3)
-      .hexPolygonMargin(0.7)
+      .hexPolygonResolution(6)
+      .hexPolygonMargin(0.3)
       .showAtmosphere(defaultProps.showAtmosphere)
       .atmosphereColor(defaultProps.atmosphereColor)
       .atmosphereAltitude(defaultProps.atmosphereAltitude)
@@ -181,7 +227,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .arcEndLng((d) => (d as { endLng: number }).endLng * 1)
       .arcColor((e: any) => (e as { color: string }).color)
       .arcAltitude((e) => (e as { arcAlt: number }).arcAlt * 1)
-      .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
+      .arcStroke(() => 0.5)
       .arcDashLength(defaultProps.arcLength)
       .arcDashInitialGap((e) => (e as { order: number }).order * 1)
       .arcDashGap(15)
@@ -191,12 +237,12 @@ export function Globe({ globeConfig, data }: WorldProps) {
       .pointsData(filteredPoints)
       .pointColor((e) => (e as { color: string }).color)
       .pointsMerge(true)
-      .pointAltitude(0.0)
-      .pointRadius(2);
+      .pointAltitude(0.01)
+      .pointRadius(1.5);
 
     globeRef.current
       .ringsData([])
-      .ringColor(() => defaultProps.polygonColor)
+      .ringColor(() => "rgba(255,255,255,0.4)")
       .ringMaxRadius(defaultProps.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
       .ringRepeatPeriod(
@@ -216,7 +262,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     defaultProps.maxRings,
   ]);
 
-  // Handle rings animation with cleanup
+  // Handle rings animation with cleanup - more subtle
   useEffect(() => {
     if (!globeRef.current || !isInitialized || !data) return;
 
@@ -226,7 +272,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
       const newNumbersOfRings = genRandomNumbers(
         0,
         data.length,
-        Math.floor((data.length * 4) / 5),
+        Math.floor((data.length * 2) / 5), // Fewer rings
       );
 
       const ringsData = data
@@ -234,11 +280,11 @@ export function Globe({ globeConfig, data }: WorldProps) {
         .map((d) => ({
           lat: d.startLat,
           lng: d.startLng,
-          color: d.color,
+          color: "rgba(255,255,255,0.3)",
         }));
 
       globeRef.current.ringsData(ringsData);
-    }, 2000);
+    }, 4000); // Slower pulse
 
     return () => {
       clearInterval(interval);
@@ -254,7 +300,7 @@ export function WebGLRendererConfig() {
   useEffect(() => {
     gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
-    gl.setClearColor(0xffaaff, 0);
+    gl.setClearColor(0x000000, 0);
   }, []);
 
   return null;
@@ -267,19 +313,21 @@ export function World(props: WorldProps) {
   return (
     <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
-      <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
+      <ambientLight color={globeConfig.ambientLight} intensity={0.8} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
         position={new Vector3(-400, 100, 400)}
+        intensity={1}
       />
       <directionalLight
         color={globeConfig.directionalTopLight}
         position={new Vector3(-200, 500, 200)}
+        intensity={0.8}
       />
       <pointLight
         color={globeConfig.pointLight}
         position={new Vector3(-200, 500, 200)}
-        intensity={0.8}
+        intensity={0.6}
       />
       <Globe {...props} />
       <OrbitControls
@@ -287,8 +335,8 @@ export function World(props: WorldProps) {
         enableZoom={false}
         minDistance={cameraZ}
         maxDistance={cameraZ}
-        autoRotateSpeed={1}
-        autoRotate={true}
+        autoRotateSpeed={globeConfig.autoRotateSpeed || 0.3}
+        autoRotate={globeConfig.autoRotate}
         minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI - Math.PI / 3}
       />

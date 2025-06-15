@@ -10,7 +10,7 @@ const GlobePlaceholder = () => (
 
 export default function GlobeDemo() {
   const globeConfig = {
-    pointSize: 4,
+    pointSize: 2,
     globeColor: "#2c5282", // brand-navy
     showAtmosphere: true,
     atmosphereColor: "#FFFFFF",
@@ -18,18 +18,18 @@ export default function GlobeDemo() {
     emissive: "#062056",
     emissiveIntensity: 0.1,
     shininess: 0.9,
-    polygonColor: "rgba(255,255,255,0.7)",
+    polygonColor: "rgba(255,255,255,0.8)",
     ambientLight: "#38bdf8",
     directionalLeftLight: "#ffffff",
     directionalTopLight: "#ffffff",
     pointLight: "#ffffff",
-    arcTime: 1000,
+    arcTime: 3000,
     arcLength: 0.9,
     rings: 1,
-    maxRings: 3,
+    maxRings: 2,
     initialPosition: { lat: 22.3193, lng: 114.1694 },
     autoRotate: true,
-    autoRotateSpeed: 0.5,
+    autoRotateSpeed: 0.3,
   };
   
   const colors = ["#e07a5f", "#81b29a", "#f2cc8f", "#6d6875"];
@@ -112,7 +112,7 @@ export default function GlobeDemo() {
   return (
     <div className="w-full h-full relative">
       <Suspense fallback={<GlobePlaceholder />}>
-        <div className="w-full h-[500px]">
+        <div className="w-full h-[600px]">
           <World data={sampleArcs} globeConfig={globeConfig} />
         </div>
       </Suspense>
