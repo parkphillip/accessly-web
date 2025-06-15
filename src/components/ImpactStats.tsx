@@ -30,7 +30,6 @@ export const ImpactStats = () => {
             precision: 1,
             suffix: 'B',
             description: "people globally have vision impairments",
-            source: "WHO",
             icon: Eye,
             color: "text-brand-navy"
         },
@@ -39,7 +38,6 @@ export const ImpactStats = () => {
             precision: 0,
             suffix: '%',
             description: "need assistance reading menus while dining",
-            source: "BrailleWorks",
             icon: Users,
             color: "text-brand-terracotta"
         },
@@ -48,7 +46,6 @@ export const ImpactStats = () => {
             precision: 0,
             suffix: '%',
             description: "experience full independence while dining",
-            source: "Accessibility Studies",
             icon: Accessibility,
             color: "text-brand-navy"
         }
@@ -81,10 +78,10 @@ export const ImpactStats = () => {
     };
 
     return (
-        <div ref={ref}>
-            {/* Horizontal scrolling stats on mobile, grid on desktop */}
+        <div ref={ref} className="space-y-32">
+            {/* Flowing stats layout */}
             <motion.div 
-                className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-20"
+                className="space-y-16"
                 variants={containerVariants}
                 initial="hidden"
                 animate={isInView ? "visible" : "hidden"}
@@ -93,33 +90,33 @@ export const ImpactStats = () => {
                     <motion.div
                         key={index}
                         variants={fadeInVariants}
-                        className="text-center group hover:scale-105 transition-transform duration-300"
+                        className="text-center max-w-3xl mx-auto"
                     >
-                        {/* Icon */}
-                        <div className="flex justify-center mb-4">
-                            <stat.icon className={`w-8 h-8 ${stat.color}`} />
-                        </div>
-                        
-                        {/* Animated Number */}
-                        <div className="text-6xl lg:text-7xl font-heading font-bold text-dark-text mb-2">
-                            {isInView ? <AnimatedNumber n={stat.value} precision={stat.precision} /> : '0'}
-                            <span className={stat.color}>{stat.suffix}</span>
+                        {/* Icon and animated number */}
+                        <div className="flex items-center justify-center gap-6 mb-4">
+                            <stat.icon className={`w-12 h-12 ${stat.color}`} />
+                            <div className="text-7xl lg:text-8xl font-heading font-bold text-dark-text">
+                                {isInView ? <AnimatedNumber n={stat.value} precision={stat.precision} /> : '0'}
+                                <span className={stat.color}>{stat.suffix}</span>
+                            </div>
                         </div>
                         
                         {/* Description */}
-                        <p className="text-lg text-medium-text leading-relaxed mb-2 max-w-xs mx-auto">
+                        <p className="text-xl text-medium-text leading-relaxed">
                             {stat.description}
                         </p>
                         
-                        {/* Source */}
-                        <p className="text-sm text-medium-text/70">({stat.source})</p>
+                        {/* Subtle divider for non-last items */}
+                        {index < stats.length - 1 && (
+                            <div className="w-24 h-px bg-subtle-gray mx-auto mt-12"></div>
+                        )}
                     </motion.div>
                 ))}
             </motion.div>
             
-            {/* Cost of Inaccessibility with minimalist progress visualization */}
+            {/* Cost of Inaccessibility with uploaded braille image */}
             <motion.div 
-                className="mt-24"
+                className="mt-32"
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
@@ -131,11 +128,11 @@ export const ImpactStats = () => {
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
-                    {/* Image section */}
+                    {/* Braille image section */}
                     <div className="relative order-2 lg:order-1">
                         <img 
-                            src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80&auto=format&fit=crop" 
-                            alt="Person using technology, representing digital access and independence" 
+                            src="/lovable-uploads/c7975745-76c2-4e5f-bc18-09cedfa14dfb.png" 
+                            alt="Hands reading braille text, representing accessible communication and independence" 
                             className="rounded-2xl shadow-medium w-full object-cover aspect-[4/3]"
                         />
                     </div>

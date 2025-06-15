@@ -34,7 +34,7 @@ const ImpactMetrics = () => {
   };
 
   return (
-    <section id="impact" className="py-24 bg-light-bg">
+    <section id="impact" className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         {/* Header with cleaner typography */}
         <motion.div 
