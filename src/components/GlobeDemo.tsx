@@ -5,7 +5,7 @@ import createGlobe from "cobe";
 
 // Based on: https://github.com/shuding/cobe
 
-export default function GlobeDemo() {
+export default function GlobeDemo({ size = 600 }: { size?: number }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -27,8 +27,8 @@ export default function GlobeDemo() {
 
     const globe = createGlobe(canvasRef.current, {
       devicePixelRatio: 2,
-      width: 600 * 2,
-      height: 600 * 2,
+      width: size * 2,
+      height: size * 2,
       phi: 0,
       theta: 0.3,
       dark: 0.85,
@@ -63,13 +63,13 @@ export default function GlobeDemo() {
       globe.destroy();
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [size]);
 
   return (
     <div className="w-full h-full flex justify-center items-center">
       <canvas
         ref={canvasRef}
-        style={{ width: 600, height: 600, maxWidth: "100%", aspectRatio: 1 }}
+        style={{ width: size, height: size, maxWidth: "100%", aspectRatio: 1 }}
         className="[filter:drop-shadow(0_10px_20px_rgba(0,0,0,0.4))]"
       />
     </div>

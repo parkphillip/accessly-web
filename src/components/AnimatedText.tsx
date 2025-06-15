@@ -15,7 +15,6 @@ interface AnimatedTextProps {
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   const [displayedText, setDisplayedText] = useState(text);
   const [isBraille, setIsBraille] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
   
   const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const toggleIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -44,7 +43,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
         clearInterval(animationIntervalRef.current);
     }
     
-    setIsAnimating(true);
     let currentIndex = 0;
     let scrambleIteration = 0;
     const scramblePerChar = 3; // Number of scramble frames for each character
@@ -67,7 +65,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
         // End of animation
         if (currentIndex >= targetText.length) {
           if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
-          setIsAnimating(false);
         }
       }
     }, frameRate);
@@ -119,12 +116,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
             }
             return char;
           })}
-          {/* Add blinking cursor to the end of the last line */}
-          {lineIndex === lines.length - 1 && (
-            <span className={`ml-px inline-block text-inherit ${isAnimating ? 'opacity-100' : 'animate-caret-blink'}`}>
-              |
-            </span>
-          )}
         </div>
       ))}
     </span>
