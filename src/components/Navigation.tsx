@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, ArrowRight } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
@@ -73,8 +74,8 @@ const Navigation = () => {
     }
   };
   return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'p-2' : ''}`}>
-      <div className={`transition-all duration-300 bg-off-white/95 backdrop-blur-sm ${isScrolled ? 'max-w-7xl mx-auto rounded-xl shadow-medium border border-light-gray/50' : 'border-b border-black/10'}`}>
-        <div className={`flex items-center justify-between h-16 ${isScrolled ? 'px-6 lg:px-8' : 'max-w-7xl mx-auto px-6 lg:px-8'}`}>
+      <div className={`transition-all duration-300 bg-off-white/95 backdrop-blur-sm ${isScrolled ? 'max-w-6xl mx-auto rounded-xl shadow-medium border border-light-gray/50' : 'border-b border-black/10'}`}>
+        <div className={`flex items-center justify-between h-16 ${isScrolled ? 'px-6 lg:px-8' : 'max-w-6xl mx-auto px-6 lg:px-8'}`}>
           {/* Logo */}
           <div className="flex items-center space-x-4">
             {isHomePage ? <button onClick={() => scrollToSection('hero')} className="flex items-center space-x-3">

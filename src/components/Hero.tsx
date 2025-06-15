@@ -16,10 +16,10 @@ const Hero = () => {
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
           {/* Left Column: Text Content */}
           <div className="text-center lg:text-left">
-            <div className="max-w-xl">
+            <div>
               <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight">
                 Building an <AnimatedText text={"Accessible"} className="text-brand-navy" />
                 <span style={{
