@@ -2,6 +2,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ImpactStats } from './ImpactStats';
+import MissionSection from './MissionSection';
+import CostOfInaccessibility from './CostOfInaccessibility';
 
 const ImpactMetrics = () => {
   const fadeInVariants = {
@@ -22,7 +24,6 @@ const ImpactMetrics = () => {
   return (
     <section id="impact" className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        {/* Header with cleaner typography */}
         <motion.div 
           className="text-center mb-20" 
           initial="hidden" 
@@ -38,10 +39,13 @@ const ImpactMetrics = () => {
           </p>
         </motion.div>
 
-        {/* Stats component with new layout */}
         <div className="mb-20">
           <ImpactStats />
         </div>
+        
+        <MissionSection />
+
+        <CostOfInaccessibility />
       </div>
     </section>
   );

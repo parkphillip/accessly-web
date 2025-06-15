@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect } from 'react';
@@ -76,162 +77,33 @@ export const ImpactStats = () => {
         }
     };
 
-    const staggerVariants = {
-      hidden: {
-        opacity: 0
-      },
-      visible: {
-        opacity: 1,
-        transition: {
-          duration: 0.8,
-          ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-          staggerChildren: 0.2
-        }
-      }
-    };
-
     return (
-        <div ref={ref} className="space-y-24">
-            {/* Flowing stats layout */}
-            <motion.div 
-                className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-16"
-                variants={containerVariants}
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-            >
-                {stats.map((stat, index) => (
-                    <motion.div
-                        key={index}
-                        variants={fadeInVariants}
-                        className="text-center"
-                    >
-                        {/* Icon and animated number */}
-                        <div className="flex items-center justify-center gap-6 mb-4">
-                            <stat.icon className={`w-12 h-12 ${stat.color}`} />
-                            <div className="text-7xl lg:text-8xl font-heading font-bold text-dark-text">
-                                {isInView ? <AnimatedNumber n={stat.value} precision={stat.precision} /> : '0'}
-                                <span className={stat.color}>{stat.suffix}</span>
-                            </div>
+        <motion.div 
+            ref={ref}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-16"
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+        >
+            {stats.map((stat, index) => (
+                <motion.div
+                    key={index}
+                    variants={fadeInVariants}
+                    className="text-center"
+                >
+                    <div className="flex items-center justify-center gap-6 mb-4">
+                        <stat.icon className={`w-12 h-12 ${stat.color}`} />
+                        <div className="text-7xl lg:text-8xl font-heading font-bold text-dark-text">
+                            {isInView ? <AnimatedNumber n={stat.value} precision={stat.precision} /> : '0'}
+                            <span className={stat.color}>{stat.suffix}</span>
                         </div>
-                        
-                        {/* Description */}
-                        <p className="text-xl text-medium-text leading-relaxed">
-                            {stat.description}
-                        </p>
-                    </motion.div>
-                ))}
-            </motion.div>
-
-            {/* Mission & Testimonial Combined Card */}
-            <motion.div 
-              className="max-w-4xl mx-auto"
-              initial="hidden" 
-              whileInView="visible" 
-              viewport={{ once: true, amount: 0.5 }} 
-              variants={staggerVariants}
-            >
-              <motion.div 
-                className="bg-off-white rounded-3xl p-12 shadow-subtle border border-subtle-gray/20"
-                variants={fadeInVariants}
-              >
-                <motion.h3 
-                  className="text-3xl lg:text-4xl font-heading font-bold mb-8 text-dark-text text-center"
-                  variants={fadeInVariants}
-                >
-                  This is Where We Come In
-                </motion.h3>
-                
-                <motion.div 
-                  className="w-16 h-1 bg-brand-terracotta mx-auto rounded-full mb-8"
-                  variants={fadeInVariants}
-                ></motion.div>
-                
-                <motion.p 
-                  className="text-xl text-dark-text leading-relaxed mb-12 text-center max-w-3xl mx-auto"
-                  variants={fadeInVariants}
-                >
-                  Accessly provides free, high-quality braille menus to restaurants. We believe access shouldn't be an afterthought—it's fundamental hospitality that empowers independence.
-                </motion.p>
-                
-                {/* Testimonial */}
-                <motion.div 
-                  className="border-l-4 border-brand-navy pl-8 max-w-2xl mx-auto"
-                  variants={fadeInVariants}
-                >
-                  <blockquote className="text-2xl font-heading italic text-dark-text leading-relaxed mb-4">
-                    "For the first time, I felt like just another customer, not a burden. That feeling is priceless."
-                  </blockquote>
-                  <p className="text-medium-text font-medium">— Jessica L., Diner in Austin, TX</p>
-                </motion.div>
-              </motion.div>
-            </motion.div>
-            
-            {/* Cost of Inaccessibility with uploaded braille image */}
-            <motion.div 
-                className="mt-32"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-            >
-                <div className="text-center mb-16">
-                    <h4 className="text-4xl font-heading text-dark-text font-bold mb-4">The Cost of Inaccessibility</h4>
-                    <div className="w-16 h-1 bg-brand-terracotta mx-auto rounded-full"></div>
-                </div>
-                
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
-                    {/* Braille image section */}
-                    <div className="relative order-2 lg:order-1">
-                        <img 
-                            src="/lovable-uploads/c7975745-76c2-4e5f-bc18-09cedfa14dfb.png" 
-                            alt="Hands reading braille text, representing accessible communication and independence" 
-                            className="rounded-2xl shadow-medium w-full object-cover aspect-[4/3]"
-                        />
                     </div>
                     
-                    {/* Content section with progress visualization */}
-                    <div className="space-y-8 order-1 lg:order-2">
-                        <p className="text-xl text-dark-text leading-relaxed">
-                            Without accessible menus, the dining experience becomes fundamentally different—creating reliance and turning simple pleasure into challenge.
-                        </p>
-                        
-                        {/* Minimalist progress bars */}
-                        <div className="space-y-8">
-                            <div className="relative">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-lg font-medium text-dark-text">Dine independently</span>
-                                    <span className="text-3xl font-heading font-bold text-brand-navy">10%</span>
-                                </div>
-                                <div className="w-full bg-subtle-gray rounded-full h-2">
-                                    <motion.div 
-                                        className="bg-brand-navy h-2 rounded-full"
-                                        initial={{ width: 0 }}
-                                        whileInView={{ width: "10%" }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 1.5, delay: 0.5 }}
-                                    ></motion.div>
-                                </div>
-                            </div>
-                            
-                            <div className="relative">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-lg font-medium text-dark-text">Require assistance</span>
-                                    <span className="text-3xl font-heading font-bold text-brand-terracotta">90%</span>
-                                </div>
-                                <div className="w-full bg-subtle-gray rounded-full h-2">
-                                    <motion.div 
-                                        className="bg-brand-terracotta h-2 rounded-full"
-                                        initial={{ width: 0 }}
-                                        whileInView={{ width: "90%" }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 1.5, delay: 0.7 }}
-                                    ></motion.div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </motion.div>
-        </div>
+                    <p className="text-xl text-medium-text leading-relaxed">
+                        {stat.description}
+                    </p>
+                </motion.div>
+            ))}
+        </motion.div>
     );
 };
