@@ -1,3 +1,4 @@
+
 import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -58,7 +59,7 @@ const GlobeDots = () => {
     
     continents.forEach(continent => {
         const density = Math.abs(continent.lon[1] - continent.lon[0]) * Math.abs(continent.lat[1] - continent.lat[0]);
-        const numPoints = Math.floor(density * 0.35);
+        const numPoints = Math.floor(density * 0.5);
 
         for (let i = 0; i < numPoints && pointIndex < maxPoints; i++) {
             const lon = THREE.MathUtils.randFloat(continent.lon[0], continent.lon[1]);
@@ -131,7 +132,7 @@ const GlobeDots = () => {
 const BrailleGlobe = () => {
   return (
     <div className="absolute inset-0 z-0">
-      <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
+      <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
         <Suspense fallback={null}>
           <ambientLight intensity={0.8} />
           <directionalLight position={[1, 1, 1]} intensity={0.2} />
