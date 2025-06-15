@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -28,8 +27,7 @@ const Hero = () => {
             }} className="text-brand-navy font-heading font-semibold">
                 World
               </span>
-              <span className="block text-3xl lg:text-4xl text-medium-text font-normal font-sans mt-4">one menu at a time
-            </span>
+              <span className="block text-3xl lg:text-4xl text-medium-text font-normal font-sans mt-4">One Menu at a Time</span>
             </h1>
             <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto lg:mx-0 leading-relaxed">
               Accessly is a civic startup building a future where access is standard, not special. We're starting with free braille menus for every restaurant.
