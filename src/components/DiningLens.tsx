@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { Eye, UsersRound, Accessibility } from 'lucide-react';
 import gsap from 'gsap';
@@ -115,12 +114,11 @@ const DiningLens = () => {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.current,
-                start: 'top center', // Start when section reaches center of viewport
-                end: `+=${cardsData.length * 120}%`, // Moderate scroll distance
+                start: 'top top',
+                end: `+=${cardsData.length * 150}%`,
                 pin: true,
-                scrub: 0.8, // Slightly more responsive than default
+                scrub: 1,
                 anticipatePin: 1,
-                immediateRender: false,
             },
         });
 
@@ -135,9 +133,9 @@ const DiningLens = () => {
             tl.to(card, {
                 y: finalY,
                 rotate: finalRotate,
-                duration: 1,
+                duration: 0.8,
                 ease: 'power2.out',
-            }, index * 0.25); // Balanced timing for smooth sequence
+            }, index * 0.6);
         });
 
         return () => {
@@ -162,7 +160,7 @@ const DiningLens = () => {
                                 ref={el => cardsRef.current[index] = el}
                                 className="absolute flex items-center justify-center"
                                 style={{
-                                    zIndex: cardsData.length - index,
+                                    zIndex: index + 1,
                                     width: CARD_WIDTH,
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
