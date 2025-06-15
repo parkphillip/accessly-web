@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
@@ -9,62 +10,81 @@ interface Page {
   content: string[];
 }
 
+interface Leaf {
+  front: Page;
+  back?: Page;
+}
+
 const BrailleMenuBook = () => {
-  const [pages, setPages] = useState<Page[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [leaves, setLeaves] = useState<Leaf[]>([]);
+  const [currentLeafIndex, setCurrentLeafIndex] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
 
-  const generatePages = useCallback((text: string): Page[] => {
+  const generateLeaves = useCallback((text: string): Leaf[] => {
     const lines = text.split('\n').filter(line => line.trim() !== '');
-    const linesPerPage = 6; // Reduced from 8 to prevent overflow
+    const linesPerPage = 6;
     const contentPages: Page[] = [];
 
     for (let i = 0; i < lines.length; i += linesPerPage) {
       const chunk = lines.slice(i, i + linesPerPage);
       contentPages.push({
         type: 'page',
-        title: i === 0 ? 'Menu Highlights' : '',
+        title: '', // Titles are handled differently now or can be added if needed
         content: chunk,
       });
     }
 
-    return [
-      { type: 'page', title: '', content: [] }, // Inside front cover
+    const pages: Page[] = [
+      { type: 'page', title: '', content: [] }, // Inside front cover (pages[0])
       {
         type: 'cover',
         title: "Accessly Menus",
         content: ["Your Custom Menu", "Est. 2024"]
-      },
+      }, // Cover (pages[1])
       ...contentPages,
-      { type: 'page', title: '', content: [] }, // Final blank page
+      { type: 'page', title: '', content: [] }, // Final blank page for back cover
     ];
+
+    const generatedLeaves: Leaf[] = [];
+    // Leaf 0: Cover. Front is page 1, back is page 0.
+    generatedLeaves.push({ front: pages[1], back: pages[0] });
+
+    // Content leaves
+    for (let i = 2; i < pages.length; i += 2) {
+      generatedLeaves.push({
+        front: pages[i],
+        back: pages[i + 1], // will be undefined for the last page if odd number of content pages
+      });
+    }
+
+    return generatedLeaves;
   }, []);
 
   useEffect(() => {
-    setPages(generatePages(sampleTexts.join('\n\n')));
-  }, [generatePages]);
+    setLeaves(generateLeaves(sampleTexts.join('\n\n')));
+  }, [generateLeaves]);
 
   const handleMenuUpdate = (text: string) => {
-    setPages(generatePages(text));
-    setCurrentPage(1);
+    setLeaves(generateLeaves(text));
+    setCurrentLeafIndex(0);
   };
 
-  const totalPages = pages.length;
-  const canGoBack = currentPage > 1;
-  const canGoForward = currentPage < totalPages - 1;
+  const totalLeaves = leaves.length;
+  const canGoBack = currentLeafIndex > 0;
+  const canGoForward = currentLeafIndex < totalLeaves;
 
   const flipPage = useCallback((direction: 'next' | 'prev') => {
     if (isFlipping) return;
 
     if (direction === 'next' && canGoForward) {
       setIsFlipping(true);
-      setCurrentPage(prev => prev + 1);
+      setCurrentLeafIndex(prev => prev + 1);
     } else if (direction === 'prev' && canGoBack) {
       setIsFlipping(true);
-      setCurrentPage(prev => prev - 1);
+      setCurrentLeafIndex(prev => prev - 1);
     }
 
-    setTimeout(() => setIsFlipping(false), 700); // Match new CSS transition duration
+    setTimeout(() => setIsFlipping(false), 700); // Match CSS transition duration
   }, [isFlipping, canGoForward, canGoBack]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -86,10 +106,37 @@ const BrailleMenuBook = () => {
     );
   };
   
+  const PageContent = ({ page }: { page?: Page }) => {
+    if (!page) return null;
+    return (
+      <div className="page-content">
+        {page.title && (
+          <h3 className={`text-3xl font-serif font-bold mb-8 ${page.type === 'cover' ? 'text-center' : ''}`}>
+            {page.title}
+          </h3>
+        )}
+        <div className="space-y-4">
+          {page.content.map((line, lineIndex) => (
+            <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
+              {line.split(' ').map((word, wordIndex) => (
+                <span key={wordIndex}>
+                  <Word text={word} />
+                  {' '}
+                </span>
+              ))}
+            </p>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   const DisplayedPageNumber = () => {
-    if (currentPage === 1) return "Cover";
-    if (currentPage >= totalPages - 1) return "Back";
-    return `Page ${currentPage - 1}`;
+    if (currentLeafIndex === 0) return "Cover";
+    if (currentLeafIndex >= totalLeaves) return "Back Cover";
+    const leftPage = (currentLeafIndex * 2);
+    const rightPage = leftPage + 1;
+    return `Pages ${leftPage} - ${rightPage}`;
   }
   
   return (
@@ -115,34 +162,18 @@ const BrailleMenuBook = () => {
         >
           <div className={`book ${isFlipping ? 'is-flipping' : ''}`}>
             <div className="book-spine"></div>
-            {pages.map((page, index) => (
+            {leaves.map((leaf, index) => (
               <div
                 key={index}
-                className={`page ${page.type} ${currentPage > index ? 'flipped' : ''}`}
-                style={{ zIndex: currentPage > index ? index : totalPages - index }}
+                className={`page ${leaf.front.type} ${currentLeafIndex > index ? 'flipped' : ''}`}
+                style={{ zIndex: currentLeafIndex > index ? index : totalLeaves - index }}
               >
                 <div className="page-face front">
-                  <div className="page-content">
-                    {page.title && (
-                      <h3 className={`text-3xl font-serif font-bold mb-8 ${page.type === 'cover' ? 'text-center' : ''}`}>
-                        {page.title}
-                      </h3>
-                    )}
-                    <div className="space-y-4">
-                      {page.content.map((line, lineIndex) => (
-                        <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
-                          {line.split(' ').map((word, wordIndex) => (
-                            <span key={wordIndex}>
-                              <Word text={word} />
-                              {' '}
-                            </span>
-                          ))}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
+                  <PageContent page={leaf.front} />
                 </div>
-                <div className="page-face back" />
+                <div className="page-face back">
+                  <PageContent page={leaf.back} />
+                </div>
               </div>
             ))}
           </div>
