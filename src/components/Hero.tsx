@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -15,14 +16,14 @@ const Hero = () => {
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-[2fr,3fr] gap-8 items-center">
+        <div className="flex flex-wrap lg:flex-nowrap gap-8 items-center">
           {/* Left Column: Text Content */}
-          <div className="text-center lg:text-left">
+          <div className="w-full lg:flex-shrink-0 lg:w-2/5 text-center lg:text-left">
             <div>
               <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight">
-                <span className="block">Building an</span>
+                <span className="block mb-1">Building an</span>
                 <AnimatedText text={"Accessible"} className="text-brand-navy" />
-                <span className="block">World</span>
+                <span className="block mt-1">World</span>
               </h1>
               <p className="text-3xl lg:text-4xl text-brand-navy font-normal font-sans mt-4">One Menu at a Time</p>
               <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto lg:mx-0 leading-relaxed">Accessly is a civic startup building a future where access is standard, not special. We're starting with
@@ -43,7 +44,7 @@ free braille menus for every restaurant.</p>
           </div>
 
           {/* Right Column: Globe */}
-          <div className="hidden lg:flex lg:justify-center items-center">
+          <div className="hidden lg:flex w-full lg:w-3/5 justify-center items-center">
             <GlobeDemo size={650} />
           </div>
         </div>
