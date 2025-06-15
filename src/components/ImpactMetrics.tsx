@@ -1,6 +1,9 @@
+
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
-import { ImpactVisuals } from './ImpactVisuals';
+import { ImpactStats } from './ImpactStats';
+import { Image as ImageIcon } from 'lucide-react';
+
 const itemVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -15,6 +18,7 @@ const itemVariants: Variants = {
     }
   }
 };
+
 const ImpactMetrics = () => {
   return <section id="impact" className="py-24 bg-[#111827]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -31,7 +35,7 @@ const ImpactMetrics = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 xl:gap-12 items-stretch mb-24">
-            <motion.div className="lg:col-span-3" initial={{
+            <motion.div className="lg:col-span-3 min-h-[450px]" initial={{
           opacity: 0,
           y: 20
         }} whileInView={{
@@ -44,9 +48,15 @@ const ImpactMetrics = () => {
           duration: 0.8,
           ease: "easeOut"
         }}>
-                <ImpactVisuals />
+              <div className="relative h-full w-full bg-gray-900/50 p-8 rounded-lg border-2 border-dashed border-gray-700/50 flex flex-col justify-center items-center text-center">
+                  <ImageIcon className="w-16 h-16 text-gray-600 mb-4" strokeWidth={1} />
+                  <h3 className="text-2xl font-heading text-off-white mb-2">The Accessibility Gap</h3>
+                  <p className="text-slate-400 max-w-sm">
+                    This space is reserved for a creative visual that powerfully illustrates the challenges faced by diners with vision impairments.
+                  </p>
+              </div>
             </motion.div>
-            <motion.div className="lg:col-span-2 min-h-[400px]" initial={{
+            <motion.div className="lg:col-span-2" initial={{
           opacity: 0,
           y: 20
         }} whileInView={{
@@ -60,12 +70,7 @@ const ImpactMetrics = () => {
           ease: "easeOut",
           delay: 0.2
         }}>
-                <div className="h-full w-full bg-gray-900/50 p-8 rounded-lg border border-gray-700/50 flex flex-col justify-center items-center text-center">
-                    <blockquote className="text-2xl font-heading italic text-off-white leading-relaxed">
-                        “True hospitality is making everyone feel welcome.”
-                    </blockquote>
-                    <p className="font-sans text-base text-slate-400 mt-6">— A Friend of Accessly</p>
-                </div>
+              <ImpactStats />
             </motion.div>
         </div>
 
