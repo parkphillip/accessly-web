@@ -28,7 +28,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       .join('\n');
   }, [text]);
 
-  // This effect runs the scramble animation.
+  // This effect runs the combined typewriter and decode animation.
   useEffect(() => {
     // Don't run the animation on the very first render.
     if (isInitialMount.current) {
@@ -43,28 +43,35 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
         clearInterval(animationIntervalRef.current);
     }
     
-    let iterations = 0;
-    const frameRate = 50; // ms per frame
-    const revealSpeed = 3; // iterations per character reveal
+    let currentIndex = 0;
+    let revealedText = '';
+    let scrambleIteration = 0;
+    const scramblePerChar = 3; // Number of scramble frames for each character
+    const frameRate = 40; // ms per frame
+
+    // Reset displayed text to empty to start the typing animation from scratch
+    setDisplayedText('');
 
     animationIntervalRef.current = setInterval(() => {
-      const revealedCount = Math.floor(iterations / revealSpeed);
-      
-      const newDisplayedText = targetText.split('').map((_, index) => {
-        if (index < revealedCount) {
-          return targetText[index];
+        if (currentIndex >= targetText.length) {
+            if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
+            setDisplayedText(targetText); // Final clean up
+            return;
         }
-        return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-      }).join('');
-      
-      setDisplayedText(newDisplayedText);
 
-      if (revealedCount >= targetText.length) {
-        setDisplayedText(targetText); // Final clean up
-        if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
-      }
-
-      iterations++;
+        // Scramble the current character for a few frames
+        if (scrambleIteration < scramblePerChar) {
+            const randomChar = scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+            setDisplayedText(revealedText + randomChar);
+            scrambleIteration++;
+        } else {
+            // Reveal the correct character and move to the next one
+            revealedText += targetText[currentIndex];
+            currentIndex++;
+            scrambleIteration = 0;
+            // Set the text for the next frame, which will be the revealed part
+            setDisplayedText(revealedText);
+        }
     }, frameRate);
 
     return () => {
@@ -105,7 +112,8 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
           style={{ 
             display: 'block',
             lineHeight: '1.1',
-            minHeight: '1.2em',
+            // Use a fixed height to prevent the vertical "jump" during transitions
+            height: '1.3em',
             marginBottom: lineIndex === 0 ? '4px' : 0, 
           }}
         >
