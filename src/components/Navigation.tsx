@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Menu, Book } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 const Navigation = () => {
   const [activeSection, setActiveSection] = useState('hero');
@@ -13,9 +12,6 @@ const Navigation = () => {
   }, {
     id: 'impact',
     label: 'Impact'
-  }, {
-    id: 'workshop',
-    label: 'Workshop'
   }, {
     id: 'network',
     label: 'Network'
@@ -60,7 +56,7 @@ const Navigation = () => {
         ? 'bg-off-white/95 backdrop-blur-sm shadow-subtle border-b border-light-gray' 
         : 'bg-transparent'
     }`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo with improved badge separation */}
           <div className="flex items-center space-x-4">
