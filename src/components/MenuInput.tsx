@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Textarea } from './ui/textarea';
 import { sampleTexts } from '../utils/brailleUtils';
@@ -36,7 +35,7 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
   };
 
   return (
-    <div className="mb-12 p-8 structured-card max-w-4xl mx-auto">
+    <div className="p-8 structured-card h-full flex flex-col">
       <div className="flex justify-center mb-8">
         <div className="inline-flex items-center bg-subtle-gray p-1 rounded-lg space-x-1">
           <button 
@@ -54,7 +53,7 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
         </div>
       </div>
 
-      <div className="min-h-[240px]">
+      <div className="flex-grow flex flex-col">
         {inputType === 'text' ? (
           <div className="animate-fade-in h-full">
             <Textarea

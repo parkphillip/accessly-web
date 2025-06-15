@@ -50,7 +50,7 @@ const PageContent = ({ page }: { page: Page | undefined }) => {
 
 const BrailleMenuBook = () => {
   const [pages, setPages] = useState<Page[]>([]);
-  const [currentPage, setCurrentPage] = useState(0); // Index of the right-hand page
+  const [currentPage, setCurrentPage] = useState(0); // Index of the current page
   const [isFlipping, setIsFlipping] = useState(false);
 
   const generatePages = useCallback((text: string): Page[] => {
@@ -67,7 +67,7 @@ const BrailleMenuBook = () => {
       });
     }
 
-    const allPages: Page[] = [
+    return [
       {
         type: 'cover',
         title: "Accessly Menu",
@@ -75,13 +75,6 @@ const BrailleMenuBook = () => {
       },
       ...contentPages
     ];
-
-    // Ensure we have an even number of pages after the cover for spreads
-    if ((allPages.length - 1) % 2 !== 0) {
-      allPages.push({ type: 'page', title: '', content: [] });
-    }
-
-    return allPages;
   }, []);
 
   useEffect(() => {
@@ -94,21 +87,20 @@ const BrailleMenuBook = () => {
   };
 
   const totalPages = pages.length;
-  const leftPage = currentPage > 0 ? pages[currentPage - 1] : undefined;
-  const rightPage = currentPage < totalPages ? pages[currentPage] : undefined;
+  const activePage = pages[currentPage];
 
   const canGoBack = currentPage > 0;
-  const canGoForward = currentPage + 2 <= totalPages;
+  const canGoForward = currentPage < totalPages - 1;
 
   const flipPage = useCallback((direction: 'next' | 'prev') => {
     if (isFlipping) return;
 
     if (direction === 'next' && canGoForward) {
       setIsFlipping(true);
-      setCurrentPage(prev => prev + 2);
+      setCurrentPage(prev => prev + 1);
     } else if (direction === 'prev' && canGoBack) {
       setIsFlipping(true);
-      setCurrentPage(prev => prev - 2);
+      setCurrentPage(prev => prev - 1);
     }
 
     setTimeout(() => setIsFlipping(false), 800); // Match CSS animation duration
@@ -123,16 +115,10 @@ const BrailleMenuBook = () => {
   };
 
   const DisplayedPageNumber = () => {
-    if (currentPage === 0) return "Cover";
-    if (!rightPage || (rightPage.content.length === 0 && !rightPage.title)) return "Back";
-    
-    const rightNum = currentPage + 1;
-
-    if (!leftPage || (leftPage.content.length === 0 && !leftPage.title)) {
-        return `Page ${rightNum}`;
-    }
-
-    return `Pages ${currentPage} - ${rightNum}`;
+    if (!activePage) return null;
+    if (activePage.type === 'cover') return "Cover";
+    // For simplicity, we'll just show page numbers. Last page will be a number too.
+    return `Page ${currentPage}`;
   }
   
   return (
@@ -147,7 +133,7 @@ const BrailleMenuBook = () => {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-12 items-start">
+        <div className="flex flex-col lg:flex-row gap-12 lg:items-stretch">
           <div className="lg:w-2/5 w-full lg:sticky top-8">
             <MenuInput onUpdate={handleMenuUpdate} />
           </div>
@@ -160,13 +146,9 @@ const BrailleMenuBook = () => {
               role="application"
               aria-label="Interactive Braille Book"
             >
-              <div className={`book ${isFlipping ? 'is-flipping' : ''}`}>
-                <div className="page left">
-                  <PageContent page={leftPage} />
-                </div>
-                <div className="book-spine"></div>
-                <div className="page right">
-                  <PageContent page={rightPage} />
+              <div className="book">
+                <div className={`page single-page ${isFlipping ? 'is-flipping' : ''}`}>
+                  <PageContent page={activePage} />
                 </div>
               </div>
               
