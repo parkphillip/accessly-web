@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Mail, Phone, Instagram, Twitter } from 'lucide-react';
 const Footer = () => {
@@ -21,10 +20,10 @@ const Footer = () => {
     label: 'Get Started'
   }];
   return <footer className="bg-dark-text text-light-bg">
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
           {/* Brand section */}
-          <div className="md:col-span-5 px-[11px]">
+          <div className="md:col-span-5">
             <div className="flex items-center space-x-3 mb-4">
               <span className="text-3xl font-heading font-bold text-off-white">Accessly</span>
             </div>
@@ -73,7 +72,7 @@ const Footer = () => {
 
         </div>
 
-        <div className="border-t border-light-gray/20 pt-8 text-center text-sm text-medium-text">
+        <div className="border-t border-light-gray/20 pt-12 text-center text-sm text-medium-text">
           <p>© {new Date().getFullYear()} Accessly. All rights reserved. A non-profit initiative dedicated to accessibility.</p>
         </div>
       </div>

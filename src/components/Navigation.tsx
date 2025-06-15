@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
 
@@ -58,7 +57,7 @@ const Navigation = () => {
         : 'bg-transparent'
     }`}>
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16">
           {/* Logo with improved badge separation */}
           <div className="flex items-center space-x-4">
             <a 
