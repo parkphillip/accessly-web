@@ -31,13 +31,13 @@ export default function GlobeDemo() {
       height: 600 * 2,
       phi: 0,
       theta: 0.3,
-      dark: 1,
+      dark: 0,
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [44 / 255, 82 / 255, 130 / 255], // Lighter blue, from brand-navy
-      markerColor: [0.1, 0.8, 1], // A nice light blue
-      glowColor: [0.4, 0.6, 1.0], // A slightly brighter glow to match
+      baseColor: [44 / 255, 82 / 255, 130 / 255], // brand-navy for land
+      markerColor: [224 / 255, 122 / 255, 95 / 255], // Terracotta orange
+      glowColor: [1, 0.7, 0.5], // Warm orange glow
       markers: [
         // Extracted from previous sample data
         { location: [-19.885592, -43.951191], size: 0.05 },
