@@ -1,6 +1,7 @@
-import React, { useRef, useMemo, Suspense, useState, useEffect } from 'react';
+import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { isLand } from '@/utils/landSampler';
 
 const vertexShader = `
   attribute float size;
@@ -38,73 +39,10 @@ const continents = [
   { lon: [-180, 180], lat: [-85, -65] },
 ];
 
-const isLand = (lon: number, lat: number, polygons: number[][][]): boolean => {
-  for (const polygon of polygons) {
-    let isInside = false;
-    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      const xi = polygon[i][0], yi = polygon[i][1];
-      const xj = polygon[j][0], yj = polygon[j][1];
-      const intersect = ((yi > lat) !== (yj > lat)) && (lon < (xj - xi) * (lat - yi) / (yj - yi) + xi);
-      if (intersect) {
-        isInside = !isInside;
-      }
-    }
-    if (isInside) return true;
-  }
-  return false;
-};
-
 const GlobeDots = () => {
   const ref = useRef<THREE.Points>(null!);
-  const [landPolygons, setLandPolygons] = useState<number[][][] | null>(null);
-
-  useEffect(() => {
-    const landURL = "https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json";
-    fetch(landURL)
-      .then(res => res.json())
-      .then(topoData => {
-        if (!topoData.objects.land || !topoData.transform) return;
-
-        const { land } = topoData.objects;
-        const { arcs: allArcs, transform } = topoData;
-        const { scale, translate } = transform;
-        
-        const decodedArcs = allArcs.map((arc: [number, number][]) => {
-          let x = 0, y = 0;
-          return arc.map(([dx, dy]: [number, number]) => {
-            x += dx;
-            y += dy;
-            return [x, y];
-          });
-        });
-        
-        const polygons = land.geometries.map((geom: { arcs: number[][] }) => 
-          geom.arcs.map((arcIndices: number[]) => 
-            arcIndices.map((arcIndex: number) => {
-              const arc = decodedArcs[arcIndex < 0 ? ~arcIndex : arcIndex];
-              const points = arc.map((point: [number, number]) => [
-                point[0] * scale[0] + translate[0],
-                point[1] * scale[1] + translate[1],
-              ]);
-              return arcIndex < 0 ? points.slice().reverse() : points;
-            }).flat()
-          )
-        ).flat();
-
-        setLandPolygons(polygons);
-      }).catch(console.error);
-  }, []);
 
   const { positions, colors, sizes, pulseIndexes } = useMemo(() => {
-    if (!landPolygons) {
-        return {
-            positions: new Float32Array(),
-            colors: new Float32Array(),
-            sizes: new Float32Array(),
-            pulseIndexes: [],
-        };
-    }
-
     const maxPoints = 9000;
     const radius = 2.5;
 
@@ -127,7 +65,7 @@ const GlobeDots = () => {
             const lon = THREE.MathUtils.randFloat(continent.lon[0], continent.lon[1]);
             const lat = THREE.MathUtils.randFloat(continent.lat[0], continent.lat[1]);
             
-            if (!isLand(lon, lat, landPolygons)) {
+            if (!isLand(lon, lat)) {
                 continue;
             }
             
@@ -161,7 +99,7 @@ const GlobeDots = () => {
     const sizes = new Float32Array(tempSizes);
 
     return { positions, colors, sizes, pulseIndexes };
-  }, [landPolygons]);
+  }, []);
 
   useFrame((state, delta) => {
     ref.current.rotation.y += delta * 0.05;
