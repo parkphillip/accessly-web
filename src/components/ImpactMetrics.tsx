@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
-import { AccessibilityChart } from './AccessibilityChart';
+import { ImpactVisuals } from './ImpactVisuals';
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -37,19 +37,19 @@ const ImpactMetrics = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 xl:gap-12 items-stretch mb-24">
             <motion.div 
                 className="lg:col-span-3"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
             >
-                <AccessibilityChart />
+                <ImpactVisuals />
             </motion.div>
             <motion.div 
                 className="lg:col-span-2 min-h-[400px]"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             >
                 <div className="relative h-full w-full">
                     <img 
