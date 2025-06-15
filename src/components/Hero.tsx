@@ -16,7 +16,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-[4fr,5fr] gap-8 items-center">
+        <div className="grid lg:grid-cols-[2fr,3fr] gap-8 items-center">
           {/* Left Column: Text Content */}
           <div className="text-center lg:text-left">
             <div>
