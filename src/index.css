@@ -110,6 +110,11 @@
     @apply bg-off-white text-brand-navy px-8 py-3 text-base font-medium rounded-xl border border-light-gray hover:bg-light-bg transition-colors duration-300 shadow-medium hover:shadow-strong focus:outline-none;
   }
 
+  .braille-text-display {
+    @apply font-mono font-medium text-brand-navy;
+    letter-spacing: 0.15em;
+  }
+
   .form-input {
     @apply w-full p-3 bg-off-white border border-light-gray text-dark-text rounded-md text-base focus:border-brand-navy focus:ring-1 focus:ring-brand-navy focus:outline-none transition-colors shadow-inner-subtle;
   }

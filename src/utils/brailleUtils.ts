@@ -1,4 +1,3 @@
-
 // A mapping for lower-case letters only. No spaces or placeholders.
 export const brailleMap: { [key: string]: string } = {
   'a': '⠁', 'b': '⠃', 'c': '⠉', 'd': '⠙', 'e': '⠑', 'f': '⠋', 'g': '⠛', 'h': '⠓',
@@ -19,15 +18,21 @@ export function lineToBraille(line: string): string[] {
   return line.split('').map(l => brailleMap[l.toLowerCase()] || '');
 }
 
-// Added to fix build errors from read-only files
+/**
+ * Translates a string to a braille string, ignoring spaces and unknown characters.
+ * @param text The input string (e.g., "Hello World")
+ * @returns The braille representation (e.g., "⠓⠑⠇⠇⠕⠺⠕⠗⠇⠙")
+ */
 export const translateToBraille = (text: string): string => {
-  return text.split('').map(char => {
-    const lowerChar = char.toLowerCase();
-    if (brailleMap[lowerChar]) {
-      return brailleMap[lowerChar];
-    }
-    return char === ' ' ? ' ' : ''; // Keep spaces, remove unknown chars
-  }).join('');
+  return text
+    .split('')
+    .map(char => {
+      const lowerChar = char.toLowerCase();
+      // Return braille char if it exists, otherwise return an empty string
+      // This effectively removes spaces and any other non-mappable characters
+      return brailleMap[lowerChar] || '';
+    })
+    .join('');
 };
 
 export const sampleTexts: string[] = [
