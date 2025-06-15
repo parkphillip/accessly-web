@@ -26,18 +26,23 @@ const fragmentShader = `
 `;
 
 function topoArcsToLonLat(topo: any) {
+  if (!topo || !topo.transform || !topo.arcs) {
+    return [];
+  }
   const { scale, translate } = topo.transform;
-  return topo.arcs.flatMap((arc: number[][]) => {
-    let lastX = 0;
-    let lastY = 0;
-    return arc.map(([dx, dy]: number[]) => {
-      lastX += dx;
-      lastY += dy;
-      return [
-        lastX * scale[0] + translate[0],
-        lastY * scale[1] + translate[1],
-      ];
-    });
+  return topo.arcs
+    .filter(Boolean) // Safely handle any invalid arc entries
+    .flatMap((arc: number[][]) => {
+      let lastX = 0;
+      let lastY = 0;
+      return arc.map(([dx, dy]: number[]) => {
+        lastX += dx;
+        lastY += dy;
+        return [
+          lastX * scale[0] + translate[0],
+          lastY * scale[1] + translate[1],
+        ];
+      });
   });
 }
 
