@@ -1,11 +1,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 
-const MissionSection = () => {
+const MissionIntro = () => {
   const fadeInVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -20,7 +17,7 @@ const MissionSection = () => {
 
   return (
     <motion.div
-      className="max-w-4xl mx-auto my-24 text-center"
+      className="max-w-4xl mx-auto mt-24 mb-0 text-center px-6"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -39,23 +36,14 @@ const MissionSection = () => {
       ></motion.div>
 
       <motion.p
-        className="text-xl text-dark-text leading-relaxed mb-12 max-w-3xl mx-auto"
+        className="text-xl text-dark-text leading-relaxed mb-0 max-w-3xl mx-auto"
         variants={fadeInVariants}
       >
         Accessly provides free, high-quality braille menus to restaurants. We
         believe access shouldn't be an afterthought but built into hospitality.
-        Our simple process above makes it happen.
+        Our simple process below makes it happen.
       </motion.p>
-
-      <motion.div variants={fadeInVariants}>
-        <Link to="/partner">
-          <Button size="lg" className="group">
-            Partner With Us
-            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-          </Button>
-        </Link>
-      </motion.div>
     </motion.div>
   );
 };
-export default MissionSection;
+export default MissionIntro;

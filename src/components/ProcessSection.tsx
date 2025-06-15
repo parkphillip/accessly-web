@@ -7,7 +7,7 @@ const ProcessSection = () => {
   return (
     <motion.section 
         id="process" 
-        className="py-24 bg-white"
+        className="pt-16 pb-24 bg-white"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.2 }}
