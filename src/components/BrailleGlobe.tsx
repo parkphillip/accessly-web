@@ -1,8 +1,9 @@
-
 import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { isLand } from '@/utils/landSampler';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import world110 from "@/data/world110.json";
 
 const vertexShader = `
   attribute float size;
@@ -24,11 +25,28 @@ const fragmentShader = `
   }
 `;
 
+function topoArcsToLonLat(topo: any) {
+  const { scale, translate } = topo.transform;
+  return topo.arcs.flatMap((arc: number[][]) => {
+    let lastX = 0;
+    let lastY = 0;
+    return arc.map(([dx, dy]: number[]) => {
+      lastX += dx;
+      lastY += dy;
+      return [
+        lastX * scale[0] + translate[0],
+        lastY * scale[1] + translate[1],
+      ];
+    });
+  });
+}
+
+const landLonLat = topoArcsToLonLat(world110).slice(); // Use slice for a shallow copy as requested
+
 const GlobeDots = () => {
   const ref = useRef<THREE.Points>(null!);
 
   const { positions, colors, sizes, pulseIndexes } = useMemo(() => {
-    const maxPoints = 10000;
     const radius = 2.5;
 
     const tempPositions: number[] = [];
@@ -42,42 +60,33 @@ const GlobeDots = () => {
 
     let pointIndex = 0;
 
-    const step = 2; // degrees between samples
-    for (let lat = -88; lat <= 88; lat += step) {
-      if (pointIndex >= maxPoints) break;
-      for (let lon = -178; lon <= 178; lon += step) {
-        if (pointIndex >= maxPoints) break;
+    landLonLat.forEach(([lon, lat], i) => {
+      // down-sample: keep 1 of every 4 points to avoid millions
+      if (i % 4 !== 0) return;
 
-        if (!isLand(lon, lat)) continue; // skip water
+      const latR = THREE.MathUtils.degToRad(lat);
+      const lonR = THREE.MathUtils.degToRad(lon);
 
-        // jitter so dots don’t form perfect rows
-        const latJ = lat + THREE.MathUtils.randFloatSpread(step * 0.6);
-        const lonJ = lon + THREE.MathUtils.randFloatSpread(step * 0.6);
+      const x = radius * Math.cos(latR) * Math.cos(lonR);
+      const y = radius * Math.sin(latR);
+      const z = radius * Math.cos(latR) * Math.sin(lonR);
 
-        const latR = THREE.MathUtils.degToRad(latJ);
-        const lonR = THREE.MathUtils.degToRad(lonJ);
+      tempPositions.push(x, y, z);
 
-        const x = radius * Math.cos(latR) * Math.cos(lonR);
-        const y = radius * Math.sin(latR);
-        const z = radius * Math.cos(latR) * Math.sin(lonR);
-
-        tempPositions.push(x, y, z);
-
-        let color;
-        const rand = Math.random();
-        if (rand > 0.985) {
-          color = yellow;
-          if (rand > 0.995) pulseIndexes.push(pointIndex);
-        } else if (rand > 0.97) {
-          color = white;
-        } else {
-          color = navy;
-        }
-        tempColors.push(color.r, color.g, color.b);
-        tempSizes.push(Math.random() * 1.5 + 0.8);
-        pointIndex++;
+      let color;
+      const rand = Math.random();
+      if (rand > 0.985) {
+        color = yellow;
+        if (rand > 0.995) pulseIndexes.push(pointIndex);
+      } else if (rand > 0.97) {
+        color = white;
+      } else {
+        color = navy;
       }
-    }
+      tempColors.push(color.r, color.g, color.b);
+      tempSizes.push(Math.random() * 1.5 + 0.8);
+      pointIndex++;
+    });
 
     const positions = new Float32Array(tempPositions);
     const colors = new Float32Array(tempColors);
