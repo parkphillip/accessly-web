@@ -79,26 +79,23 @@ const CARD_WIDTH = '420px';
 const CARD_HEIGHT = '520px';
 const IMAGE_HEIGHT = '320px';
 const CARD_PADDING = '2.5rem';
-const TILT_DEG = 4; // Subtle tilt
-const STACK_OFFSET = 70; // px between stacked cards (increased for neat cascade)
+const STACK_OFFSET = 40; // Reduced offset for tighter stacking
 
 const DiningLens = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const cardsContainerRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-    const headingRef = useRef<HTMLHeadingElement>(null);
 
     useEffect(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
 
-        // Set initial state for animated cards (2nd and 3rd)
-        [1, 2].forEach((i) => {
-            const card = cardsRef.current[i];
+        // Set initial state - all cards start from bottom of screen
+        cardsRef.current.forEach((card, index) => {
             if (card) {
                 gsap.set(card, {
                     y: '100vh',
-                    rotate: i % 2 === 0 ? '-4deg' : '4deg',
-                    opacity: 1, // Always fully opaque
+                    rotate: index % 2 === 0 ? '-4deg' : '4deg',
+                    opacity: 1,
                 });
             }
         });
@@ -108,24 +105,26 @@ const DiningLens = () => {
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: 'top top',
-                end: `+=${(cardsData.length - 1) * 120}%`,
+                end: `+=${cardsData.length * 100}%`,
                 pin: true,
                 scrub: 1,
                 anticipatePin: 1,
             },
         });
 
-        // Animate in cards 2 and 3
-        [1, 2].forEach((i, idx) => {
-            const card = cardsRef.current[i];
+        // Animate cards sequentially - each card stacks on top of the previous
+        cardsRef.current.forEach((card, index) => {
             if (!card) return;
+            
+            const finalY = -index * STACK_OFFSET; // Stack upward from baseline
+            const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
+            
             tl.to(card, {
-                y: `${-i * STACK_OFFSET}px`,
-                rotate: i % 2 === 0 ? '-4deg' : '4deg',
-                opacity: 1, // Always fully opaque
-                duration: 0.7,
+                y: finalY,
+                rotate: finalRotate,
+                duration: 0.8,
                 ease: 'power2.out',
-            }, idx * 0.4);
+            }, index * 0.3); // Sequential timing
         });
 
         return () => {
@@ -136,10 +135,10 @@ const DiningLens = () => {
     return (
         <section id="impact" ref={sectionRef} className="relative bg-slate-50">
             <div className="h-screen flex items-center justify-center overflow-hidden">
-                <div className="max-w-7xl w-full mx-auto px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start py-20 lg:py-0">
-                    {/* Left column: heading gets a ref for alignment */}
+                <div className="max-w-7xl w-full mx-auto px-8 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
+                    {/* Left column */}
                     <div className="flex flex-col justify-center h-full">
-                        <h2 ref={headingRef} className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-4 leading-tight tracking-tight">
+                        <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-4 leading-tight tracking-tight">
                             Dining Through a Different Lens
                         </h2>
                         <p className="text-xl text-medium-text mt-4 mb-8">
@@ -172,85 +171,47 @@ const DiningLens = () => {
                             </div>
                         </div>
                     </div>
+
                     {/* Right Column: responsive handling */}
                     <div className="lg:hidden flex flex-col gap-8 mt-8">
                         {cardsData.map(card => <MobileCard key={card.id} card={card} />)}
                     </div>
-                    <div ref={cardsContainerRef} className="hidden lg:block relative h-[700px] w-full" style={{ marginTop: '0.5rem' }}>
-                        {/* First card: statically rendered, always visible */}
-                        <div
-                            className="card absolute top-0 left-0 flex items-center justify-center"
-                            style={{
-                                zIndex: 0,
-                                width: CARD_WIDTH,
-                                height: CARD_HEIGHT,
-                                left: '50%',
-                                transform: `translateX(-50%)`,
-                                boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
-                                pointerEvents: 'none',
-                                rotate: '-4deg',
-                                opacity: 1,
-                            }}
-                        >
+
+                    {/* Desktop cards container - centered with flexbox */}
+                    <div ref={cardsContainerRef} className="hidden lg:flex items-center justify-center relative w-full min-h-[600px]">
+                        {cardsData.map((card, index) => (
                             <div
-                                className="bg-off-white rounded-2xl border border-light-gray/50 flex flex-col items-center"
+                                key={card.id}
+                                ref={el => cardsRef.current[index] = el}
+                                className="absolute flex items-center justify-center"
                                 style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    padding: CARD_PADDING,
-                                    boxSizing: 'border-box',
+                                    zIndex: cardsData.length - index, // Higher z-index for cards that should be on top
+                                    width: CARD_WIDTH,
+                                    height: CARD_HEIGHT,
+                                    boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
+                                    pointerEvents: index === cardsData.length - 1 ? 'auto' : 'none',
                                 }}
                             >
-                                <img
-                                    src={cardsData[0].image}
-                                    alt={cardsData[0].title}
-                                    className="rounded-xl mb-6 object-cover"
-                                    style={{ width: '100%', height: IMAGE_HEIGHT, background: '#f5f5f5' }}
-                                />
-                                <h3 className="font-heading font-bold text-2xl text-dark-text text-center mb-2">{cardsData[0].title}</h3>
-                                <p className="text-medium-text text-base text-center">{cardsData[0].description}</p>
-                            </div>
-                        </div>
-                        {/* Animated cards: 2 and 3 */}
-                        {cardsData.slice(1).map((card, idx) => {
-                            const i = idx + 1;
-                            return (
                                 <div
-                                    key={card.id}
-                                    ref={el => cardsRef.current[i] = el}
-                                    className="card absolute top-0 left-0 flex items-center justify-center"
+                                    className="bg-off-white rounded-2xl border border-light-gray/50 flex flex-col items-center"
                                     style={{
-                                        zIndex: i,
-                                        width: CARD_WIDTH,
-                                        height: CARD_HEIGHT,
-                                        left: '50%',
-                                        transform: `translateX(-50%)`,
-                                        boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
-                                        pointerEvents: i === cardsData.length - 1 ? 'auto' : 'none',
-                                        opacity: 1,
+                                        width: '100%',
+                                        height: '100%',
+                                        padding: CARD_PADDING,
+                                        boxSizing: 'border-box',
                                     }}
                                 >
-                                    <div
-                                        className="bg-off-white rounded-2xl border border-light-gray/50 flex flex-col items-center"
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            padding: CARD_PADDING,
-                                            boxSizing: 'border-box',
-                                        }}
-                                    >
-                                        <img
-                                            src={card.image}
-                                            alt={card.title}
-                                            className="rounded-xl mb-6 object-cover"
-                                            style={{ width: '100%', height: IMAGE_HEIGHT, background: '#f5f5f5' }}
-                                        />
-                                        <h3 className="font-heading font-bold text-2xl text-dark-text text-center mb-2">{card.title}</h3>
-                                        <p className="text-medium-text text-base text-center">{card.description}</p>
-                                    </div>
+                                    <img
+                                        src={card.image}
+                                        alt={card.title}
+                                        className="rounded-xl mb-6 object-cover"
+                                        style={{ width: '100%', height: IMAGE_HEIGHT, background: '#f5f5f5' }}
+                                    />
+                                    <h3 className="font-heading font-bold text-2xl text-dark-text text-center mb-2">{card.title}</h3>
+                                    <p className="text-medium-text text-base text-center">{card.description}</p>
                                 </div>
-                            );
-                        })}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
