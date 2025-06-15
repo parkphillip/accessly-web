@@ -37,7 +37,7 @@ export default function GlobeDemo() {
       mapBrightness: 12,
       baseColor: [1, 1, 1], // White for landmass dots
       markerColor: [0.7, 0.7, 0.7], // Neutral grey for markers
-      glowColor: [0.5, 0.5, 0.5], // Neutral grey glow
+      glowColor: [0.17, 0.32, 0.51], // Subtle brand-navy glow
       markers: [
         // Extracted from previous sample data
         { location: [-19.885592, -43.951191], size: 0.05 },
