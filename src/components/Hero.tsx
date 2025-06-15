@@ -4,6 +4,7 @@ import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
+
 const Hero = () => {
   const scrollToNext = (id: string) => {
     document.getElementById(id)?.scrollIntoView({
@@ -15,7 +16,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left Column: Text Content */}
           <div className="text-center lg:text-left">
             <div className="max-w-xl">
@@ -46,14 +47,15 @@ free braille menus for every restaurant.</p>
               </Link>
             </div>
           </div>
+
+          {/* Right Column: Globe */}
+          <div className="hidden lg:flex justify-center items-center">
+            <div className="w-[600px] h-[600px]">
+                <GlobeDemo size={600} />
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* Right Column: Globe - Absolutely Positioned */}
-      <div className="hidden lg:block absolute inset-y-0 right-0 transform translate-x-[20%] w-[800px] pointer-events-none flex items-center">
-        <GlobeDemo size={800} />
-      </div>
-
 
       {/* Scroll Indicator */}
       <button onClick={() => scrollToNext('impact')} className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 text-medium-text hover:text-dark-text transition-colors z-10" aria-label="Scroll to next section">
