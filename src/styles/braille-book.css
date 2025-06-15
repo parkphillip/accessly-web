@@ -1,5 +1,4 @@
 /* --- 3D Book Experience --- */
-/* ... keep existing code (.book-container, .book, .book-spine) */
 .book-container {
   display: flex;
   flex-direction: column;
@@ -10,7 +9,6 @@
 }
 
 .book {
-/* ... keep existing code */
   position: relative;
   width: 900px;
   height: 600px;
@@ -23,7 +21,6 @@
 /* Removed the book:hover selector to prevent tilting glitch */
 
 .book-spine {
-/* ... keep existing code */
   position: absolute;
   width: 60px;
   height: 100%;
@@ -36,7 +33,6 @@
 }
 
 .page {
-/* ... keep existing code */
   position: absolute;
   width: 50%;
   height: 100%;
@@ -53,7 +49,6 @@
 }
 
 .page.flipped {
-/* ... keep existing code */
   transform: rotateY(-180deg);
   box-shadow: 
     inset 0 0 20px rgba(0,0,0,0.05),
@@ -62,7 +57,6 @@
 }
 
 .page-face {
-/* ... keep existing code */
   position: absolute;
   width: 100%;
   height: 100%;
@@ -72,7 +66,6 @@
 }
 
 .page-face.back {
-/* ... keep existing code */
   transform: rotateY(180deg);
   background-color: #f1f2f4; /* Slightly different color for back */
 }
@@ -89,7 +82,6 @@
 }
 
 /* Paper texture effect */
-/* ... keep existing code */
 .page-content::before {
   content: '';
   position: absolute;
@@ -102,7 +94,6 @@
 }
 
 .braille-line {
-/* ... keep existing code */
   line-height: 2;
   transition: background-color 0.2s;
 }
@@ -122,14 +113,13 @@
     -1px -1px 2px rgba(0, 0, 0, 0.2),      /* Bottom-right shadow for depth */
     1px 1px 3px rgba(0,0,0,0.1);           /* Softer drop shadow */
 
-  /* Transition for the fade-out effect */
-  transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
-  will-change: color, text-shadow;
+  /* Transition for the fade-out effect - optimized for performance */
+  transition: color 0.3s ease-in-out;
+  will-change: color;
 }
 
 /* The English translation, which fades in */
 .braille-word::after {
-/* ... keep existing code */
   content: attr(data-english);
   position: absolute;
   top: 50%;
@@ -156,7 +146,7 @@
 /* NEW: On hover, fade out braille and fade in English */
 .braille-word:hover {
   color: transparent;
-  text-shadow: none;
+  text-shadow: none; /* Shadow removed instantly to improve performance */
 }
 
 .braille-word:hover::after {
@@ -164,7 +154,6 @@
 }
 
 .page.cover .page-content {
-/* ... keep existing code */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -172,11 +161,9 @@
   text-align: center;
 }
 .page.cover h3 {
-/* ... keep existing code */
   font-size: 3rem;
 }
 .page.cover .braille-line {
-/* ... keep existing code */
   font-size: 1.5rem;
 }
 
@@ -187,7 +174,6 @@
 }
 
 /* Responsive adjustments */
-/* ... keep existing code */
 @media (max-width: 960px) {
   .book {
     width: 100%;

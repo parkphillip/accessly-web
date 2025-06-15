@@ -16,7 +16,7 @@ const BrailleMenuBook = () => {
 
   const generatePages = useCallback((text: string): Page[] => {
     const lines = text.split('\n').filter(line => line.trim() !== '');
-    const linesPerPage = 8;
+    const linesPerPage = 6; // Reduced from 8 to prevent overflow
     const contentPages: Page[] = [];
 
     for (let i = 0; i < lines.length; i += linesPerPage) {
