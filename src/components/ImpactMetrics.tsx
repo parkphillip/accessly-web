@@ -1,46 +1,21 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { BookOpen, Users, EyeOff } from 'lucide-react';
-import { cn } from "@/lib/utils";
+import { motion, Variants } from 'framer-motion';
+import { AccessibilityChart } from './AccessibilityChart';
 
-const challenges = [
-  {
-    icon: EyeOff,
-    title: "The Public Menu Reading",
-    description: "When a menu isn't accessible, the simple act of choosing a meal becomes a public performance. Staff or companions must read everything aloud, stripping away the quiet, personal moment of decision.",
-    image: "/placeholder.svg",
-    alt: "Illustration of an open menu with a large eye crossed out, symbolizing inaccessible menus.",
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
   },
-  {
-    icon: Users,
-    title: "A Loss of Connection",
-    description: "Dining is a social experience. The simple act of discussing the menu with a partner is lost when one person is solely reliant on the other to understand their options, creating a subtle barrier.",
-    image: "/placeholder.svg",
-    alt: "Illustration showing two figures at a table with a broken link between them, representing lost connection.",
-  },
-  {
-    icon: BookOpen,
-    title: "The Illusion of Choice",
-    description: "Without the ability to browse freely, diners often default to 'what's popular?' or a companion's suggestion. This isn't true choice; it's a compromise that limits personal preference and discovery.",
-    image: "/placeholder.svg",
-    alt: "Illustration of a menu with several options faded out and only one highlighted.",
-  },
-];
+};
 
 const ImpactMetrics = () => {
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
   return (
     <section id="impact" className="py-24 bg-subtle-gray/50 bg-slate-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -59,38 +34,38 @@ const ImpactMetrics = () => {
           </p>
         </motion.div>
 
-        <div className="space-y-24 mb-24">
-          {challenges.map((challenge, index) => (
-            <motion.div
-              key={index}
-              className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 xl:gap-12 items-stretch mb-24">
+            <motion.div 
+                className="lg:col-span-3"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <div className={cn("text-left", index % 2 !== 0 && "md:order-2")}>
-                <div className="w-16 h-16 bg-brand-navy/10 text-brand-navy rounded-xl flex items-center justify-center mb-6">
-                  <challenge.icon className="w-8 h-8" />
-                </div>
-                <h3 className="text-3xl font-heading font-bold text-dark-text mb-4">{challenge.title}</h3>
-                <p className="text-lg text-medium-text leading-relaxed">
-                  {challenge.description}
-                </p>
-              </div>
-              <div className={cn(index % 2 !== 0 && "md:order-1")}>
-                <img 
-                  src={challenge.image} 
-                  alt={challenge.alt} 
-                  className="rounded-lg shadow-medium w-full h-auto object-cover aspect-video" 
-                />
-              </div>
+                <AccessibilityChart />
             </motion.div>
-          ))}
+            <motion.div 
+                className="lg:col-span-2 min-h-[400px]"
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+                <div className="relative h-full w-full">
+                    <img 
+                      src="/placeholder.svg" 
+                      alt="A person with a visual impairment dining with a friend, feeling connected and included." 
+                      className="rounded-lg shadow-medium w-full h-full object-cover" 
+                    />
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg flex items-end p-6">
+                        <p className="text-off-white text-xl font-semibold leading-tight">True hospitality is making everyone feel welcome.</p>
+                    </div>
+                </div>
+            </motion.div>
         </div>
 
         <motion.div 
-          className="structured-card bg-brand-navy text-off-white p-12"
+          className="structured-card bg-brand-navy text-off-white p-12 rounded-lg"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
