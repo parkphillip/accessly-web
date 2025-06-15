@@ -51,7 +51,9 @@ export default function GlobeDemo() {
         { location: [37.7595, -122.4367], size: 0.1 },
       ],
       onRender: (state) => {
-        // Smoothly interpolate to the target rotation set by scrolling.
+        // Add a slow, constant rotation to the target.
+        targetPhi += 0.002;
+        // Smoothly interpolate to the target rotation, which is affected by both scrolling and the constant rotation.
         phi += (targetPhi - phi) * 0.05;
         state.phi = phi;
       },
