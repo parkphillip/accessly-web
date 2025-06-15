@@ -1,6 +1,11 @@
+
 import React from 'react';
 import ProcessTimeline from './ProcessTimeline';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+
 const ProcessSection = () => {
   return <motion.section id="process" className="py-32 bg-white" initial={{
     opacity: 0
@@ -18,6 +23,14 @@ const ProcessSection = () => {
           <p className="text-xl text-medium-text max-w-3xl mx-auto leading-relaxed">We’ve streamlined the process to make acquiring accessibility features effortless and completely free—for your restaurant, starting with braille menus.</p>
         </div>
         <ProcessTimeline />
+        <div className="text-center mt-20">
+            <Link to="/partner">
+              <Button size="lg" className="group">
+                Partner With Us
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+        </div>
       </div>
     </motion.section>;
 };

@@ -13,9 +13,6 @@ const Footer = () => {
     id: 'impact',
     label: 'Impact'
   }, {
-    id: 'network',
-    label: 'Network'
-  }, {
     id: 'order',
     label: 'Get Started'
   }];

@@ -12,9 +12,6 @@ const navItems = [{
 }, {
   id: 'process',
   label: 'Our Process'
-}, {
-  id: 'network',
-  label: 'Network'
 }];
 
 const Navigation = () => {
