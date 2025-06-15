@@ -1,18 +1,16 @@
-
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
 import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
-
 const Hero = () => {
   const scrollToNext = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(id)?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
-
-  return (
-    <section id="hero" className="relative min-h-screen flex items-center bg-off-white overflow-hidden">
+  return <section id="hero" className="relative min-h-screen flex items-center bg-off-white overflow-hidden">
       {/* Background Texture */}
-      <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg"></div>
+      <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-400"></div>
       
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 lg:gap-16 items-center">
         
@@ -21,7 +19,11 @@ const Hero = () => {
           <div className="max-w-3xl">
             <h1 className="text-5xl lg:text-7xl font-heading font-extrabold text-dark-text leading-tight tracking-tight">
               Building an <AnimatedText text={"Accessible"} className="text-brand-navy font-mono" />
-              <span className="text-brand-navy font-heading" style={{ display: 'block', lineHeight: '1.1', minHeight: '1.2em' }}>
+              <span className="text-brand-navy font-heading" style={{
+              display: 'block',
+              lineHeight: '1.1',
+              minHeight: '1.2em'
+            }}>
                 World
               </span>
               <span className="block text-3xl lg:text-4xl text-medium-text font-normal font-sans mt-4">
@@ -35,16 +37,10 @@ const Hero = () => {
 
           {/* Call to Action */}
           <div className="flex flex-col sm:flex-row gap-4 mt-12 justify-center lg:justify-start">
-            <button
-              onClick={() => scrollToNext('order')}
-              className="primary-button text-lg px-10 py-4"
-            >
+            <button onClick={() => scrollToNext('order')} className="primary-button text-lg px-10 py-4">
               Join the Movement
             </button>
-            <button
-              onClick={() => scrollToNext('impact')}
-              className="secondary-button text-lg px-10 py-4"
-            >
+            <button onClick={() => scrollToNext('impact')} className="secondary-button text-lg px-10 py-4">
               See Our Impact
             </button>
           </div>
@@ -59,16 +55,10 @@ const Hero = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <button 
-        onClick={() => scrollToNext('impact')}
-        className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 text-medium-text hover:text-dark-text transition-colors z-10" 
-        aria-label="Scroll to next section"
-      >
+      <button onClick={() => scrollToNext('impact')} className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 text-medium-text hover:text-dark-text transition-colors z-10" aria-label="Scroll to next section">
         <span className="font-sans text-sm py-0 my-0 text-center font-normal">Explore</span>
         <ArrowDown className="w-5 h-5 animate-bounce" />
       </button>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
