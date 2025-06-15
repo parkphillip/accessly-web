@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, ArrowRight } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
@@ -72,8 +73,8 @@ const Navigation = () => {
       });
     }
   };
-  return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-off-white/95 backdrop-blur-sm shadow-subtle border-b border-light-gray' : 'bg-transparent'}`}>
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-8">
+  return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'p-2' : ''}`}>
+      <div className={`max-w-screen-2xl mx-auto px-6 lg:px-8 transition-all duration-300 border rounded-xl ${isScrolled ? 'bg-off-white/95 backdrop-blur-sm shadow-medium border-light-gray/50' : 'bg-transparent border-transparent'}`}>
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-4">
