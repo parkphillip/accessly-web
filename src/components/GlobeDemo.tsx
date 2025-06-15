@@ -70,7 +70,7 @@ export default function GlobeDemo({ size = 600 }: { size?: number }) {
       <canvas
         ref={canvasRef}
         style={{ width: size, height: size, maxWidth: "100%", aspectRatio: 1 }}
-        className="[filter:drop-shadow(0_10px_20px_rgba(0,0,0,0.4))]"
+        className="[filter:drop-shadow(0_10px_20px_rgba(0,0,0,0.4))] focus:outline-none"
       />
     </div>
   );
