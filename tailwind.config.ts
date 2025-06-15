@@ -145,6 +145,10 @@ export default {
           '0%': { backgroundPosition: '0 0' },
           '100%': { backgroundPosition: '100px 100px' },
         },
+        'caret-blink': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0' },
+        },
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -155,6 +159,7 @@ export default {
 				'blink': 'blink 1s step-end infinite',
         'blob': 'blob 7s infinite ease-in-out',
         'move-bg': 'move-bg 8s linear infinite',
+        'caret-blink': 'caret-blink 1.2s ease-in-out infinite',
 			},
 			boxShadow: {
 				'subtle': '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
