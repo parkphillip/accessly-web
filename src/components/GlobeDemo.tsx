@@ -70,6 +70,7 @@ export default function GlobeDemo() {
       <canvas
         ref={canvasRef}
         style={{ width: 600, height: 600, maxWidth: "100%", aspectRatio: 1 }}
+        className="[filter:drop-shadow(0_10px_20px_rgba(0,0,0,0.4))]"
       />
     </div>
   );
