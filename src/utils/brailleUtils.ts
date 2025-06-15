@@ -1,35 +1,20 @@
 
-// A more complete Braille character map
+// A mapping for lower-case letters only. No spaces or placeholders.
 export const brailleMap: { [key: string]: string } = {
   'a': '⠁', 'b': '⠃', 'c': '⠉', 'd': '⠙', 'e': '⠑', 'f': '⠋', 'g': '⠛', 'h': '⠓',
   'i': '⠊', 'j': '⠚', 'k': '⠅', 'l': '⠇', 'm': '⠍', 'n': '⠝', 'o': '⠕', 'p': '⠏',
   'q': '⠟', 'r': '⠗', 's': '⠎', 't': '⠞', 'u': '⠥', 'v': '⠧', 'w': '⠺', 'x': '⠭',
-  'y': '⠽', 'z': '⠵', ' ': '⠀'
+  'y': '⠽', 'z': '⠵'
 };
 
 /**
- * Translates a string to Braille, preserving newlines.
+ * Translate a word to a braille string (one braille cell per character).
+ * Empty string or unsupported chars are returned as "" (NOT a visual cell).
  */
-export const translateToBraille = (text: string): string => {
-  let brailleString = '';
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (char === '\n') {
-      brailleString += '\n';
-      continue;
-    }
-    const lowerChar = char.toLowerCase();
-    // Preserve original character if not in map, preventing empty cells for unknown chars
-    brailleString += brailleMap[lowerChar] || lowerChar;
-  }
-  return brailleString;
-};
+export function wordToBraille(word: string): string[] {
+  return [...word].map(letter => brailleMap[letter.toLowerCase()] || '');
+}
 
-// Alias for backwards compatibility if needed elsewhere
-export const textToBraille = translateToBraille;
-
-export const sampleTexts = [
-  "Main Courses\n\nFilet Mignon - 8oz center cut, potato gratin\n\nPan-Seared Salmon - with asparagus and lemon-dill sauce\n\nChicken Parmesan - breaded chicken, marinara, mozzarella",
-  "Desserts\n\nChocolate Lava Cake - with vanilla bean ice cream\n\nNew York Cheesecake - with raspberry coulis\n\nTiramisu - coffee-soaked ladyfingers, mascarpone cream",
-  "Beverages\n\nCoffee\n\nTea\n\nSoda\n\nSparkling Water"
-];
+export function lineToBraille(line: string): string[] {
+  return line.split('').map(l => brailleMap[l.toLowerCase()] || '');
+}
