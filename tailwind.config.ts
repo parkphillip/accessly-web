@@ -142,6 +142,10 @@ export default {
           '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
           '100%': { transform: 'translate(0px, 0px) scale(1)' },
         },
+        'move-bg': {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '100px 100px' },
+        },
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -151,6 +155,7 @@ export default {
 				'typewriter': 'typewriter 3s steps(30) infinite',
 				'blink': 'blink 1s step-end infinite',
         'blob': 'blob 7s infinite ease-in-out',
+        'move-bg': 'move-bg 8s linear infinite',
 			},
 			boxShadow: {
 				'subtle': '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)',

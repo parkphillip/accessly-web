@@ -1,16 +1,21 @@
 
-export const brailleMap = {};
-
-export const translateToBraille = (text: string): string => {
-  // This is a placeholder function to resolve a build error in a read-only file.
-  // The feature using this has been removed.
-  return text;
+// A more complete Braille character map
+export const brailleMap: { [key: string]: string } = {
+  'a': '⠁', 'b': '⠃', 'c': '⠉', 'd': '⠙', 'e': '⠑', 'f': '⠋', 'g': '⠛', 'h': '⠓',
+  'i': '⠊', 'j': '⠚', 'k': '⠅', 'l': '⠇', 'm': '⠍', 'n': '⠝', 'o': '⠕', 'p': '⠏',
+  'q': '⠟', 'r': '⠗', 's': '⠎', 't': '⠞', 'u': '⠥', 'v': '⠧', 'w': '⠺', 'x': '⠭',
+  'y': '⠽', 'z': '⠵', ' ': '⠀'
 };
 
-export const sampleTexts: string[] = [];
-
+/**
+ * Translates a string to Braille, padding with non-breaking spaces
+ * to ensure the output has the same length as the input for animation purposes.
+ */
 export const textToBraille = (text: string): string => {
-  // This is a placeholder function to resolve a build error in a read-only file.
-  // The feature using this has been removed.
-  return '';
+  const lowerCaseText = text.toLowerCase();
+  let brailleString = '';
+  for (let i = 0; i < lowerCaseText.length; i++) {
+    brailleString += brailleMap[lowerCaseText[i]] || '⠀'; // Use braille space for unknown chars
+  }
+  return brailleString;
 };

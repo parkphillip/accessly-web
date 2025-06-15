@@ -1,69 +1,56 @@
 
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
-import alee from '/public/placeholder.svg';
+import BrailleGlobe from './BrailleGlobe';
+import AnimatedText from './AnimatedText';
 
 const Hero = () => {
-  const scrollToNext = () => {
-    const element = document.getElementById('impact');
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
+  const scrollToNext = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
+
   return (
-    <section id="hero" className="relative min-h-screen flex items-center bg-gradient-to-b from-white to-subtle-gray/20 py-32 md:py-24 overflow-hidden">
-      {/* Soft Gradient Aura */}
-      <div className="absolute top-0 -left-1/4 w-96 h-96 lg:w-[32rem] lg:h-[32rem] bg-brand-terracotta/10 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
-      <div style={{ animationDelay: '2s' }} className="absolute top-1/4 -right-1/4 w-96 h-96 lg:w-[32rem] lg:h-[32rem] bg-brand-navy/10 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
-      <div style={{ animationDelay: '4s' }} className="absolute bottom-0 left-1/4 w-96 h-96 lg:w-[32rem] lg:h-[32rem] bg-subtle-gray/20 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
+    <section id="hero" className="relative min-h-screen flex flex-col justify-center bg-off-white overflow-hidden">
+      {/* Background Texture */}
+      <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg"></div>
+      
+      {/* 3D Globe */}
+      <BrailleGlobe />
 
-      <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        
-        {/* Left Side - Content */}
-        <div className="space-y-8 z-10">
-          <h1 className="text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-dark-text leading-tight">
-            Braille Menus
-            <span className="block text-brand-navy">on <span className="italic">Every</span> Table.</span>
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 lg:px-8 text-center flex flex-col items-center">
+        <div className="max-w-3xl">
+          <h1 className="text-5xl lg:text-7xl font-serif font-bold text-dark-text leading-tight tracking-tight">
+            Building an <AnimatedText text="Accessible World" className="text-brand-navy font-mono" />
+            <span className="block text-3xl lg:text-4xl text-medium-text font-normal mt-4">
+              One Menu at a Time
+            </span>
           </h1>
-          
-          <p className="text-lg lg:text-xl text-medium-text max-w-xl leading-relaxed">
-            Accessly is a civic startup making public spaces accessible—starting with braille menus. We're building toward a future where access is standard, not special.
+          <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto leading-relaxed">
+            Accessly is a civic startup building a future where access is standard, not special. We're starting with free braille menus for every restaurant.
           </p>
-
-          {/* Call to Action */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <button onClick={() => document.getElementById('order')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="primary-button">
-              Get Your Free Menus
-            </button>
-            
-            <button onClick={() => document.getElementById('impact')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="secondary-button">
-              See Our Impact
-            </button>
-          </div>
         </div>
 
-        {/* Right Side - Visual */}
-        <div className="relative flex justify-center items-center h-full">
-          <div className="relative w-[320px] h-[400px] lg:w-[400px] lg:h-[500px]">
-            <div className="absolute inset-0 bg-subtle-gray rounded-2xl transform -rotate-3"></div>
-            <img src={alee} alt="Person reading a braille menu in a restaurant" className="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-strong" />
-            <div className="absolute -bottom-8 -right-8 structured-card p-4 text-center">
-              <div className="text-4xl font-mono text-brand-navy tracking-widest">⠍⠑⠝⠥</div>
-              <div className="text-sm font-medium text-medium-text mt-2">"Menu" in Braille</div>
-            </div>
-          </div>
+        {/* Call to Action */}
+        <div className="flex flex-col sm:flex-row gap-4 mt-12">
+          <button
+            onClick={() => scrollToNext('order')}
+            className="primary-button text-lg px-10 py-4"
+          >
+            Join the Movement
+          </button>
+          <button
+            onClick={() => scrollToNext('impact')}
+            className="secondary-button text-lg px-10 py-4"
+          >
+            See Our Impact
+          </button>
         </div>
       </div>
 
-      {/* Scroll indicator - Fixed positioning for better full screen support */}
+      {/* Scroll Indicator */}
       <button 
-        onClick={scrollToNext} 
+        onClick={() => scrollToNext('impact')}
         className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 text-medium-text hover:text-dark-text transition-colors z-10" 
         aria-label="Scroll to next section"
       >
