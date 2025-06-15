@@ -31,7 +31,7 @@ export default function GlobeDemo() {
       height: 600 * 2,
       phi: 0,
       theta: 0.3,
-      dark: 0.4,
+      dark: 0.7,
       diffuse: 3,
       mapSamples: 16000,
       mapBrightness: 12,
