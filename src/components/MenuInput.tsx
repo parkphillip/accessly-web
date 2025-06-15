@@ -105,4 +105,3 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
 };
 
 export default MenuInput;
-

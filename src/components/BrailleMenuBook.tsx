@@ -1,19 +1,16 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
-/* ... keep existing code (imports) */
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
 import MenuInput from './MenuInput';
 
 interface Page {
-/* ... keep existing code (interface) */
   type: 'cover' | 'page';
   title: string;
   content: string[];
 }
 
 const BrailleMenuBook = () => {
-/* ... keep existing code (state and generatePages) */
   const [pages, setPages] = useState<Page[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFlipping, setIsFlipping] = useState(false);
@@ -72,7 +69,6 @@ const BrailleMenuBook = () => {
   }, [isFlipping, canGoForward, canGoBack]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-/* ... keep existing code (handleKeyDown, Word, DisplayedPageNumber, and JSX) */
     if (e.key === 'ArrowRight') {
       flipPage('next');
     } else if (e.key === 'ArrowLeft') {
@@ -102,10 +98,10 @@ const BrailleMenuBook = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-serif font-bold text-dark-text mb-4 headline-underline">
-            An Interactive Braille Menu
+            Create a Braille Menu
           </h2>
           <p className="text-lg text-medium-text max-w-3xl mx-auto">
-            Create your own accessible menu below. Hover over braille to translate, and use the arrows to flip pages.
+            Enter text or upload an image. Flip the book. Hover to translate.
           </p>
         </div>
 
