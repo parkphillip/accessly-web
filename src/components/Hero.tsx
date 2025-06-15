@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
-import { GlobeDemo } from './GlobeDemo';
+import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
 
 const Hero = () => {
