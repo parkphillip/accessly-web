@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { Eye, UsersRound, Accessibility } from 'lucide-react';
 import gsap from 'gsap';
@@ -90,32 +89,42 @@ const DiningLens = () => {
     useEffect(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
 
-        // Set initial state - all cards start from bottom of screen
+        // Set initial state - first card starts in position, others start from bottom
         cardsRef.current.forEach((card, index) => {
             if (card) {
-                gsap.set(card, {
-                    y: '100vh',
-                    rotate: index % 2 === 0 ? '-4deg' : '4deg',
-                    opacity: 1,
-                });
+                if (index === 0) {
+                    // First card starts in its final position
+                    gsap.set(card, {
+                        y: 0,
+                        rotate: '-4deg',
+                        opacity: 1,
+                    });
+                } else {
+                    // Other cards start from bottom of screen
+                    gsap.set(card, {
+                        y: '100vh',
+                        rotate: index % 2 === 0 ? '-4deg' : '4deg',
+                        opacity: 1,
+                    });
+                }
             }
         });
 
-        // GSAP timeline for scroll-linked animation with more space between cards
+        // GSAP timeline for scroll-linked animation
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: 'top top',
-                end: `+=${cardsData.length * 150}%`, // Increased from 100% to 150% for more time
+                end: `+=${cardsData.length * 150}%`,
                 pin: true,
                 scrub: 1,
                 anticipatePin: 1,
             },
         });
 
-        // Animate cards sequentially with larger delays between each card
+        // Animate only the cards that need to move (skip first card)
         cardsRef.current.forEach((card, index) => {
-            if (!card) return;
+            if (!card || index === 0) return; // Skip first card
             
             // Cards stack upward with tighter spacing
             const finalY = -index * STACK_OFFSET;
@@ -126,7 +135,7 @@ const DiningLens = () => {
                 rotate: finalRotate,
                 duration: 0.8,
                 ease: 'power2.out',
-            }, index * 0.6); // Increased delay from 0.3 to 0.6 for more reading time
+            }, index * 0.6);
         });
 
         return () => {
@@ -138,15 +147,12 @@ const DiningLens = () => {
         <section id="impact" ref={sectionRef} className="relative bg-slate-50">
             <div className="h-screen flex items-center justify-center overflow-hidden">
                 <div className="max-w-6xl w-full mx-auto px-5 lg:px-7 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
-                    {/* Left column */}
                     <LeftColumn />
 
-                    {/* Right Column: responsive handling */}
                     <div className="lg:hidden flex flex-col gap-8 mt-8">
                         {cardsData.map(card => <MobileCard key={card.id} card={card} />)}
                     </div>
 
-                    {/* Desktop cards container */}
                     <div ref={cardsContainerRef} className="hidden lg:flex items-center justify-center relative w-full h-full">
                         {cardsData.map((card, index) => (
                             <div
@@ -154,7 +160,7 @@ const DiningLens = () => {
                                 ref={el => cardsRef.current[index] = el}
                                 className="absolute flex items-center justify-center"
                                 style={{
-                                    zIndex: index + 1, // First card has z-index 1, second has 2, third has 3
+                                    zIndex: index + 1,
                                     width: CARD_WIDTH,
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
