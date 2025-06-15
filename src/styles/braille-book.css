@@ -22,6 +22,7 @@
 /* Removed the book:hover selector to prevent tilting glitch */
 
 .book-spine {
+/* ... keep existing code */
   position: absolute;
   width: 60px;
   height: 100%;
@@ -85,6 +86,7 @@
   color: #343a40;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box; /* Ensures padding is contained */
 }
 
 /* Paper texture effect */
@@ -122,7 +124,7 @@
     1px 1px 3px rgba(0,0,0,0.1);           /* Softer drop shadow */
 
   /* Transition for the fade-out effect */
-  transition: opacity 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out;
 }
 
 /* The English translation, which fades in */
@@ -149,7 +151,8 @@
 
 /* When translated, fade out braille and fade in English */
 .braille-word.translated {
-  opacity: 0;
+  color: transparent;
+  text-shadow: none;
 }
 
 .braille-word.translated::after {
@@ -201,3 +204,4 @@
     font-size: 1rem;
   }
 }
+
