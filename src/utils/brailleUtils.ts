@@ -8,10 +8,9 @@ export const brailleMap: { [key: string]: string } = {
 };
 
 /**
- * Translates a string to Braille, padding with non-breaking spaces
- * to ensure the output has the same length as the input for animation purposes.
+ * Translates a string to Braille.
  */
-export const textToBraille = (text: string): string => {
+export const translateToBraille = (text: string): string => {
   const lowerCaseText = text.toLowerCase();
   let brailleString = '';
   for (let i = 0; i < lowerCaseText.length; i++) {
@@ -19,3 +18,12 @@ export const textToBraille = (text: string): string => {
   }
   return brailleString;
 };
+
+// Alias for backwards compatibility if needed elsewhere
+export const textToBraille = translateToBraille;
+
+export const sampleTexts = [
+  "Main Courses\n\nFilet Mignon - 8oz center cut, potato gratin\n\nPan-Seared Salmon - with asparagus and lemon-dill sauce\n\nChicken Parmesan - breaded chicken, marinara, mozzarella",
+  "Desserts\n\nChocolate Lava Cake - with vanilla bean ice cream\n\nNew York Cheesecake - with raspberry coulis\n\nTiramisu - coffee-soaked ladyfingers, mascarpone cream",
+  "Beverages\n\nCoffee\n\nTea\n\nSoda\n\nSparkling Water"
+];

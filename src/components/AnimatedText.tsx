@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
-import { textToBraille } from '../utils/brailleUtils';
+import { translateToBraille } from '../utils/brailleUtils';
 
 interface AnimatedTextProps {
   text: string;
@@ -10,7 +9,7 @@ interface AnimatedTextProps {
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   const [isBraille, setIsBraille] = useState(false);
   const [displayedText, setDisplayedText] = useState(text);
-  const brailleText = useMemo(() => textToBraille(text), [text]);
+  const brailleText = useMemo(() => translateToBraille(text), [text]);
 
   useEffect(() => {
     const timer = setInterval(() => {
