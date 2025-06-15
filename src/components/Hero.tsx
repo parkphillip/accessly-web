@@ -19,11 +19,11 @@ const Hero = () => {
           <div className="max-w-3xl">
             <h1 className="text-5xl lg:text-7xl font-heading font-extrabold text-dark-text leading-tight tracking-tight">
               Building an <AnimatedText text={"Accessible"} className="text-brand-navy font-mono" />
-              <span className="text-brand-navy font-heading" style={{
+              <span style={{
               display: 'block',
               lineHeight: '1.1',
               minHeight: '1.2em'
-            }}>
+            }} className="text-brand-navy font-heading font-semibold">
                 World
               </span>
               <span className="block text-3xl lg:text-4xl text-medium-text font-normal font-sans mt-4">
