@@ -8,13 +8,19 @@ export const brailleMap: { [key: string]: string } = {
 };
 
 /**
- * Translates a string to Braille.
+ * Translates a string to Braille, preserving newlines.
  */
 export const translateToBraille = (text: string): string => {
-  const lowerCaseText = text.toLowerCase();
   let brailleString = '';
-  for (let i = 0; i < lowerCaseText.length; i++) {
-    brailleString += brailleMap[lowerCaseText[i]] || '⠀'; // Use braille space for unknown chars
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (char === '\n') {
+      brailleString += '\n';
+      continue;
+    }
+    const lowerChar = char.toLowerCase();
+    // Preserve original character if not in map, preventing empty cells for unknown chars
+    brailleString += brailleMap[lowerChar] || lowerChar;
   }
   return brailleString;
 };

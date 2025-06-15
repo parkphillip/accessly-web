@@ -20,7 +20,7 @@ const Hero = () => {
         <div className="text-center lg:text-left">
           <div className="max-w-3xl">
             <h1 className="text-5xl lg:text-7xl font-serif font-bold text-dark-text leading-tight tracking-tight">
-              Building an <AnimatedText text="Accessible World" className="text-brand-navy font-mono" />
+              Building an <AnimatedText text={"Accessible\nWorld"} className="text-brand-navy font-mono" />
               <span className="block text-3xl lg:text-4xl text-medium-text font-normal mt-4">
                 One Menu at a Time
               </span>

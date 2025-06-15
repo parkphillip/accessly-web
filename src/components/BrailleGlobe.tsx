@@ -1,4 +1,3 @@
-
 import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -23,51 +22,93 @@ const fragmentShader = `
   }
 `;
 
+// Lat/Lon bounding boxes for continents (approximate)
+const continents = [
+  // North America
+  { lon: [-168, -55], lat: [15, 75] },
+  // South America
+  { lon: [-81, -34], lat: [-55, 12] },
+  // Europe & Asia
+  { lon: [-10, 140], lat: [10, 75] },
+  // Africa
+  { lon: [-17, 51], lat: [-34, 37] },
+  // Australia
+  { lon: [113, 153], lat: [-43, -10] },
+  // Antarctica
+  { lon: [-180, 180], lat: [-85, -65] },
+];
+
 const GlobeDots = () => {
   const ref = useRef<THREE.Points>(null!);
 
-  const { positions, colors, sizes } = useMemo(() => {
-    const count = 6000;
+  const { positions, colors, sizes, pulseIndexes } = useMemo(() => {
+    const maxPoints = 12000;
     const radius = 2.5;
 
-    const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-    const sizes = new Float32Array(count);
+    const tempPositions: number[] = [];
+    const tempColors: number[] = [];
+    const tempSizes: number[] = [];
+    const pulseIndexes: number[] = [];
 
     const navy = new THREE.Color('#2c5282');
-    const terracotta = new THREE.Color('#e07a5f');
-    const gray = new THREE.Color('#6c757d');
+    const white = new THREE.Color('#ffffff');
+    const yellow = new THREE.Color('#fbbf24'); // Warm yellow
 
-    for (let i = 0; i < count; i++) {
-      const phi = Math.acos(-1 + (2 * i) / count);
-      const theta = Math.sqrt(count * Math.PI) * phi;
+    let pointIndex = 0;
+    
+    continents.forEach(continent => {
+        const density = Math.abs(continent.lon[1] - continent.lon[0]) * Math.abs(continent.lat[1] - continent.lat[0]);
+        const numPoints = Math.floor(density * 0.35);
 
-      const x = radius * Math.cos(theta) * Math.sin(phi);
-      const y = radius * Math.sin(theta) * Math.sin(phi);
-      const z = radius * Math.cos(phi);
+        for (let i = 0; i < numPoints && pointIndex < maxPoints; i++) {
+            const lon = THREE.MathUtils.randFloat(continent.lon[0], continent.lon[1]);
+            const lat = THREE.MathUtils.randFloat(continent.lat[0], continent.lat[1]);
+            
+            const latRad = lat * (Math.PI / 180);
+            const lonRad = lon * (Math.PI / 180);
 
-      positions.set([x, y, z], i * 3);
+            const x = radius * Math.cos(latRad) * Math.cos(lonRad);
+            const y = radius * Math.sin(latRad);
+            const z = radius * Math.cos(latRad) * Math.sin(lonRad);
+            
+            tempPositions.push(x, y, z);
 
-      let color;
-      const rand = Math.random();
-      if (rand > 0.97) { // 3% accent color
-        color = terracotta;
-      } else if (rand > 0.94) { // 3% second accent color
-        color = gray;
-      }
-      else {
-        color = navy;
-      }
-      colors.set([color.r, color.g, color.b], i * 3);
+            let color;
+            const rand = Math.random();
+            if (rand > 0.985) {
+                color = yellow;
+                if (rand > 0.995) pulseIndexes.push(pointIndex);
+            } else if (rand > 0.97) {
+                color = white;
+            } else {
+                color = navy;
+            }
+            tempColors.push(color.r, color.g, color.b);
+            tempSizes.push(Math.random() * 1.5 + 0.8);
+            pointIndex++;
+        }
+    });
 
-      sizes[i] = Math.random() * 1.5 + 0.5;
-    }
-    return { positions, colors, sizes };
+    const positions = new Float32Array(tempPositions);
+    const colors = new Float32Array(tempColors);
+    const sizes = new Float32Array(tempSizes);
+
+    return { positions, colors, sizes, pulseIndexes };
   }, []);
 
   useFrame((state, delta) => {
     ref.current.rotation.y += delta * 0.05;
     ref.current.rotation.x += delta * 0.02;
+
+    const time = state.clock.getElapsedTime();
+    const sizesAttribute = ref.current.geometry.attributes.size as THREE.BufferAttribute;
+    
+    pulseIndexes.forEach(i => {
+      const initialSize = sizes[i];
+      sizesAttribute.setX(i, initialSize + Math.sin(time * 2 + i) * 0.8);
+    });
+
+    sizesAttribute.needsUpdate = true;
   });
 
   return (
@@ -92,8 +133,8 @@ const BrailleGlobe = () => {
     <div className="absolute inset-0 z-0">
       <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
         <Suspense fallback={null}>
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[1, 1, 1]} intensity={0.5} />
+          <ambientLight intensity={0.8} />
+          <directionalLight position={[1, 1, 1]} intensity={0.2} />
           <GlobeDots />
         </Suspense>
       </Canvas>

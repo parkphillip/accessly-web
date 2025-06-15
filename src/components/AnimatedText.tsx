@@ -21,8 +21,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   }, []);
 
   useEffect(() => {
-    // Don't run the animation on the initial render.
-    // The first animation will be from text to braille after the first interval.
     if (isInitialRender.current) {
       isInitialRender.current = false;
       return;
@@ -49,7 +47,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     return () => clearInterval(interval);
   }, [isBraille, text, brailleText]);
 
-  return <span className={className}>{displayedText}</span>;
+  return <span className={`${className} whitespace-pre-wrap`}>{displayedText}</span>;
 };
 
 export default AnimatedText;
