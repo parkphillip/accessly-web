@@ -61,15 +61,12 @@
 }
 
 .page-face {
-/* ... keep existing code */
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* Flex properties removed to allow page-content padding to create margins */
 }
 
 .page-face.back {
@@ -79,6 +76,7 @@
 }
 
 .page-content {
+/* ... keep existing code */
   width: 100%;
   height: 100%;
   padding: 4rem; /* Increased padding for margins */
@@ -90,8 +88,8 @@
 }
 
 /* Paper texture effect */
-.page-content::before {
 /* ... keep existing code */
+.page-content::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -124,7 +122,8 @@
     1px 1px 3px rgba(0,0,0,0.1);           /* Softer drop shadow */
 
   /* Transition for the fade-out effect */
-  transition: color 0.2s ease-in-out;
+  transition: color 0.3s ease-in-out;
+  will-change: color;
 }
 
 /* The English translation, which fades in */
@@ -139,17 +138,19 @@
   font-family: 'Inter', sans-serif;
   font-weight: 500;
   font-size: 1rem;
-  color: #e07a5f; /* Terracotta for emphasis */
+  color: #2c5282; /* Updated to a professional blue */
   text-shadow: none;
   letter-spacing: normal;
   line-height: 1;
 
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+  will-change: opacity;
   pointer-events: none;
 }
 
 /* When translated, fade out braille and fade in English */
+/* ... keep existing code */
 .braille-word.translated {
   color: transparent;
   text-shadow: none;
@@ -204,4 +205,3 @@
     font-size: 1rem;
   }
 }
-
