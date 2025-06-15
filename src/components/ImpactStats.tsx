@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect } from 'react';
@@ -39,7 +38,7 @@ export const ImpactStats = () => {
             suffix: '%',
             description: "need help reading menus",
             icon: UsersRound,
-            color: "text-brand-terracotta"
+            color: "text-brand-navy"
         },
         {
             value: 10,
