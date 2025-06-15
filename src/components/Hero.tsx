@@ -3,6 +3,7 @@ import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
+
 const Hero = () => {
   const scrollToNext = (id: string) => {
     document.getElementById(id)?.scrollIntoView({
@@ -18,7 +19,7 @@ const Hero = () => {
           {/* Left Column: Text Content */}
           <div className="text-center lg:text-left">
             <div>
-              <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight px-0 mx-[11px]">
+              <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight">
                 Building an <AnimatedText text={"Accessible"} className="text-brand-navy" />
                 <span style={{
                 display: 'block',
@@ -29,13 +30,13 @@ const Hero = () => {
                 </span>
                 <span className="block text-3xl lg:text-4xl text-brand-navy font-normal font-sans mt-4">One Menu at a Time</span>
               </h1>
-              <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto leading-relaxed lg:mx-[11px]">Accessly is a civic startup building a future where access is standard, not special. We're starting with
+              <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto lg:mx-0 leading-relaxed">Accessly is a civic startup building a future where access is standard, not special. We're starting with
 free braille menus for every restaurant.</p>
             </div>
 
             {/* Call to Action */}
             <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center lg:justify-start items-center">
-              <Link to="/partner" className="primary-button inline-flex items-center gap-2 px-[16px] mx-[11px]">
+              <Link to="/partner" className="primary-button inline-flex items-center gap-2 px-[16px]">
                 
                 Apply to be a Partner
               </Link>
