@@ -7,30 +7,33 @@ import LiquidGauge from 'react-liquid-gauge';
 import { useInView } from 'framer-motion';
 
 const AnimatedNumber = ({ n, precision = 0 }: { n: number; precision?: number }) => {
-  const { number } = useSpring({
+  const [props] = useSpring(() => ({
     from: { number: 0 },
-    to: n,
+    to: { number: n },
     delay: 200,
-    config: { mass: 1, tension: 20, friction: 10 },
-  });
-  return <animated.span>{number.to((val) => val.toFixed(precision))}</animated.span>;
+    config: { mass: 1, tension: 20, friction: 14 },
+  }), [n]);
+  
+  if (!props?.number) return null;
+
+  return <animated.span>{props.number.to((val) => val.toFixed(precision))}</animated.span>;
 };
 
 const CounterStats = ({ inView }: { inView: boolean }) => (
   <div className="flex justify-around text-center mb-12">
-    <div className="text-dark-text" aria-label="2.2 Billion Global vision impairment">
-      <p className="text-4xl lg:text-5xl font-bold font-heading text-brand-navy">
+    <div className="text-off-white" aria-label="2.2 Billion Global vision impairment">
+      <p className="text-4xl lg:text-5xl font-bold font-heading text-off-white">
         {inView ? <AnimatedNumber n={2.2} precision={1} /> : '0.0'}B
       </p>
-      <p className="text-medium-text mt-2 text-sm">Global vision impairment</p>
-      <p className="text-xs text-slate-400 mt-1">(WHO, 2019)</p>
+      <p className="text-slate-300 mt-2 text-sm">Global vision impairment</p>
+      <p className="text-xs text-slate-500 mt-1">(WHO, 2019)</p>
     </div>
-    <div className="text-dark-text" aria-label="7 Million Americans with vision loss">
-      <p className="text-4xl lg:text-5xl font-bold font-heading text-brand-navy">
+    <div className="text-off-white" aria-label="7 Million Americans with vision loss">
+      <p className="text-4xl lg:text-5xl font-bold font-heading text-off-white">
         {inView ? <AnimatedNumber n={7} precision={0} /> : '0'}M
       </p>
-      <p className="text-medium-text mt-2 text-sm">Americans with vision loss</p>
-      <p className="text-xs text-slate-400 mt-1">(CDC VEHSS, 2017)</p>
+      <p className="text-slate-300 mt-2 text-sm">Americans with vision loss</p>
+      <p className="text-xs text-slate-500 mt-1">(CDC VEHSS, 2017)</p>
     </div>
   </div>
 );
@@ -63,9 +66,9 @@ const RelianceGauge = ({ inView }: { inView: boolean }) => {
           riseAnimationTime={2000}
           waveFrequency={2}
           waveAmplitude={1}
-          circleStyle={{ fill: '#e2e8f0' }}
-          waveStyle={{ fill: '#172554' }}
-          textStyle={{ fill: '#172554' }}
+          circleStyle={{ fill: '#4b5563' }}
+          waveStyle={{ fill: '#3b82f6' }}
+          textStyle={{ fill: '#3b82f6' }}
           waveTextStyle={{ fill: '#fff' }}
           textRenderer={(props) => {
               const displayValue = Math.round(props.value);
@@ -73,8 +76,8 @@ const RelianceGauge = ({ inView }: { inView: boolean }) => {
           }}
         />
       </div>
-      <p className="text-medium-text mt-4">Guests who need help reading menus</p>
-      <p className="text-xs text-slate-400 mt-1">(BrailleWorks survey, 2023)</p>
+      <p className="text-slate-300 mt-4">Guests who need help reading menus</p>
+      <p className="text-xs text-slate-500 mt-1">(BrailleWorks survey, 2023)</p>
     </div>
   );
 };
@@ -95,22 +98,22 @@ const MorphingBar = ({ inView }: { inView: boolean }) => {
 
   return (
     <div className="w-full">
-        <h3 className="text-lg font-bold text-dark-text mb-2 text-center">Typical Diner Autonomy</h3>
-        <div className="flex w-full h-10 rounded-lg overflow-hidden bg-slate-200" role="img" aria-label="Bar chart showing diner autonomy. Initially 100% heavy reliance, which morps to 45% heavy reliance, 45% some help, and 10% full independence.">
-            <animated.div style={relianceSpring} className="bg-[#ef4444]">
+        <h3 className="text-lg font-bold text-off-white mb-2 text-center">Typical Diner Autonomy</h3>
+        <div className="flex w-full h-10 rounded-lg overflow-hidden bg-gray-700" role="img" aria-label="Bar chart showing diner autonomy. Initially 100% heavy reliance, which morps to 45% heavy reliance, 45% some help, and 10% full independence.">
+            <animated.div style={relianceSpring} className="bg-blue-600">
                  <span className="sr-only">Heavy reliance</span>
             </animated.div>
-            <animated.div style={assistanceSpring} className="bg-[#f59e0b]">
+            <animated.div style={assistanceSpring} className="bg-blue-500">
                  <span className="sr-only">Some help</span>
             </animated.div>
-             <animated.div style={independenceSpring} className="bg-[#38a169]">
+             <animated.div style={independenceSpring} className="bg-blue-400">
                  <span className="sr-only">Full independence</span>
             </animated.div>
         </div>
-         <div className="flex flex-wrap justify-between mt-2 text-xs text-medium-text px-1 gap-2">
-            <div className="flex items-center"><span className="w-3 h-3 rounded-full bg-[#ef4444] mr-2"></span>Heavy Reliance</div>
-            <div className="flex items-center"><span className="w-3 h-3 rounded-full bg-[#f59e0b] mr-2"></span>Some Help</div>
-            <div className="flex items-center"><span className="w-3 h-3 rounded-full bg-[#38a169] mr-2"></span>Independence</div>
+         <div className="flex flex-wrap justify-between mt-2 text-xs text-slate-300 px-1 gap-2">
+            <div className="flex items-center"><span className="w-3 h-3 rounded-full bg-blue-600 mr-2"></span>Heavy Reliance</div>
+            <div className="flex items-center"><span className="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>Some Help</div>
+            <div className="flex items-center"><span className="w-3 h-3 rounded-full bg-blue-400 mr-2"></span>Independence</div>
         </div>
     </div>
   );
@@ -121,7 +124,7 @@ export const ImpactVisuals = () => {
     const isInView = useInView(ref, { once: true, amount: 0.3 });
 
     return (
-        <div ref={ref} className="bg-slate-200/50 p-6 md:p-8 rounded-lg border border-slate-300/50 h-full flex flex-col justify-around">
+        <div ref={ref} className="bg-gray-900/50 p-6 md:p-8 rounded-lg border border-gray-700/50 h-full flex flex-col justify-around">
             <CounterStats inView={isInView} />
             <RelianceGauge inView={isInView} />
             <MorphingBar inView={isInView} />

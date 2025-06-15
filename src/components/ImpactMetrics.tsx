@@ -16,16 +16,16 @@ const itemVariants: Variants = {
   }
 };
 const ImpactMetrics = () => {
-  return <section id="impact" className="py-24 bg-subtle-gray/50 bg-zinc-300">
+  return <section id="impact" className="py-24 bg-[#111827]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div className="text-center mb-20" initial="hidden" whileInView="visible" viewport={{
         once: true,
         amount: 0.3
       }} variants={itemVariants}>
-          <h2 className="text-4xl lg:text-5xl font-heading font-bold text-dark-text mb-4">
+          <h2 className="text-4xl lg:text-5xl font-heading font-bold text-off-white mb-4">
             Dining Through a Different Lens
           </h2>
-          <p className="text-lg text-medium-text max-w-3xl mx-auto">
+          <p className="text-lg text-slate-300 max-w-3xl mx-auto">
             For millions of people with vision impairments, a simple meal out is filled with hidden barriers. It's more than just reading a menu; it's about dignity, independence, and connection.
           </p>
         </motion.div>
@@ -60,11 +60,11 @@ const ImpactMetrics = () => {
           ease: "easeOut",
           delay: 0.2
         }}>
-                <div className="relative h-full w-full">
-                    <img src="/placeholder.svg" alt="A person with a visual impairment dining with a friend, feeling connected and included." className="rounded-lg shadow-medium w-full h-full object-cover" />
-                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg flex items-end p-6">
-                        <p className="text-off-white text-xl font-semibold leading-tight">True hospitality is making everyone feel welcome.</p>
-                    </div>
+                <div className="h-full w-full bg-gray-900/50 p-8 rounded-lg border border-gray-700/50 flex flex-col justify-center items-center text-center">
+                    <blockquote className="text-2xl font-heading italic text-off-white leading-relaxed">
+                        “True hospitality is making everyone feel welcome.”
+                    </blockquote>
+                    <p className="font-sans text-base text-slate-400 mt-6">— A Friend of Accessly</p>
                 </div>
             </motion.div>
         </div>
@@ -75,7 +75,7 @@ const ImpactMetrics = () => {
       }} variants={itemVariants}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
             <div className="lg:col-span-2">
-              <h3 className="text-3xl font-heading font-bold mb-4 headline-underline after:bg-brand-terracotta">
+              <h3 className="text-3xl font-heading font-bold mb-4 headline-underline after:bg-blue-400">
                 This is Where We Come In
               </h3>
               <p className="text-lg text-off-white/80 leading-relaxed">
