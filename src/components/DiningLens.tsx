@@ -137,7 +137,7 @@ const DiningLens = () => {
     return (
         <section id="impact" ref={sectionRef} className="relative bg-slate-50">
             <div className="h-screen flex items-center justify-center overflow-hidden">
-                <div className="max-w-7xl w-full mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
+                <div className="max-w-6xl w-full mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
                     {/* Left column */}
                     <LeftColumn />
 
@@ -154,7 +154,7 @@ const DiningLens = () => {
                                 ref={el => cardsRef.current[index] = el}
                                 className="absolute flex items-center justify-center"
                                 style={{
-                                    zIndex: index + 1, // Higher index cards have higher z-index (stack on top)
+                                    zIndex: cardsData.length - index, // Higher index cards have higher z-index (stack on top)
                                     width: CARD_WIDTH,
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
