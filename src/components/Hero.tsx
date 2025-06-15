@@ -13,7 +13,7 @@ const Hero = () => {
     }
   };
   return (
-    <section id="hero" className="relative min-h-screen flex items-center bg-light-bg py-32 md:py-24">
+    <section id="hero" className="relative min-h-screen flex items-center bg-gradient-to-b from-white to-subtle-gray/20 py-32 md:py-24">
       <div className="relative w-full max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
         {/* Left Side - Content */}
