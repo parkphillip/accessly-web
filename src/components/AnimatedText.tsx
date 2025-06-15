@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { translateToBraille } from '../utils/brailleUtils';
+import BrailleChar from './BrailleChar';
 
-// A mix of characters for the scramble effect
-const SCRAMBLE_CHARS = '⠁⠃⠉⠙⠑⠋⠛⠓⠊⠚⠅⠇⠍⠝⠕⠏⠟⠗⠎⠞⠥⠧⠺⠭⠽⠵*+~#?';
+// A mix of characters for the scramble effect - now only braille for consistency.
+const SCRAMBLE_CHARS = '⠁⠃⠉⠙⠑⠋⠛⠓⠊⠚⠅⠇⠍⠝⠕⠏⠟⠗⠎⠞⠥⠧⠺⠭⠽⠵';
 
 interface AnimatedTextProps {
   text: string;
@@ -93,7 +93,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     className,
     'whitespace-pre-wrap',
     'transition-all duration-300', // Smooth transition for any style changes
-    isBraille ? 'braille-text-display' : ''
+    'animated-text-container', // General class for our text
   ].filter(Boolean).join(' ');
 
   return (
@@ -109,7 +109,15 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
             marginBottom: i === 0 ? '4px' : 0, 
           }}
         >
-          {line}
+          {[...line].map((char, j) => {
+            // Conditionally render BrailleChar if the character is in the braille unicode range.
+            // This works for both the final braille text and the scramble animation.
+            if (char.charCodeAt(0) >= 0x2800 && char.charCodeAt(0) <= 0x28FF) {
+              return <BrailleChar key={`${j}-${char}`} braille={char} />;
+            }
+            // Otherwise, render the character as plain text (for English).
+            return char;
+          })}
         </div>
       ))}
     </span>

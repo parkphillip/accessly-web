@@ -110,9 +110,55 @@
     @apply bg-off-white text-brand-navy px-8 py-3 text-base font-medium rounded-xl border border-light-gray hover:bg-light-bg transition-colors duration-300 shadow-medium hover:shadow-strong focus:outline-none;
   }
 
+  .animated-text-container.font-mono {
+    /* When the animated text is mono, we can ensure consistent character width */
+    .braille-char-container {
+      width: 1ch; /* Lock width to one monospace character to prevent reflow */
+    }
+  }
+
+  /*
+    New Braille rendering styles.
+    Renders discrete dots instead of font characters.
+  */
+  .braille-char-container {
+    display: inline-block;
+    vertical-align: middle; /* Aligns better with text */
+    height: 1.1em; /* Matches line-height for vertical stability */
+    position: relative;
+    /* width is set above if font is mono */
+  }
+
+  .braille-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5em; /* Controls the size of the braille cell */
+    height: 0.825em; /* width * 1.5 * 1.1 line-height */
+    gap: 0.1em; /* Space between dot positions */
+  }
+
+  .braille-dot {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transform: scale(0); /* Invisible by default */
+    background-color: transparent;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .braille-dot.filled {
+    @apply bg-brand-navy;
+    transform: scale(0.9); /* Visible dot */
+  }
+
   .braille-text-display {
-    @apply font-mono font-medium text-brand-navy;
-    letter-spacing: 0.15em;
+    /* This class is no longer needed for styling, but is kept for compatibility */
+    /* All styling is now handled by the BrailleChar component and its CSS */
   }
 
   .form-input {
