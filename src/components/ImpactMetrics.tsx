@@ -20,7 +20,7 @@ const ImpactMetrics = () => {
   };
 
   return (
-    <section id="impact" className="py-32 bg-slate-50">
+    <section id="impact" className="pt-32 bg-slate-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div 
           className="text-center mb-24" 

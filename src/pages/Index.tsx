@@ -8,7 +8,6 @@ import Footer from '../components/Footer';
 import Marquee from '../components/Marquee';
 import ProcessSection from '../components/ProcessSection';
 import CostOfInaccessibility from '../components/CostOfInaccessibility';
-import MissionIntro from '../components/MissionIntro';
 import PartnerCTA from '../components/PartnerCTA';
 
 const Index = () => {
@@ -19,7 +18,6 @@ const Index = () => {
       <Marquee />
       <ImpactMetrics />
       <CostOfInaccessibility />
-      <MissionIntro />
       <ProcessSection />
       <PartnerCTA />
       <NetworkMap />

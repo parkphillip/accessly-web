@@ -6,7 +6,7 @@ const CostOfInaccessibility = () => {
   return (
     <motion.section 
       id="cost" 
-      className="py-32"
+      className="pt-24 pb-32 bg-slate-50"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
