@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -15,9 +16,9 @@ const Hero = () => {
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-[4fr,5fr] gap-2 items-center max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Column: Text Content */}
-          <div className="text-center lg:text-left">
+          <div className="text-center lg:text-right">
             <div>
               <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight">
                 Building an <AnimatedText text={"Accessible"} className="text-brand-navy" />
@@ -35,7 +36,7 @@ free braille menus for every restaurant.</p>
             </div>
 
             {/* Call to Action */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center lg:justify-start items-center">
+            <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center lg:justify-end items-center">
               <Link to="/partner" className="primary-button inline-flex items-center gap-2 px-[16px]">
                 
                 Apply to be a Partner
@@ -48,7 +49,7 @@ free braille menus for every restaurant.</p>
           </div>
 
           {/* Right Column: Globe */}
-          <div className="hidden lg:flex justify-center items-center">
+          <div className="hidden lg:flex lg:justify-start items-center">
             <GlobeDemo size={620} />
           </div>
         </div>
