@@ -1,5 +1,7 @@
+
 import React from 'react';
-import { Book, Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Instagram, Twitter } from 'lucide-react';
+
 const Footer = () => {
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({
@@ -26,10 +28,9 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
           {/* Brand section */}
-          <div className="md:col-span-5">
+          <div className="md:col-span-4">
             <div className="flex items-center space-x-3 mb-4">
-              
-              <span className="text-3xl font-serif font-bold text-off-white text-justify mx-0">Accessly</span>
+              <span className="text-3xl font-serif font-bold text-off-white">Accessly</span>
             </div>
             <p className="text-base text-light-gray leading-relaxed mb-6 max-w-md">
               Providing free, high-quality braille menus to restaurants to foster a more inclusive and accessible dining experience for everyone.
@@ -49,7 +50,7 @@ const Footer = () => {
           </div>
 
           {/* Contact */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-2">
             <h3 className="text-lg font-semibold mb-4 text-off-white">Contact Us</h3>
             <div className="space-y-4">
               <a href="mailto:hello@accessly.org" className="flex items-center space-x-3 group">
@@ -63,6 +64,19 @@ const Footer = () => {
             </div>
           </div>
           
+          {/* Social */}
+          <div className="md:col-span-2">
+            <h3 className="text-lg font-semibold mb-4 text-off-white">Follow Us</h3>
+            <div className="flex items-center space-x-6">
+               <a href="#" aria-label="Visit our Instagram page" className="text-light-gray hover:text-brand-terracotta transition-colors duration-300">
+                  <Instagram className="w-6 h-6" />
+                </a>
+                <a href="#" aria-label="Visit our Twitter page" className="text-light-gray hover:text-brand-terracotta transition-colors duration-300">
+                  <Twitter className="w-6 h-6" />
+                </a>
+            </div>
+          </div>
+
            {/* Legal */}
            <div className="md:col-span-2">
             <h3 className="text-lg font-semibold mb-4 text-off-white">Legal</h3>

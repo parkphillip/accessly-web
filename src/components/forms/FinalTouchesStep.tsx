@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Heart } from 'lucide-react';
+
 interface FormData {
   materialPreference: string;
   additionalNotes: string;
@@ -32,9 +33,8 @@ const FinalTouchesStep: React.FC<FinalTouchesStepProps> = ({
         <textarea value={formData.additionalNotes} onChange={e => onInputChange('additionalNotes', e.target.value)} className="w-full p-5 bg-cream/80 border-2 border-warm-gray/50 rounded-2xl text-charcoal placeholder-pencil/60 focus:border-sage/60 focus:outline-none transition-all duration-200 h-40 resize-none font-light leading-relaxed linen-texture" placeholder="Special requests, questions, or just say hi! We love hearing from restaurant owners." />
       </div>
 
-      <div className="paper-card p-8 rounded-2xl shadow-inner-paper transform rotate-1">
-        <h4 className="font-serif font-semibold text-charcoal mb-6 text-xl flex items-center gap-3">
-          <Heart className="w-6 h-6 text-sage" />
+      <div className="paper-card p-8 rounded-2xl shadow-inner-paper">
+        <h4 className="font-serif font-semibold text-charcoal mb-6 text-xl">
           What happens next?
         </h4>
         <ul className="text-pencil space-y-4 leading-relaxed">
