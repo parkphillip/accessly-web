@@ -31,7 +31,7 @@ export default function GlobeDemo() {
       height: 600 * 2,
       phi: 0,
       theta: 0.3,
-      dark: 1,
+      dark: 0.4,
       diffuse: 3,
       mapSamples: 16000,
       mapBrightness: 12,
@@ -47,8 +47,8 @@ export default function GlobeDemo() {
         { location: [-33.8688, 151.2093], size: 0.05 },
         { location: [34.0522, -118.2437], size: 0.05 },
         { location: [37.5665, 126.978], size: 0.05 },
-        { location: [40.7128, -74.006], size: 0.1 },
-        { location: [37.7595, -122.4367], size: 0.1 },
+        { location: [40.7128, -74.006], size: 0 },
+        { location: [37.7595, -122.4367], size: 0 },
       ],
       onRender: (state) => {
         // Add a slow, constant rotation to the target.
