@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ImpactStats } from './ImpactStats';
 import MissionSection from './MissionSection';
 import CostOfInaccessibility from './CostOfInaccessibility';
-
 const ImpactMetrics = () => {
   const fadeInVariants = {
     hidden: {
@@ -20,17 +18,12 @@ const ImpactMetrics = () => {
       }
     }
   };
-
-  return (
-    <section id="impact" className="py-24 bg-white">
+  return <section id="impact" className="py-24 bg-slate-50">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <motion.div 
-          className="text-center mb-20" 
-          initial="hidden" 
-          whileInView="visible" 
-          viewport={{ once: true, amount: 0.3 }} 
-          variants={fadeInVariants}
-        >
+        <motion.div className="text-center mb-20" initial="hidden" whileInView="visible" viewport={{
+        once: true,
+        amount: 0.3
+      }} variants={fadeInVariants}>
           <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-6 leading-tight">
             Dining Through a<br />Different Lens
           </h2>
@@ -47,8 +40,6 @@ const ImpactMetrics = () => {
 
         <CostOfInaccessibility />
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ImpactMetrics;
