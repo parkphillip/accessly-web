@@ -14,9 +14,6 @@ const Footer = () => {
     id: 'impact',
     label: 'Impact'
   }, {
-    id: 'workshop',
-    label: 'Workshop'
-  }, {
     id: 'network',
     label: 'Network'
   }, {
@@ -24,7 +21,7 @@ const Footer = () => {
     label: 'Get Started'
   }];
   return <footer className="bg-dark-text text-light-bg">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
           {/* Brand section */}
           <div className="md:col-span-5">
