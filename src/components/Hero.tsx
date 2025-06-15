@@ -36,8 +36,8 @@ const Hero = () => {
 
           {/* Call to Action */}
           <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center lg:justify-start items-center">
-            <Link to="/partner" className="primary-button inline-flex items-center gap-2 px-[18px]">
-              <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
+            <Link to="/partner" className="primary-button inline-flex items-center gap-2 px-[16px]">
+              
               Apply to be a Partner
             </Link>
             <Link to="/fund" className="font-medium text-brand-navy hover:underline text-base flex items-center gap-2 group">
