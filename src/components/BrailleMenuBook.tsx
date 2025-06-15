@@ -1,19 +1,15 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
-/* ... keep existing code (imports) */
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
 import MenuInput from './MenuInput';
 
 interface Page {
-/* ... keep existing code (interface) */
   type: 'cover' | 'page';
   title: string;
   content: string[];
 }
 
 const BrailleMenuBook = () => {
-/* ... keep existing code (state and generatePages) */
   const [pages, setPages] = useState<Page[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFlipping, setIsFlipping] = useState(false);
@@ -68,11 +64,10 @@ const BrailleMenuBook = () => {
       setCurrentPage(prev => prev - 1);
     }
 
-    setTimeout(() => setIsFlipping(false), 800); // Match CSS transition duration
+    setTimeout(() => setIsFlipping(false), 700); // Match new CSS transition duration
   }, [isFlipping, canGoForward, canGoBack]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-/* ... keep existing code (handleKeyDown, Word, DisplayedPageNumber, and JSX) */
     if (e.key === 'ArrowRight') {
       flipPage('next');
     } else if (e.key === 'ArrowLeft') {
