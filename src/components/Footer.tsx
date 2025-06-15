@@ -23,7 +23,7 @@ const Footer = () => {
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
           {/* Brand section */}
-          <div className="md:col-span-5">
+          <div className="md:col-span-5 px-[11px]">
             <div className="flex items-center space-x-3 mb-4">
               <span className="text-3xl font-serif font-bold text-off-white">Accessly</span>
             </div>
