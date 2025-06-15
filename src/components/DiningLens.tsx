@@ -80,6 +80,7 @@ const CARD_HEIGHT = '520px';
 const IMAGE_HEIGHT = '320px';
 const CARD_PADDING = '2.5rem';
 const STACK_OFFSET = 8; // Much tighter stacking
+const INITIAL_PEEK_OFFSET = 25; // Offset for the peek effect
 
 const DiningLens = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -89,24 +90,15 @@ const DiningLens = () => {
     useEffect(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
 
-        // Set initial state - first card starts in position, others start from bottom
+        // Set initial state with peek effect - each card peeks out behind the previous one
         cardsRef.current.forEach((card, index) => {
             if (card) {
-                if (index === 0) {
-                    // First card starts in its final position
-                    gsap.set(card, {
-                        y: 0,
-                        rotate: '-4deg',
-                        opacity: 1,
-                    });
-                } else {
-                    // Other cards start from bottom of screen
-                    gsap.set(card, {
-                        y: '100vh',
-                        rotate: index % 2 === 0 ? '-4deg' : '4deg',
-                        opacity: 1,
-                    });
-                }
+                const initialY = index * INITIAL_PEEK_OFFSET; // Each card offset by 25px
+                gsap.set(card, {
+                    y: initialY,
+                    rotate: index % 2 === 0 ? '-4deg' : '4deg',
+                    opacity: 1,
+                });
             }
         });
 
@@ -123,11 +115,11 @@ const DiningLens = () => {
             },
         });
 
-        // Animate only the cards that need to move (skip first card)
+        // Animate cards to stack tightly
         cardsRef.current.forEach((card, index) => {
-            if (!card || index === 0) return; // Skip first card
+            if (!card) return;
             
-            // Cards stack upward with tighter spacing
+            // Final position with tight stacking
             const finalY = -index * STACK_OFFSET;
             const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
             
