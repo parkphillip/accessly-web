@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -16,7 +15,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-[4fr,5fr] gap-2 items-center max-w-6xl mx-auto">
           {/* Left Column: Text Content */}
           <div className="text-center lg:text-left">
             <div>
@@ -50,9 +49,7 @@ free braille menus for every restaurant.</p>
 
           {/* Right Column: Globe */}
           <div className="hidden lg:flex justify-center items-center">
-            <div className="w-[600px] h-[600px]">
-                <GlobeDemo size={600} />
-            </div>
+            <GlobeDemo size={620} />
           </div>
         </div>
       </div>
