@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { translateToBraille } from '../utils/brailleUtils';
 import BrailleChar from './BrailleChar';
@@ -93,6 +92,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     'whitespace-pre-wrap',
     'transition-all duration-300',
     'animated-text-container',
+    isBraille ? 'font-mono' : '',
   ].filter(Boolean).join(' ');
 
   const lines = displayedText.split('\n');
