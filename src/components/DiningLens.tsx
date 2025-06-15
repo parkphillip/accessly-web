@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 import { Eye, UsersRound, Accessibility } from 'lucide-react';
@@ -87,10 +86,12 @@ const AnimatedCard = ({ card, i, scrollYProgress }: { card: CardData, i: number,
     const startProgress = (i - 1) / (totalCards - 1);
     const endProgress = i / (totalCards - 1);
     
-    // Animate `y` from below the container to its final stacked position.
-    const y = useTransform(scrollYProgress, [startProgress, endProgress], ['100%', `${-i * 40}px`]);
-    // Add alternating tilt to cards as they enter.
-    const rotate = useTransform(scrollYProgress, [startProgress, endProgress], [i % 2 === 0 ? 3 : -3, 0]);
+    // Animate `y` from below the viewport to its final stacked position.
+    // Using '60vh' ensures the card starts off-screen.
+    const y = useTransform(scrollYProgress, [startProgress, endProgress], ['60vh', `${-i * 40}px`]);
+    
+    // Add a slight tilt to the cards as they enter, which straightens out.
+    const rotate = useTransform(scrollYProgress, [startProgress, endProgress], [i % 2 === 0 ? 4 : -4, 0]);
     
     return (
         <motion.div
