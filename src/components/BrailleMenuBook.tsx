@@ -1,57 +1,57 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { translateToBraille } from '../utils/brailleUtils';
+import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
+import MenuInput from './MenuInput';
+
+interface Page {
+  type: 'cover' | 'page';
+  title: string;
+  content: string[];
+}
 
 const BrailleMenuBook = () => {
-  // Start at page 1 to show an open book initially.
-  // The first page in the array is a blank left page.
+  const [pages, setPages] = useState<Page[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFlipping, setIsFlipping] = useState(false);
-  // Use a unique string ID for each word to fix the hover bug
   const [hoveredWordId, setHoveredWordId] = useState<string | null>(null);
 
-  const bookPages = [
-    // Add a blank page to serve as the inside of the front cover.
-    { type: 'page', title: '', content: [] },
-    {
-      type: 'cover',
-      title: "The Grill House",
-      content: ["Braille Menu", "Est. 2024"]
-    },
-    {
-      type: 'page',
-      title: "Appetizers",
-      content: [
-        "Caesar Salad - $12.00",
-        "Fresh Bruschetta - $8.50",
-        "Spinach Dip - $11.00",
-      ]
-    },
-    {
-      type: 'page',
-      title: "Main Courses",
-      content: [
-        "Grilled Salmon - $24.00",
-        "Pasta Primavera - $18.50",
-        "8oz Beef Tenderloin - $32.00",
-      ]
-    },
-    {
-      type: 'page',
-      title: "Desserts",
-      content: [
-        "Chocolate Mousse - $9.00",
-        "Classic Tiramisu - $10.50",
-        "Fresh Fruit Tart - $8.50"
-      ]
-    },
-     // Add a blank page at the end for a clean final page
-    { type: 'page', title: '', content: [] },
-  ];
+  const generatePages = useCallback((text: string): Page[] => {
+    const lines = text.split('\n').filter(line => line.trim() !== '');
+    const linesPerPage = 8;
+    const contentPages: Page[] = [];
 
-  const totalPages = bookPages.length;
-  // Don't allow flipping back before the first page (cover).
+    for (let i = 0; i < lines.length; i += linesPerPage) {
+      const chunk = lines.slice(i, i + linesPerPage);
+      contentPages.push({
+        type: 'page',
+        title: i === 0 ? 'Menu Highlights' : '',
+        content: chunk,
+      });
+    }
+
+    return [
+      { type: 'page', title: '', content: [] }, // Inside front cover
+      {
+        type: 'cover',
+        title: "The Grill House",
+        content: ["Your Custom Menu", "Est. 2024"]
+      },
+      ...contentPages,
+      { type: 'page', title: '', content: [] }, // Final blank page
+    ];
+  }, []);
+
+  useEffect(() => {
+    setPages(generatePages(sampleTexts.join('\n\n')));
+  }, [generatePages]);
+
+  const handleMenuUpdate = (text: string) => {
+    setPages(generatePages(text));
+    setCurrentPage(1);
+  };
+
+  const totalPages = pages.length;
   const canGoBack = currentPage > 1;
   const canGoForward = currentPage < totalPages - 1;
 
@@ -66,7 +66,7 @@ const BrailleMenuBook = () => {
       setCurrentPage(prev => prev - 1);
     }
 
-    setTimeout(() => setIsFlipping(false), 1000); // Match CSS animation time
+    setTimeout(() => setIsFlipping(false), 1000);
   }, [isFlipping, canGoForward, canGoBack]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -95,7 +95,7 @@ const BrailleMenuBook = () => {
   
   const DisplayedPageNumber = () => {
     if (currentPage === 1) return "Cover";
-    if (currentPage === totalPages - 1) return "Back";
+    if (currentPage >= totalPages - 1) return "Back";
     return `Page ${currentPage - 1}`;
   }
   
@@ -107,9 +107,11 @@ const BrailleMenuBook = () => {
             An Interactive Braille Menu
           </h2>
           <p className="text-lg text-medium-text max-w-3xl mx-auto">
-            Experience a tactile menu, brought to life. Hover over braille to translate, and use the arrows to flip pages.
+            Create your own accessible menu below. Hover over braille to translate, and use the arrows to flip pages.
           </p>
         </div>
+
+        <MenuInput onUpdate={handleMenuUpdate} />
 
         <div 
           className="book-container"
@@ -120,7 +122,7 @@ const BrailleMenuBook = () => {
         >
           <div className={`book ${isFlipping ? 'is-flipping' : ''}`}>
             <div className="book-spine"></div>
-            {bookPages.map((page, index) => (
+            {pages.map((page, index) => (
               <div
                 key={index}
                 className={`page ${page.type} ${currentPage > index ? 'flipped' : ''}`}
@@ -137,19 +139,17 @@ const BrailleMenuBook = () => {
                       {page.content.map((line, lineIndex) => (
                         <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
                           {line.split(' ').map((word, wordIndex) => (
-                            <React.Fragment key={wordIndex}>
+                            <span key={wordIndex}>
                               <Word text={word} pageIdx={index} lineIdx={lineIndex} wordIdx={wordIndex} />
                               {' '}
-                            </React.Fragment>
+                            </span>
                           ))}
                         </p>
                       ))}
                     </div>
                   </div>
                 </div>
-                <div className="page-face back">
-                  {/* Back of page content can be added here if needed */}
-                </div>
+                <div className="page-face back" />
               </div>
             ))}
           </div>
