@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Textarea } from './ui/textarea';
 import { sampleTexts } from '../utils/brailleUtils';
 import { UploadCloud } from 'lucide-react';
-import { Switch } from './ui/switch';
 
 interface MenuInputProps {
   onUpdate: (text: string) => void;
@@ -43,56 +42,58 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
         Choose your input method. The book will automatically paginate the content. For best results, separate menu items with a new line.
       </p>
 
-      <div className="flex items-center justify-center gap-4 mb-8">
-        <label htmlFor="input-type-toggle" className={`cursor-pointer transition-colors ${inputType === 'text' ? 'text-primary-blue font-semibold' : 'text-medium-text'}`}>
-          Paste Text
-        </label>
-        <Switch
-          id="input-type-toggle"
-          checked={inputType === 'image'}
-          onCheckedChange={(checked) => {
-            setInputType(checked ? 'image' : 'text');
-            setSelectedFile(null);
-            setText(sampleTexts.join('\n\n'));
-          }}
-        />
-        <label htmlFor="input-type-toggle" className={`cursor-pointer transition-colors ${inputType === 'image' ? 'text-primary-blue font-semibold' : 'text-medium-text'}`}>
-          Upload Image
-        </label>
+      <div className="flex justify-center mb-8">
+        <div className="inline-flex items-center bg-subtle-gray p-1 rounded-lg space-x-1">
+          <button 
+            onClick={() => { setInputType('text'); setText(sampleTexts.join('\n\n')); setSelectedFile(null); }} 
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${inputType === 'text' ? 'bg-off-white text-brand-navy shadow-sm' : 'text-medium-text hover:bg-light-gray/50'}`}
+          >
+            Paste Text
+          </button>
+          <button 
+            onClick={() => { setInputType('image'); setText(''); setSelectedFile(null); }} 
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${inputType === 'image' ? 'bg-off-white text-brand-navy shadow-sm' : 'text-medium-text hover:bg-light-gray/50'}`}
+          >
+            Upload Image
+          </button>
+        </div>
       </div>
 
-      {inputType === 'text' ? (
-        <div className="animate-fade-in">
-          <Textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Paste your menu here..."
-            className="form-input min-h-[200px] text-base"
-            rows={10}
-          />
-        </div>
-      ) : (
-        <div className="animate-fade-in">
-          <div
-            onClick={handleUploadAreaClick}
-            className="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-light-bg/50 hover:border-primary-blue transition-colors min-h-[200px]"
-          >
-            <input
-              type="file"
-              id="menu-image-upload"
-              className="hidden"
-              accept="image/png, image/jpeg, image/webp"
-              onChange={handleFileChange}
+      <div className="min-h-[240px]">
+        {inputType === 'text' ? (
+          <div className="animate-fade-in h-full">
+            <Textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Paste your menu here..."
+              className="form-input min-h-[240px] text-base font-sans w-full h-full resize-none"
             />
-            <UploadCloud className="w-10 h-10 text-gray-400 mb-4" />
-            <p className="text-dark-text font-semibold">Click to upload an image</p>
-            <p className="text-sm text-medium-text">PNG, JPG, or WEBP</p>
-            {selectedFile && (
-              <p className="text-sm text-green-600 mt-2">Selected: {selectedFile.name}</p>
-            )}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="animate-fade-in h-full">
+            <div
+              onClick={handleUploadAreaClick}
+              className="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed border-subtle-gray rounded-lg cursor-pointer hover:bg-light-bg/50 hover:border-brand-navy transition-colors min-h-[240px] h-full bg-light-bg"
+            >
+              <input
+                type="file"
+                id="menu-image-upload"
+                className="hidden"
+                accept="image/png, image/jpeg, image/webp"
+                onChange={handleFileChange}
+              />
+              <UploadCloud className="w-10 h-10 text-gray-400 mb-4" />
+              <p className="text-dark-text font-semibold">Click to upload your menu image</p>
+              <p className="text-sm text-medium-text">PNG, JPG, or WEBP</p>
+              {selectedFile && (
+                <p className="text-sm text-green-600 mt-4 bg-green-100 px-3 py-1 rounded-full">
+                  Selected: {selectedFile.name}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="flex justify-end mt-8">
         <button onClick={handleSubmit} className="primary-button">
@@ -104,3 +105,4 @@ const MenuInput: React.FC<MenuInputProps> = ({ onUpdate }) => {
 };
 
 export default MenuInput;
+
