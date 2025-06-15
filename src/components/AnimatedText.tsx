@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { translateToBraille } from '../utils/brailleUtils';
 import BrailleChar from './BrailleChar';
@@ -27,7 +28,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       .join('\n');
   }, [text]);
 
-  // This effect runs the typewriter/scramble animation.
+  // This effect runs the scramble animation.
   useEffect(() => {
     // Don't run the animation on the very first render.
     if (isInitialMount.current) {
@@ -42,30 +43,28 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
         clearInterval(animationIntervalRef.current);
     }
     
-    let currentIndex = 0;
-    let scrambleIteration = 0;
-    const scramblePerChar = 3; // Number of scramble frames for each character
-    const frameRate = 30; // ms per frame
+    let iterations = 0;
+    const frameRate = 50; // ms per frame
+    const revealSpeed = 3; // iterations per character reveal
 
     animationIntervalRef.current = setInterval(() => {
-      // Phase 1: Scramble the character at the current position
-      if (scrambleIteration < scramblePerChar) {
-        const prefix = targetText.substring(0, currentIndex);
-        const randomChar = scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-        setDisplayedText(prefix + randomChar);
-        scrambleIteration++;
-      } else {
-        // Phase 2: Reveal the character and advance
-        currentIndex++;
-        const newText = targetText.substring(0, currentIndex);
-        setDisplayedText(newText);
-        scrambleIteration = 0;
-        
-        // End of animation
-        if (currentIndex >= targetText.length) {
-          if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
+      const revealedCount = Math.floor(iterations / revealSpeed);
+      
+      const newDisplayedText = targetText.split('').map((_, index) => {
+        if (index < revealedCount) {
+          return targetText[index];
         }
+        return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+      }).join('');
+      
+      setDisplayedText(newDisplayedText);
+
+      if (revealedCount >= targetText.length) {
+        setDisplayedText(targetText); // Final clean up
+        if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
       }
+
+      iterations++;
     }, frameRate);
 
     return () => {
@@ -79,7 +78,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     
     toggleIntervalRef.current = setInterval(() => {
         setIsBraille(prev => !prev);
-    }, 5000); // Increased interval to allow for the longer typing animation
+    }, 5000); 
 
     return () => {
       if (toggleIntervalRef.current) clearInterval(toggleIntervalRef.current);
@@ -98,7 +97,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   const lines = displayedText.split('\n');
 
   return (
-    <span className={dynamicClassName}>
+    <span className={dynamicClassName} style={{ display: 'inline-block', verticalAlign: 'bottom' }}>
       {lines.map((line, lineIndex) => (
         <div 
           key={lineIndex} 
