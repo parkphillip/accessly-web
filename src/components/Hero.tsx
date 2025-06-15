@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
@@ -37,12 +37,14 @@ const Hero = () => {
           </div>
 
           {/* Call to Action */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-12 justify-center lg:justify-start items-center">
-            <Link to="/partner" className="primary-button text-lg px-10 py-4">
+          <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center lg:justify-start items-center">
+            <Link to="/partner" className="primary-button inline-flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
               Apply to be a Partner
             </Link>
-            <button onClick={() => scrollToNext('impact')} className="font-medium text-brand-navy hover:underline text-lg px-10 py-4">
+            <button onClick={() => scrollToNext('impact')} className="font-medium text-brand-navy hover:underline text-base flex items-center gap-2 group">
               Our Network
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
           </div>
         </div>

@@ -75,7 +75,7 @@ const Navigation = () => {
     }`}>
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo with improved badge separation */}
+          {/* Logo */}
           <div className="flex items-center space-x-4">
             {isHomePage ? (
               <button 
@@ -93,14 +93,6 @@ const Navigation = () => {
                 </span>
               </Link>
             )}
-            
-            {/* Separated badge with better contrast */}
-            <div className="hidden sm:block">
-              <div className="bg-brand-navy text-off-white inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full shadow-subtle border border-brand-navy/20">
-                <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
-                Now Accepting Partners
-              </div>
-            </div>
           </div>
 
           {/* Navigation Menu */}
@@ -145,14 +137,6 @@ const Navigation = () => {
           <button className="md:hidden p-2 rounded-md hover:bg-subtle-gray transition-colors">
             <Menu className="w-6 h-6 text-dark-text" />
           </button>
-        </div>
-        
-        {/* Mobile badge for small screens */}
-        <div className="sm:hidden pb-3">
-          <div className="bg-brand-navy text-off-white inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full shadow-subtle">
-            <span className="w-1.5 h-1.5 bg-brand-terracotta rounded-full"></span>
-            Now Accepting Partners
-          </div>
         </div>
       </div>
     </nav>
