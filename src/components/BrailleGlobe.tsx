@@ -1,3 +1,4 @@
+
 import React, { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -23,27 +24,11 @@ const fragmentShader = `
   }
 `;
 
-// Lat/Lon bounding boxes for continents (approximate)
-const continents = [
-  // North America
-  { lon: [-168, -55], lat: [15, 75] },
-  // South America
-  { lon: [-81, -34], lat: [-55, 12] },
-  // Europe & Asia
-  { lon: [-10, 140], lat: [10, 75] },
-  // Africa
-  { lon: [-17, 51], lat: [-34, 37] },
-  // Australia
-  { lon: [113, 153], lat: [-43, -10] },
-  // Antarctica
-  { lon: [-180, 180], lat: [-85, -65] },
-];
-
 const GlobeDots = () => {
   const ref = useRef<THREE.Points>(null!);
 
   const { positions, colors, sizes, pulseIndexes } = useMemo(() => {
-    const maxPoints = 9000;
+    const maxPoints = 10000;
     const radius = 2.5;
 
     const tempPositions: number[] = [];
@@ -56,43 +41,43 @@ const GlobeDots = () => {
     const yellow = new THREE.Color('#fbbf24'); // Warm yellow
 
     let pointIndex = 0;
-    
-    continents.forEach(continent => {
-        const density = Math.abs(continent.lon[1] - continent.lon[0]) * Math.abs(continent.lat[1] - continent.lat[0]);
-        const numPoints = Math.floor(density * 0.06);
 
-        for (let i = 0; i < numPoints && pointIndex < maxPoints; i++) {
-            const lon = THREE.MathUtils.randFloat(continent.lon[0], continent.lon[1]);
-            const lat = THREE.MathUtils.randFloat(continent.lat[0], continent.lat[1]);
-            
-            if (!isLand(lon, lat)) {
-                continue;
-            }
-            
-            const latRad = lat * (Math.PI / 180);
-            const lonRad = lon * (Math.PI / 180);
+    const step = 2; // degrees between samples
+    for (let lat = -88; lat <= 88; lat += step) {
+      if (pointIndex >= maxPoints) break;
+      for (let lon = -178; lon <= 178; lon += step) {
+        if (pointIndex >= maxPoints) break;
 
-            const x = radius * Math.cos(latRad) * Math.cos(lonRad);
-            const y = radius * Math.sin(latRad);
-            const z = radius * Math.cos(latRad) * Math.sin(lonRad);
-            
-            tempPositions.push(x, y, z);
+        if (!isLand(lon, lat)) continue; // skip water
 
-            let color;
-            const rand = Math.random();
-            if (rand > 0.985) {
-                color = yellow;
-                if (rand > 0.995) pulseIndexes.push(pointIndex);
-            } else if (rand > 0.97) {
-                color = white;
-            } else {
-                color = navy;
-            }
-            tempColors.push(color.r, color.g, color.b);
-            tempSizes.push(Math.random() * 1.5 + 0.8);
-            pointIndex++;
+        // jitter so dots don’t form perfect rows
+        const latJ = lat + THREE.MathUtils.randFloatSpread(step * 0.6);
+        const lonJ = lon + THREE.MathUtils.randFloatSpread(step * 0.6);
+
+        const latR = THREE.MathUtils.degToRad(latJ);
+        const lonR = THREE.MathUtils.degToRad(lonJ);
+
+        const x = radius * Math.cos(latR) * Math.cos(lonR);
+        const y = radius * Math.sin(latR);
+        const z = radius * Math.cos(latR) * Math.sin(lonR);
+
+        tempPositions.push(x, y, z);
+
+        let color;
+        const rand = Math.random();
+        if (rand > 0.985) {
+          color = yellow;
+          if (rand > 0.995) pulseIndexes.push(pointIndex);
+        } else if (rand > 0.97) {
+          color = white;
+        } else {
+          color = navy;
         }
-    });
+        tempColors.push(color.r, color.g, color.b);
+        tempSizes.push(Math.random() * 1.5 + 0.8);
+        pointIndex++;
+      }
+    }
 
     const positions = new Float32Array(tempPositions);
     const colors = new Float32Array(tempColors);
