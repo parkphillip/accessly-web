@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, User, BookOpen, Heart } from 'lucide-react';
 import FormStep from './forms/FormStep';
 import RestaurantInfoStep from './forms/RestaurantInfoStep';
@@ -37,6 +37,8 @@ const OrderForm = () => {
     materialPreference: 'standard',
     additionalNotes: '',
   });
+  const [containerHeight, setContainerHeight] = useState<number | undefined>();
+  const stepContentRef = useRef<HTMLDivElement>(null);
 
   const steps = [
     { number: 1, title: 'Restaurant Info', icon: MapPin, note: 'Location details' },
@@ -44,6 +46,12 @@ const OrderForm = () => {
     { number: 3, title: 'Menu Details', icon: BookOpen, note: 'What to convert' },
     { number: 4, title: 'Finalize', icon: Heart, note: 'Review & Submit' },
   ];
+
+  useEffect(() => {
+    if (stepContentRef.current) {
+      setContainerHeight(stepContentRef.current.scrollHeight);
+    }
+  }, [currentStep]);
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -119,8 +127,13 @@ const OrderForm = () => {
           </div>
 
           <form className="p-8 md:p-12">
-            <div className="h-[36rem] overflow-y-auto pr-2">
-              {renderCurrentStep()}
+            <div
+              style={{ height: containerHeight }}
+              className="overflow-hidden transition-[height] duration-500 ease-in-out"
+            >
+              <div ref={stepContentRef}>
+                {renderCurrentStep()}
+              </div>
             </div>
             <FormNavigation
               currentStep={currentStep}
