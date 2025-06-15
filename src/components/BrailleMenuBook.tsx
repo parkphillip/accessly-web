@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
@@ -10,9 +9,48 @@ interface Page {
   content: string[];
 }
 
+const Word = ({ text }: { text: string }) => {
+  return (
+    <span
+      className="braille-word"
+      data-english={text}
+    >
+      {translateToBraille(text)}
+    </span>
+  );
+};
+
+const PageContent = ({ page }: { page: Page | undefined }) => {
+  if (!page || page.content.length === 0 && !page.title) {
+    return <div className="page-content" />;
+  }
+
+  return (
+    <div className="page-content">
+      {page.title && (
+        <h3 className={`text-3xl font-serif font-bold mb-8 ${page.type === 'cover' ? 'text-center' : ''}`}>
+          {page.title}
+        </h3>
+      )}
+      <div className="space-y-4">
+        {page.content.map((line, lineIndex) => (
+          <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
+            {line.split(' ').map((word, wordIndex) => (
+              <span key={wordIndex}>
+                <Word text={word} />
+                {' '}
+              </span>
+            ))}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const BrailleMenuBook = () => {
   const [pages, setPages] = useState<Page[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0); // Represents the number of turned sheets
   const [isFlipping, setIsFlipping] = useState(false);
 
   const generatePages = useCallback((text: string): Page[] => {
@@ -29,7 +67,7 @@ const BrailleMenuBook = () => {
       });
     }
 
-    return [
+    const finalPages = [
       { type: 'page', title: '', content: [] }, // Inside front cover
       {
         type: 'cover',
@@ -37,8 +75,15 @@ const BrailleMenuBook = () => {
         content: ["Your Custom Braille Menu"]
       },
       ...contentPages,
-      { type: 'page', title: '', content: [] }, // Final blank page
+      { type: 'page', title: '', content: [] }, // Final blank page for back cover
     ];
+    
+    // Ensure there's an even number of pages after the cover for complete spreads
+    if ((finalPages.length - 1) % 2 !== 0) {
+      finalPages.push({ type: 'page', title: '', content: [] });
+    }
+
+    return finalPages;
   }, []);
 
   useEffect(() => {
@@ -47,12 +92,24 @@ const BrailleMenuBook = () => {
 
   const handleMenuUpdate = (text: string) => {
     setPages(generatePages(text));
-    setCurrentPage(1);
+    setCurrentPage(0);
   };
 
-  const totalPages = pages.length;
-  const canGoBack = currentPage > 1;
-  const canGoForward = currentPage < totalPages - 1;
+  const pageSpreads: { front: Page; back?: Page; index: number }[] = [];
+  if (pages.length > 1) {
+    // Start at 1 to skip the inside front cover, which is not a flippable page
+    for (let i = 1; i < pages.length; i += 2) {
+      pageSpreads.push({
+        front: pages[i],
+        back: pages[i + 1],
+        index: (i - 1) / 2, // Sheet index (0, 1, 2...)
+      });
+    }
+  }
+  const totalSheets = pageSpreads.length;
+
+  const canGoBack = currentPage > 0;
+  const canGoForward = currentPage < totalSheets;
 
   const flipPage = useCallback((direction: 'next' | 'prev') => {
     if (isFlipping) return;
@@ -76,21 +133,19 @@ const BrailleMenuBook = () => {
     }
   };
 
-  const Word = ({ text }: { text: string }) => {
-    return (
-      <span
-        className="braille-word"
-        data-english={text}
-      >
-        {translateToBraille(text)}
-      </span>
-    );
-  };
-  
   const DisplayedPageNumber = () => {
-    if (currentPage === 1) return "Cover";
-    if (currentPage >= totalPages - 1) return "Back";
-    return `Page ${currentPage - 1}`;
+    if (currentPage === 0) return "Cover";
+    if (currentPage >= totalSheets) return "Back";
+    
+    const leftPageNum = (currentPage * 2) - 1;
+    const rightPageNum = currentPage * 2;
+    
+    const currentSpread = pageSpreads[currentPage];
+    if (!currentSpread || !currentSpread.back || currentSpread.back.content.length === 0) {
+      return `Page ${leftPageNum}`;
+    }
+
+    return `Pages ${leftPageNum} - ${rightPageNum}`;
   }
   
   return (
@@ -116,34 +171,18 @@ const BrailleMenuBook = () => {
         >
           <div className={`book ${isFlipping ? 'is-flipping' : ''}`}>
             <div className="book-spine"></div>
-            {pages.map((page, index) => (
+            {pageSpreads.map((sheet) => (
               <div
-                key={index}
-                className={`page ${page.type} ${currentPage > index ? 'flipped' : ''}`}
-                style={{ zIndex: currentPage > index ? index : totalPages - index }}
+                key={sheet.index}
+                className={`page ${sheet.front.type} ${currentPage > sheet.index ? 'flipped' : ''}`}
+                style={{ zIndex: currentPage > sheet.index ? sheet.index : totalSheets - sheet.index }}
               >
                 <div className="page-face front">
-                  <div className="page-content">
-                    {page.title && (
-                      <h3 className={`text-3xl font-serif font-bold mb-8 ${page.type === 'cover' ? 'text-center' : ''}`}>
-                        {page.title}
-                      </h3>
-                    )}
-                    <div className="space-y-4">
-                      {page.content.map((line, lineIndex) => (
-                        <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
-                          {line.split(' ').map((word, wordIndex) => (
-                            <span key={wordIndex}>
-                              <Word text={word} />
-                              {' '}
-                            </span>
-                          ))}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
+                  <PageContent page={sheet.front} />
                 </div>
-                <div className="page-face back" />
+                <div className="page-face back">
+                  <PageContent page={sheet.back} />
+                </div>
               </div>
             ))}
           </div>
