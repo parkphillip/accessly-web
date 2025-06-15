@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Mail, Phone, Instagram, Twitter } from 'lucide-react';
 const Footer = () => {
@@ -25,7 +26,7 @@ const Footer = () => {
           {/* Brand section */}
           <div className="md:col-span-5 px-[11px]">
             <div className="flex items-center space-x-3 mb-4">
-              <span className="text-3xl font-serif font-bold text-off-white">Accessly</span>
+              <span className="text-3xl font-heading font-bold text-off-white">Accessly</span>
             </div>
             <p className="text-base text-light-gray leading-relaxed mb-6 max-w-md">
               Providing free, high-quality braille menus to restaurants to foster a more inclusive and accessible dining experience for everyone.

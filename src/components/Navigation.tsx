@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
 
@@ -65,7 +66,7 @@ const Navigation = () => {
               className="flex items-center space-x-3" 
               onClick={() => scrollToSection('hero')}
             >
-              <span className="text-2xl font-serif font-bold text-dark-text">
+              <span className="text-2xl font-heading font-bold text-dark-text">
                 Accessly
               </span>
             </a>

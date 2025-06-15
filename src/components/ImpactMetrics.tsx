@@ -51,7 +51,7 @@ const ImpactMetrics = () => {
   return <section id="impact" className="py-24 bg-subtle-gray/50 bg-zinc-300">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div ref={sectionRef} className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-dark-text mb-4">
+          <h2 className="text-4xl lg:text-5xl font-heading font-bold text-dark-text mb-4">
             Making a Tangible Difference
           </h2>
           <p className="text-lg text-medium-text max-w-3xl mx-auto">
@@ -68,7 +68,7 @@ const ImpactMetrics = () => {
             <div className="text-5xl font-mono font-bold text-dark-text mb-2">
               {counts.restaurants.toLocaleString()}
             </div>
-            <div className="text-lg font-serif font-semibold text-brand-navy mb-2">Partner Restaurants</div>
+            <div className="text-lg font-heading font-semibold text-brand-navy mb-2">Partner Restaurants</div>
             <p className="text-medium-text text-sm">
               From corner cafes to national chains across the country.
             </p>
@@ -82,7 +82,7 @@ const ImpactMetrics = () => {
             <div className="text-5xl font-mono font-bold text-dark-text mb-2">
               {counts.customers.toLocaleString()}+
             </div>
-            <div className="text-lg font-serif font-semibold text-brand-terracotta mb-2">Diners Empowered</div>
+            <div className="text-lg font-heading font-semibold text-brand-terracotta mb-2">Diners Empowered</div>
             <p className="text-medium-text text-sm">
               Individuals who can now order with independence and privacy.
             </p>
@@ -96,7 +96,7 @@ const ImpactMetrics = () => {
             <div className="text-5xl font-mono font-bold text-dark-text mb-2">
               {counts.menus.toLocaleString()}
             </div>
-            <div className="text-lg font-serif font-semibold text-medium-text mb-2">Braille Menus Delivered</div>
+            <div className="text-lg font-heading font-semibold text-medium-text mb-2">Braille Menus Delivered</div>
             <p className="text-medium-text text-sm">
               Each one is quality-checked and produced entirely free of charge.
             </p>
@@ -107,7 +107,7 @@ const ImpactMetrics = () => {
         <div className="structured-card bg-brand-navy text-off-white p-12">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
             <div className="lg:col-span-2">
-              <h3 className="text-3xl font-serif font-bold mb-4 headline-underline after:bg-brand-terracotta">
+              <h3 className="text-3xl font-heading font-bold mb-4 headline-underline after:bg-brand-terracotta">
                 More Than Just Dots
               </h3>
               <p className="text-lg text-off-white/80 leading-relaxed">
@@ -116,7 +116,7 @@ const ImpactMetrics = () => {
             </div>
             
             <div className="bg-black/20 p-6 rounded-lg border border-off-white/20">
-              <blockquote className="text-xl font-serif italic text-off-white leading-relaxed">
+              <blockquote className="text-xl font-heading italic text-off-white leading-relaxed">
                 "For the first time, I felt like just another customer, not a burden. That feeling is priceless."
               </blockquote>
               <p className="font-sans text-sm text-off-white/70 mt-4">— Jessica L., Diner in Austin, TX</p>

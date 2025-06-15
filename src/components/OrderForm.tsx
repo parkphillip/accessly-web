@@ -113,7 +113,7 @@ const OrderForm = () => {
     <section id="order" className="py-24 bg-light-bg">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-dark-text mb-4 headline-underline">
+          <h2 className="text-4xl lg:text-5xl font-heading font-bold text-dark-text mb-4 headline-underline">
             Get Your Free Braille Menus
           </h2>
           <p className="text-lg text-medium-text max-w-3xl mx-auto">
