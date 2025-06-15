@@ -1,25 +1,28 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
+import { useLocation, Link } from 'react-router-dom';
+
+const navItems = [{
+  id: 'hero',
+  label: 'Home'
+}, {
+  id: 'impact',
+  label: 'Impact'
+}, {
+  id: 'network',
+  label: 'Network'
+}, {
+  id: 'order',
+  label: 'Get Started'
+}];
 
 const Navigation = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const navItems = [{
-    id: 'hero',
-    label: 'Home'
-  }, {
-    id: 'impact',
-    label: 'Impact'
-  }, {
-    id: 'network',
-    label: 'Network'
-  }, {
-    id: 'order',
-    label: 'Get Started'
-  }];
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,9 +43,23 @@ const Navigation = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (isHomePage) {
+      window.addEventListener('scroll', handleScroll);
+      // Run on mount to set initial state
+      handleScroll();
+    } else {
+      // Reset for other pages
+      setActiveSection('');
+      // Still check for scroll to apply background
+      const handleOtherPageScroll = () => setIsScrolled(window.scrollY > 20);
+      window.addEventListener('scroll', handleOtherPageScroll);
+      handleOtherPageScroll();
+    }
+
+    return () => {
+      window.removeEventListener('scroll', isHomePage ? handleScroll : () => setIsScrolled(window.scrollY > 20));
+    };
+  }, [isHomePage]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -61,15 +78,22 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo with improved badge separation */}
           <div className="flex items-center space-x-4">
-            <a 
-              href="#hero" 
-              className="flex items-center space-x-3" 
-              onClick={() => scrollToSection('hero')}
-            >
-              <span className="text-2xl font-heading font-bold text-dark-text">
-                Accessly
-              </span>
-            </a>
+            {isHomePage ? (
+              <button 
+                onClick={() => scrollToSection('hero')}
+                className="flex items-center space-x-3" 
+              >
+                <span className="text-2xl font-heading font-bold text-dark-text">
+                  Accessly
+                </span>
+              </button>
+            ) : (
+              <Link to="/" className="flex items-center space-x-3">
+                <span className="text-2xl font-heading font-bold text-dark-text">
+                  Accessly
+                </span>
+              </Link>
+            )}
             
             {/* Separated badge with better contrast */}
             <div className="hidden sm:block">
@@ -83,20 +107,30 @@ const Navigation = () => {
           {/* Navigation Menu */}
           <div className="hidden md:flex items-center space-x-2">
             {navItems.map(item => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base ${
-                  activeSection === item.id 
-                    ? 'text-brand-navy' 
-                    : 'text-medium-text hover:text-dark-text hover:bg-subtle-gray/70'
-                }`}
-              >
-                {item.label}
-                {activeSection === item.id && (
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-1 bg-brand-terracotta rounded-full"></div>
-                )}
-              </button>
+              isHomePage ? (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base ${
+                    activeSection === item.id 
+                      ? 'text-brand-navy' 
+                      : 'text-medium-text hover:text-dark-text hover:bg-subtle-gray/70'
+                  }`}
+                >
+                  {item.label}
+                  {activeSection === item.id && (
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-1 bg-brand-terracotta rounded-full"></div>
+                  )}
+                </button>
+              ) : (
+                <a
+                  key={item.id}
+                  href={`/#${item.id}`}
+                  className="relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base text-medium-text hover:text-dark-text hover:bg-subtle-gray/70"
+                >
+                  {item.label}
+                </a>
+              )
             ))}
           </div>
 
