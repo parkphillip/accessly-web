@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ImpactStats } from './ImpactStats';
-
 const itemVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -16,17 +15,13 @@ const itemVariants: Variants = {
     }
   }
 };
-
 const ImpactMetrics = () => {
-  return <section id="impact" className="py-24 bg-[#111827]">
+  return <section id="impact" className="py-24 bg-gray-400">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div 
-          className="text-center mb-20" 
-          initial="hidden" 
-          whileInView="visible" 
-          viewport={{ once: true, amount: 0.3 }} 
-          variants={itemVariants}
-        >
+        <motion.div className="text-center mb-20" initial="hidden" whileInView="visible" viewport={{
+        once: true,
+        amount: 0.3
+      }} variants={itemVariants}>
           <h2 className="text-4xl lg:text-5xl font-heading font-bold text-off-white mb-4">
             Dining Through a Different Lens
           </h2>
@@ -36,23 +31,27 @@ const ImpactMetrics = () => {
         </motion.div>
 
         <div className="mb-24">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true, amount: 0.3 }} 
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
+            <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} whileInView={{
+          opacity: 1,
+          y: 0
+        }} viewport={{
+          once: true,
+          amount: 0.3
+        }} transition={{
+          duration: 0.8,
+          ease: "easeOut"
+        }}>
               <ImpactStats />
             </motion.div>
         </div>
 
-        <motion.div 
-          className="structured-card bg-brand-navy text-off-white p-12 rounded-lg" 
-          initial="hidden" 
-          whileInView="visible" 
-          viewport={{ once: true, amount: 0.5 }} 
-          variants={itemVariants}
-        >
+        <motion.div className="structured-card bg-brand-navy text-off-white p-12 rounded-lg" initial="hidden" whileInView="visible" viewport={{
+        once: true,
+        amount: 0.5
+      }} variants={itemVariants}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
             <div className="lg:col-span-2">
               <h3 className="text-3xl font-heading font-bold mb-4 headline-underline after:bg-blue-400">
