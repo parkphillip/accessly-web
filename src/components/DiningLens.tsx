@@ -88,11 +88,13 @@ const AnimatedCard = ({ card, i, scrollYProgress }: { card: CardData, i: number,
     const endProgress = i / (totalCards - 1);
     
     // Animate `y` from below the container to its final stacked position.
-    const y = useTransform(scrollYProgress, [startProgress, endProgress], ['100%', `${-i * 25}px`]);
+    const y = useTransform(scrollYProgress, [startProgress, endProgress], ['100%', `${-i * 40}px`]);
+    // Add alternating tilt to cards as they enter.
+    const rotate = useTransform(scrollYProgress, [startProgress, endProgress], [i % 2 === 0 ? 3 : -3, 0]);
     
     return (
         <motion.div
-            style={{ y, zIndex: i }}
+            style={{ y, rotate, zIndex: i }}
             className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
         >
             <div className="bg-off-white p-4 pb-6 rounded-lg shadow-strong w-full max-w-md">
