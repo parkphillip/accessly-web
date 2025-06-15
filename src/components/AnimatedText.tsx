@@ -28,6 +28,8 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       .join('\n');
   }, [text]);
 
+  const targetText = isBraille ? brailleText : text;
+
   // This effect runs the combined typewriter and decode animation.
   useEffect(() => {
     // Don't run the animation on the very first render.
@@ -36,7 +38,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       return;
     }
 
-    const targetText = isBraille ? brailleText : text;
     const scrambleChars = isBraille ? BRAILLE_SCRAMBLE_CHARS : ENGLISH_SCRAMBLE_CHARS;
     
     if (animationIntervalRef.current) {
@@ -77,7 +78,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     return () => {
       if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
     };
-  }, [isBraille, text, brailleText]);
+  }, [targetText, brailleText, text]);
 
   // This effect handles the timed toggling between English and Braille.
   useEffect(() => {
@@ -101,30 +102,47 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     isBraille ? 'font-mono' : '',
   ].filter(Boolean).join(' ');
 
-  const lines = displayedText.split('\n');
+  const renderTextWithBraille = (textToRender: string) => {
+    const linesToRender = textToRender.split('\n');
+    return linesToRender.map((line, lineIndex) => (
+      <div 
+        key={lineIndex} 
+        className="animated-text-line" 
+        style={{ 
+          display: 'block',
+          lineHeight: '1.1',
+          height: '1.3em',
+          marginBottom: lineIndex === 0 ? '4px' : 0, 
+        }}
+      >
+        {[...line].map((char, j) => {
+          if (char.charCodeAt(0) >= 0x2800 && char.charCodeAt(0) <= 0x28FF) {
+            return <BrailleChar key={`${j}-${char}`} braille={char} />;
+          }
+          return char;
+        })}
+      </div>
+    ));
+  };
 
   return (
-    <span className={dynamicClassName} style={{ display: 'inline-block', verticalAlign: 'bottom' }}>
-      {lines.map((line, lineIndex) => (
-        <div 
-          key={lineIndex} 
-          className="animated-text-line" 
-          style={{ 
-            display: 'block',
-            lineHeight: '1.1',
-            // Use a fixed height to prevent the vertical "jump" during transitions
-            height: '1.3em',
-            marginBottom: lineIndex === 0 ? '4px' : 0, 
-          }}
-        >
-          {[...line].map((char, j) => {
-            if (char.charCodeAt(0) >= 0x2800 && char.charCodeAt(0) <= 0x28FF) {
-              return <BrailleChar key={`${j}-${char}`} braille={char} />;
-            }
-            return char;
-          })}
-        </div>
-      ))}
+    <span 
+      className={dynamicClassName} 
+      style={{ 
+        display: 'inline-block', 
+        verticalAlign: 'bottom',
+        position: 'relative'
+      }}
+    >
+      {/* Ghost element for sizing, prevents layout jumps */}
+      <span style={{ visibility: 'hidden' }}>
+        {renderTextWithBraille(targetText)}
+      </span>
+
+      {/* Visible animated element */}
+      <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+        {renderTextWithBraille(displayedText)}
+      </span>
     </span>
   );
 };
