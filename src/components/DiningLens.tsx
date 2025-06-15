@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import { Eye, UsersRound, Accessibility } from 'lucide-react';
 import gsap from 'gsap';
@@ -79,7 +80,7 @@ const CARD_WIDTH = '420px';
 const CARD_HEIGHT = '520px';
 const IMAGE_HEIGHT = '320px';
 const CARD_PADDING = '2.5rem';
-const STACK_OFFSET = 20; // Tighter stacking for better layering effect
+const STACK_OFFSET = 8; // Much tighter stacking
 
 const DiningLens = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -100,23 +101,23 @@ const DiningLens = () => {
             }
         });
 
-        // GSAP timeline for scroll-linked animation
+        // GSAP timeline for scroll-linked animation with more space between cards
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: 'top top',
-                end: `+=${cardsData.length * 100}%`,
+                end: `+=${cardsData.length * 150}%`, // Increased from 100% to 150% for more time
                 pin: true,
                 scrub: 1,
                 anticipatePin: 1,
             },
         });
 
-        // Animate cards sequentially - each card stacks on top of the previous
+        // Animate cards sequentially with larger delays between each card
         cardsRef.current.forEach((card, index) => {
             if (!card) return;
             
-            // Cards stack upward, with each new card going higher
+            // Cards stack upward with tighter spacing
             const finalY = -index * STACK_OFFSET;
             const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
             
@@ -125,7 +126,7 @@ const DiningLens = () => {
                 rotate: finalRotate,
                 duration: 0.8,
                 ease: 'power2.out',
-            }, index * 0.3);
+            }, index * 0.6); // Increased delay from 0.3 to 0.6 for more reading time
         });
 
         return () => {
@@ -146,14 +147,14 @@ const DiningLens = () => {
                     </div>
 
                     {/* Desktop cards container */}
-                    <div ref={cardsContainerRef} className="hidden lg:flex items-center justify-center relative w-full">
+                    <div ref={cardsContainerRef} className="hidden lg:flex items-center justify-center relative w-full h-full">
                         {cardsData.map((card, index) => (
                             <div
                                 key={card.id}
                                 ref={el => cardsRef.current[index] = el}
                                 className="absolute flex items-center justify-center"
                                 style={{
-                                    zIndex: index + 1, // Higher index cards have higher z-index (stack on top)
+                                    zIndex: cardsData.length - index, // First card has highest z-index, last card has lowest
                                     width: CARD_WIDTH,
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
