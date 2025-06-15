@@ -1,29 +1,23 @@
-
 import React from 'react';
 import { Heart } from 'lucide-react';
-
 interface FormData {
   materialPreference: string;
   additionalNotes: string;
 }
-
 interface FinalTouchesStepProps {
   formData: FormData;
   onInputChange: (field: keyof FormData, value: string) => void;
 }
-
-const FinalTouchesStep: React.FC<FinalTouchesStepProps> = ({ formData, onInputChange }) => {
-  return (
-    <div className="space-y-8 animate-fade-in">
+const FinalTouchesStep: React.FC<FinalTouchesStepProps> = ({
+  formData,
+  onInputChange
+}) => {
+  return <div className="space-y-8 animate-fade-in">
       <div>
         <label className="block text-lg font-serif font-semibold text-charcoal mb-4">
           Material preference (we'll advise what works best)
         </label>
-        <select
-          value={formData.materialPreference}
-          onChange={(e) => onInputChange('materialPreference', e.target.value)}
-          className="w-full p-5 bg-cream/80 border-2 border-warm-gray/50 rounded-2xl text-charcoal focus:border-sage/60 focus:outline-none transition-all duration-200 font-light linen-texture"
-        >
+        <select value={formData.materialPreference} onChange={e => onInputChange('materialPreference', e.target.value)} className="w-full p-5 bg-cream/80 border-2 border-warm-gray/50 rounded-2xl text-charcoal focus:border-sage/60 focus:outline-none transition-all duration-200 font-light linen-texture">
           <option value="standard">Standard Paper (recommended for most)</option>
           <option value="heavy-duty">Heavy-Duty Paper (high traffic)</option>
           <option value="plastic">Plastic Coating (easy cleaning)</option>
@@ -35,12 +29,7 @@ const FinalTouchesStep: React.FC<FinalTouchesStepProps> = ({ formData, onInputCh
         <label className="block text-lg font-serif font-semibold text-charcoal mb-4">
           Anything else we should know?
         </label>
-        <textarea
-          value={formData.additionalNotes}
-          onChange={(e) => onInputChange('additionalNotes', e.target.value)}
-          className="w-full p-5 bg-cream/80 border-2 border-warm-gray/50 rounded-2xl text-charcoal placeholder-pencil/60 focus:border-sage/60 focus:outline-none transition-all duration-200 h-40 resize-none font-light leading-relaxed linen-texture"
-          placeholder="Special requests, questions, or just say hi! We love hearing from restaurant owners."
-        />
+        <textarea value={formData.additionalNotes} onChange={e => onInputChange('additionalNotes', e.target.value)} className="w-full p-5 bg-cream/80 border-2 border-warm-gray/50 rounded-2xl text-charcoal placeholder-pencil/60 focus:border-sage/60 focus:outline-none transition-all duration-200 h-40 resize-none font-light leading-relaxed linen-texture" placeholder="Special requests, questions, or just say hi! We love hearing from restaurant owners." />
       </div>
 
       <div className="paper-card p-8 rounded-2xl shadow-inner-paper transform rotate-1">
@@ -70,12 +59,8 @@ const FinalTouchesStep: React.FC<FinalTouchesStepProps> = ({ formData, onInputCh
             <span>Ongoing support and menu updates at no cost, ever</span>
           </li>
         </ul>
-        <div className="mt-6 font-script text-sage text-lg transform -rotate-1">
-          It's really that simple! ♡
-        </div>
+        
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default FinalTouchesStep;
