@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ImpactStats } from './ImpactStats';
@@ -34,9 +35,9 @@ const ImpactMetrics = () => {
           <ImpactStats />
         </div>
         
-        <MissionSection />
-
         <CostOfInaccessibility />
+
+        <MissionSection />
       </div>
     </section>;
 };
