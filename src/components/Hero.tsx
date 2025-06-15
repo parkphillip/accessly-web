@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -19,7 +20,7 @@ const Hero = () => {
           <div className="text-center lg:text-left">
             <div className="max-w-xl">
               <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight">
-                Building an <AnimatedText text={"Accessible"} className="text-brand-navy font-mono" />
+                Building an <AnimatedText text={"Accessible"} className="text-brand-navy" />
                 <span style={{
                 display: 'block',
                 lineHeight: '1.1',
@@ -49,7 +50,7 @@ free braille menus for every restaurant.</p>
       </div>
 
       {/* Right Column: Globe - Absolutely Positioned */}
-      <div className="hidden lg:block absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-[20%] w-[800px] h-[800px] pointer-events-none">
+      <div className="hidden lg:block absolute inset-y-0 right-0 transform translate-x-[20%] w-[800px] pointer-events-none flex items-center">
         <GlobeDemo size={800} />
       </div>
 
