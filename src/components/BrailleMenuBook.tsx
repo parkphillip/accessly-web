@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translateToBraille, sampleTexts } from '../utils/brailleUtils';
@@ -139,7 +140,7 @@ const BrailleMenuBook = () => {
                         <p key={lineIndex} className={`braille-line ${page.type === 'cover' ? 'text-center' : ''}`}>
                           {line.split(' ').map((word, wordIndex) => (
                             <span key={wordIndex}>
-                              <Word text={word} pageIdx={index} lineIdx={lineIndex} wordIdx={wordIdx} />
+                              <Word text={word} pageIdx={index} lineIdx={lineIndex} wordIdx={wordIndex} />
                               {' '}
                             </span>
                           ))}
