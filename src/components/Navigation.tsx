@@ -18,11 +18,11 @@ const navItems = [{
 }];
 
 const Navigation = () => {
-  const [activeSection, setActiveSection] = useState('hero');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const [activeSection, setActiveSection] = useState(isHomePage ? 'hero' : '');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,21 +43,23 @@ const Navigation = () => {
       }
     };
 
+    const handleOtherPageScroll = () => setIsScrolled(window.scrollY > 20);
+
     if (isHomePage) {
       window.addEventListener('scroll', handleScroll);
-      // Run on mount to set initial state
       handleScroll();
     } else {
-      // Reset for other pages
       setActiveSection('');
-      // Still check for scroll to apply background
-      const handleOtherPageScroll = () => setIsScrolled(window.scrollY > 20);
       window.addEventListener('scroll', handleOtherPageScroll);
       handleOtherPageScroll();
     }
 
     return () => {
-      window.removeEventListener('scroll', isHomePage ? handleScroll : () => setIsScrolled(window.scrollY > 20));
+      if (isHomePage) {
+        window.removeEventListener('scroll', handleScroll);
+      } else {
+        window.removeEventListener('scroll', handleOtherPageScroll);
+      }
     };
   }, [isHomePage]);
 
@@ -123,13 +125,13 @@ const Navigation = () => {
                   )}
                 </button>
               ) : (
-                <a
+                <Link
                   key={item.id}
-                  href={`/#${item.id}`}
+                  to={`/#${item.id}`}
                   className="relative px-4 py-2 rounded-md transition-colors duration-300 font-medium text-base text-medium-text hover:text-dark-text hover:bg-subtle-gray/70"
                 >
                   {item.label}
-                </a>
+                </Link>
               )
             ))}
           </div>
