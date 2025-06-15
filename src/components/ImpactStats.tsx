@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useEffect } from 'react';
@@ -81,7 +80,7 @@ export const ImpactStats = () => {
         <div ref={ref} className="space-y-32">
             {/* Flowing stats layout */}
             <motion.div 
-                className="space-y-16"
+                className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-16"
                 variants={containerVariants}
                 initial="hidden"
                 animate={isInView ? "visible" : "hidden"}
@@ -90,7 +89,7 @@ export const ImpactStats = () => {
                     <motion.div
                         key={index}
                         variants={fadeInVariants}
-                        className="text-center max-w-3xl mx-auto"
+                        className="text-center"
                     >
                         {/* Icon and animated number */}
                         <div className="flex items-center justify-center gap-6 mb-4">
@@ -105,11 +104,6 @@ export const ImpactStats = () => {
                         <p className="text-xl text-medium-text leading-relaxed">
                             {stat.description}
                         </p>
-                        
-                        {/* Subtle divider for non-last items */}
-                        {index < stats.length - 1 && (
-                            <div className="w-24 h-px bg-subtle-gray mx-auto mt-12"></div>
-                        )}
                     </motion.div>
                 ))}
             </motion.div>
