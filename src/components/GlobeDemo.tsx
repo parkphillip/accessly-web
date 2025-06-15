@@ -25,7 +25,7 @@ export default function GlobeDemo() {
       mapBrightness: 6,
       baseColor: [6 / 255, 32 / 255, 86 / 255], // #062056 from previous globe
       markerColor: [0.1, 0.8, 1], // A nice light blue
-      glowColor: [0.22, 0.74, 0.97], // #38bdf8 from previous globe
+      glowColor: [0.4, 0.45, 0.5], // A subtle, less intense blue-gray glow
       markers: [
         // Extracted from previous sample data
         { location: [-19.885592, -43.951191], size: 0.05 },
