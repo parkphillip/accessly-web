@@ -38,9 +38,10 @@ const OrderForm = () => {
     const testSupabaseConnection = async () => {
       console.log('🔍 Testing Supabase connection...');
       try {
+        // Use a simple select query instead of count(*) which causes parsing errors
         const { data, error } = await supabase
           .from('form_submissions')
-          .select('count(*)')
+          .select('id')
           .limit(1);
         
         if (error) {
@@ -51,7 +52,7 @@ const OrderForm = () => {
             variant: "destructive",
           });
         } else {
-          console.log('✅ Supabase connection successful:', data);
+          console.log('✅ Supabase connection successful');
         }
       } catch (err) {
         console.error('❌ Supabase connection test threw error:', err);
@@ -130,9 +131,13 @@ const OrderForm = () => {
   };
 
   const nextStep = () => {
-    console.log(`➡️ Attempting to go to next step from step ${currentStep}`);
+    console.log(`➡️ NEXT STEP CLICKED - Current step: ${currentStep}`);
+    console.log(`➡️ Form data:`, formData);
+    
     setHasAttemptedContinue(true);
     const validation = validateCurrentStep();
+    
+    console.log(`➡️ Validation result:`, validation);
     
     if (validation.isValid && currentStep < 4) {
       console.log(`✅ Moving from step ${currentStep} to step ${currentStep + 1}`);
@@ -146,6 +151,7 @@ const OrderForm = () => {
   };
 
   const prevStep = () => {
+    console.log(`⬅️ PREV STEP CLICKED - Current step: ${currentStep}`);
     if (currentStep > 1) {
       console.log(`⬅️ Moving back from step ${currentStep} to step ${currentStep - 1}`);
       setCurrentStep(currentStep - 1);
@@ -155,8 +161,9 @@ const OrderForm = () => {
   };
 
   const handleSubmit = async () => {
-    console.log('🚀 SUBMIT BUTTON CLICKED - Starting form submission...');
+    console.log('🚀🚀🚀 SUBMIT FUNCTION CALLED!');
     console.log('📊 Current form data:', formData);
+    console.log('📊 Current step:', currentStep);
     
     setHasAttemptedContinue(true);
     const validation = validateCurrentStep();
@@ -189,7 +196,7 @@ const OrderForm = () => {
         additional_notes: formData.additionalNotes
       };
       
-      console.log('📤 Submitting to Supabase:', submissionData);
+      console.log('📤 About to submit to Supabase:', submissionData);
       
       const { data, error } = await supabase
         .from('form_submissions')
@@ -303,7 +310,7 @@ const OrderForm = () => {
   const canProceed = validation.isValid;
   const errorsToShow = hasAttemptedContinue ? validationErrors : [];
 
-  console.log(`🎯 Current step: ${currentStep}, Can proceed: ${canProceed}, Is submitting: ${isSubmitting}`);
+  console.log(`🎯 Render - Current step: ${currentStep}, Can proceed: ${canProceed}, Is submitting: ${isSubmitting}`);
 
   return (
     <section className="py-24 bg-light-bg">
