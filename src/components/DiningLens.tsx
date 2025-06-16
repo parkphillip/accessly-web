@@ -115,9 +115,9 @@ const DiningLens = () => {
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: 'top top',
-                end: `+=${cardsData.length * 150}%`,
+                end: `+=${cardsData.length * 80}%`, // Reduced from 150% to 80%
                 pin: true,
-                scrub: 1,
+                scrub: 0.5, // Reduced from 1 to 0.5 for faster response
                 anticipatePin: 1,
             },
         });
@@ -133,9 +133,9 @@ const DiningLens = () => {
             tl.to(card, {
                 y: finalY,
                 rotate: finalRotate,
-                duration: 0.8,
+                duration: 0.5, // Reduced from 0.8 to 0.5
                 ease: 'power2.out',
-            }, index * 0.6);
+            }, index * 0.3); // Reduced from 0.6 to 0.3 for faster stagger
         });
 
         return () => {
