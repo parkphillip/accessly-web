@@ -23,7 +23,7 @@ const GoogleMap = () => {
         await loader.load();
         
         if (mapRef.current && !mapInstanceRef.current) {
-          mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
+          mapInstanceRef.current = new (window as any).google.maps.Map(mapRef.current, {
             center: { lat: 34.0522, lng: -118.2437 }, // Los Angeles, CA
             zoom: 8,
             styles: [
