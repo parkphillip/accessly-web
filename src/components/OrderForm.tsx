@@ -33,39 +33,6 @@ const OrderForm = () => {
   const [containerHeight, setContainerHeight] = useState<number | undefined>();
   const stepContentRef = useRef<HTMLDivElement>(null);
 
-  // Add debugging for auth state
-  useEffect(() => {
-    const checkAuthState = async () => {
-      console.log('=== DEBUGGING AUTH STATE ===');
-      
-      // Check current session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      console.log('Current session:', session);
-      console.log('Session error:', sessionError);
-      
-      // Check current user
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      console.log('Current user:', user);
-      console.log('User error:', userError);
-      
-      // Test a simple anonymous query first
-      console.log('=== TESTING ANONYMOUS DATABASE ACCESS ===');
-      try {
-        const { data: testData, error: testError } = await supabase
-          .from('form_submissions')
-          .select('count')
-          .limit(1);
-        
-        console.log('Test query result:', testData);
-        console.log('Test query error:', testError);
-      } catch (err) {
-        console.error('Test query exception:', err);
-      }
-    };
-    
-    checkAuthState();
-  }, []);
-
   const steps = [{
     number: 1,
     title: 'Restaurant Info',
@@ -164,24 +131,6 @@ const OrderForm = () => {
     setIsSubmitting(true);
     
     try {
-      console.log('=== STARTING FORM SUBMISSION DEBUG ===');
-      
-      // Clear any cached auth state to ensure anonymous access
-      try {
-        await supabase.auth.signOut();
-        console.log('Cleared any existing auth session');
-      } catch (clearError) {
-        console.log('No session to clear or error clearing:', clearError);
-      }
-      
-      // Check auth state right before submission
-      const { data: { session: preSubmitSession } } = await supabase.auth.getSession();
-      const { data: { user: preSubmitUser } } = await supabase.auth.getUser();
-      
-      console.log('Pre-submit session:', preSubmitSession);
-      console.log('Pre-submit user:', preSubmitUser);
-      console.log('Should be null for anonymous access');
-      
       console.log('Submitting form data:', formData);
       
       const submissionData = {
@@ -198,26 +147,16 @@ const OrderForm = () => {
         additional_notes: formData.additionalNotes
       };
       
-      console.log('Formatted submission data:', submissionData);
-      
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([submissionData])
         .select();
 
-      console.log('Insert result data:', data);
-      console.log('Insert result error:', error);
-      
       if (error) {
-        console.error('=== DETAILED ERROR ANALYSIS ===');
-        console.error('Error code:', error.code);
-        console.error('Error message:', error.message);
-        console.error('Error details:', error.details);
-        console.error('Error hint:', error.hint);
-        
+        console.error('Error submitting form:', error);
         toast({
           title: "Submission Error",
-          description: `Database error: ${error.message}. Please check console for details.`,
+          description: `Database error: ${error.message}. Please try again.`,
           variant: "destructive",
         });
         return;
@@ -267,11 +206,10 @@ const OrderForm = () => {
       setValidationErrors([]);
       setHasAttemptedContinue(false);
     } catch (error) {
-      console.error('=== UNEXPECTED ERROR ===');
-      console.error('Exception caught:', error);
+      console.error('Unexpected error:', error);
       toast({
         title: "Unexpected Error",
-        description: "There was an unexpected error. Please check console and try again.",
+        description: "There was an unexpected error. Please try again.",
         variant: "destructive",
       });
     } finally {
