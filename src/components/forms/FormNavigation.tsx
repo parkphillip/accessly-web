@@ -21,6 +21,22 @@ const FormNavigation: React.FC<FormNavigationProps> = ({
   canProceed = true,
   validationErrors = []
 }) => {
+  
+  const handleSubmitClick = () => {
+    console.log('🔥 FormNavigation: Submit button clicked!');
+    console.log('🔥 FormNavigation: Current step:', currentStep);
+    console.log('🔥 FormNavigation: Can proceed:', canProceed);
+    console.log('🔥 FormNavigation: Is submitting:', isSubmitting);
+    onSubmit();
+  };
+
+  const handleNextClick = () => {
+    console.log('➡️ FormNavigation: Next button clicked!');
+    console.log('➡️ FormNavigation: Current step:', currentStep);
+    console.log('➡️ FormNavigation: Can proceed:', canProceed);
+    onNextStep();
+  };
+
   return (
     <div className="mt-12 pt-8 border-t border-light-gray">
       {validationErrors.length > 0 && (
@@ -53,7 +69,7 @@ const FormNavigation: React.FC<FormNavigationProps> = ({
         {currentStep < 4 ? (
           <button
             type="button"
-            onClick={onNextStep}
+            onClick={handleNextClick}
             className="primary-button flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isSubmitting || !canProceed}
           >
@@ -63,7 +79,7 @@ const FormNavigation: React.FC<FormNavigationProps> = ({
         ) : (
           <button
             type="button"
-            onClick={onSubmit}
+            onClick={handleSubmitClick}
             className="primary-button bg-brand-terracotta hover:bg-brand-terracotta/90 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isSubmitting || !canProceed}
           >

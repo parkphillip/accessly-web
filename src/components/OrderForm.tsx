@@ -33,6 +33,34 @@ const OrderForm = () => {
   const [containerHeight, setContainerHeight] = useState<number | undefined>();
   const stepContentRef = useRef<HTMLDivElement>(null);
 
+  // Test Supabase connection on component mount
+  useEffect(() => {
+    const testSupabaseConnection = async () => {
+      console.log('🔍 Testing Supabase connection...');
+      try {
+        const { data, error } = await supabase
+          .from('form_submissions')
+          .select('count(*)')
+          .limit(1);
+        
+        if (error) {
+          console.error('❌ Supabase connection test failed:', error);
+          toast({
+            title: "Connection Error",
+            description: `Failed to connect to database: ${error.message}`,
+            variant: "destructive",
+          });
+        } else {
+          console.log('✅ Supabase connection successful:', data);
+        }
+      } catch (err) {
+        console.error('❌ Supabase connection test threw error:', err);
+      }
+    };
+
+    testSupabaseConnection();
+  }, [toast]);
+
   const steps = [{
     number: 1,
     title: 'Restaurant Info',
@@ -56,6 +84,7 @@ const OrderForm = () => {
   }];
 
   const validateCurrentStep = () => {
+    console.log(`🔍 Validating step ${currentStep}`);
     let validation;
     switch (currentStep) {
       case 1:
@@ -74,6 +103,7 @@ const OrderForm = () => {
         validation = { isValid: true, errors: [] };
     }
     
+    console.log(`📋 Step ${currentStep} validation result:`, validation);
     return validation;
   };
 
@@ -87,6 +117,7 @@ const OrderForm = () => {
   }, [currentStep]);
 
   const handleInputChange = (field: keyof FormData, value: string) => {
+    console.log(`📝 Input changed - ${field}:`, value);
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -99,20 +130,24 @@ const OrderForm = () => {
   };
 
   const nextStep = () => {
+    console.log(`➡️ Attempting to go to next step from step ${currentStep}`);
     setHasAttemptedContinue(true);
     const validation = validateCurrentStep();
     
     if (validation.isValid && currentStep < 4) {
+      console.log(`✅ Moving from step ${currentStep} to step ${currentStep + 1}`);
       setCurrentStep(currentStep + 1);
       setValidationErrors([]);
       setHasAttemptedContinue(false);
     } else {
+      console.log(`❌ Cannot proceed from step ${currentStep}:`, validation.errors);
       setValidationErrors(validation.errors);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
+      console.log(`⬅️ Moving back from step ${currentStep} to step ${currentStep - 1}`);
       setCurrentStep(currentStep - 1);
       setValidationErrors([]);
       setHasAttemptedContinue(false);
@@ -120,18 +155,25 @@ const OrderForm = () => {
   };
 
   const handleSubmit = async () => {
+    console.log('🚀 SUBMIT BUTTON CLICKED - Starting form submission...');
+    console.log('📊 Current form data:', formData);
+    
     setHasAttemptedContinue(true);
     const validation = validateCurrentStep();
     
+    console.log('🔍 Final validation result:', validation);
+    
     if (!validation.isValid) {
+      console.log('❌ Validation failed, cannot submit:', validation.errors);
       setValidationErrors(validation.errors);
       return;
     }
 
+    console.log('✅ Validation passed, proceeding with submission...');
     setIsSubmitting(true);
     
     try {
-      console.log('Submitting form data:', formData);
+      console.log('📋 Preparing submission data...');
       
       const submissionData = {
         restaurant_name: formData.restaurantName,
@@ -147,13 +189,18 @@ const OrderForm = () => {
         additional_notes: formData.additionalNotes
       };
       
+      console.log('📤 Submitting to Supabase:', submissionData);
+      
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([submissionData])
         .select();
 
+      console.log('📬 Supabase response - Data:', data);
+      console.log('📬 Supabase response - Error:', error);
+
       if (error) {
-        console.error('Error submitting form:', error);
+        console.error('❌ Supabase submission error:', error);
         toast({
           title: "Submission Error",
           description: `Database error: ${error.message}. Please try again.`,
@@ -162,10 +209,22 @@ const OrderForm = () => {
         return;
       }
 
-      console.log('Form submitted successfully:', data);
+      if (!data || data.length === 0) {
+        console.error('❌ No data returned from Supabase insert');
+        toast({
+          title: "Submission Error",
+          description: "No data was returned from the database. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log('✅ Form submitted successfully to database:', data);
       
       // Sync to Google Sheets with your specific spreadsheet ID
       const spreadsheetId = '1minZg8Jy7-Sd4RD6RdL_NW0635JuGVyNnuipOzxGPXQ';
+      console.log('📊 Attempting to sync to Google Sheets...');
+      
       try {
         const { error: sheetError } = await supabase.functions.invoke('sync-to-google-sheets', {
           body: { 
@@ -175,19 +234,21 @@ const OrderForm = () => {
         });
         
         if (sheetError) {
-          console.error('Error syncing to Google Sheets:', sheetError);
+          console.error('❌ Error syncing to Google Sheets:', sheetError);
         } else {
-          console.log('Successfully synced to Google Sheets');
+          console.log('✅ Successfully synced to Google Sheets');
         }
       } catch (sheetError) {
-        console.error('Error syncing to Google Sheets:', sheetError);
+        console.error('❌ Exception during Google Sheets sync:', sheetError);
       }
       
+      console.log('🎉 Showing success toast...');
       toast({
         title: "Request Submitted!",
         description: "Thank you! We'll create your free braille menus and be in touch within 24 hours.",
       });
       
+      console.log('🔄 Resetting form...');
       // Reset form
       setFormData({
         restaurantName: '',
@@ -205,14 +266,17 @@ const OrderForm = () => {
       setCurrentStep(1);
       setValidationErrors([]);
       setHasAttemptedContinue(false);
+      console.log('✅ Form reset complete');
     } catch (error) {
-      console.error('Unexpected error:', error);
+      console.error('💥 Unexpected error during submission:', error);
+      console.error('💥 Error stack:', error instanceof Error ? error.stack : 'No stack trace');
       toast({
         title: "Unexpected Error",
-        description: "There was an unexpected error. Please try again.",
+        description: `There was an unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
         variant: "destructive",
       });
     } finally {
+      console.log('🏁 Setting isSubmitting to false');
       setIsSubmitting(false);
     }
   };
@@ -238,6 +302,8 @@ const OrderForm = () => {
   const validation = validateCurrentStep();
   const canProceed = validation.isValid;
   const errorsToShow = hasAttemptedContinue ? validationErrors : [];
+
+  console.log(`🎯 Current step: ${currentStep}, Can proceed: ${canProceed}, Is submitting: ${isSubmitting}`);
 
   return (
     <section className="py-24 bg-light-bg">
