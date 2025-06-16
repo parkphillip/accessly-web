@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useRef } from "react";
 import createGlobe from "cobe";
@@ -59,9 +58,39 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
       },
     });
 
+    // Add mouse interaction
+    let isDragging = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    const handleMouseDown = (e: MouseEvent) => {
+      isDragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      const deltaX = e.clientX - lastX;
+      targetPhi += deltaX * 0.01;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    };
+
+    const handleMouseUp = () => {
+      isDragging = false;
+    };
+
+    canvasRef.current?.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
     return () => {
       globe.destroy();
       window.removeEventListener("scroll", onScroll);
+      canvasRef.current?.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [size]);
 

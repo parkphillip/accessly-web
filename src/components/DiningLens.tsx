@@ -182,6 +182,9 @@ const DiningLens = () => {
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
                                     pointerEvents: 'auto',
+                                    touchAction: 'none',
+                                    userSelect: 'none',
+                                    WebkitUserSelect: 'none',
                                 }}
                             >
                                 <div
