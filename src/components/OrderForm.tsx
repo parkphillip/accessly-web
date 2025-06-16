@@ -117,6 +117,22 @@ const OrderForm = () => {
         alert('There was an error submitting your request. Please try again.');
       } else {
         console.log('Form submitted successfully:', data);
+        
+        // Sync to Google Sheets (you'll need to provide your spreadsheet ID)
+        const spreadsheetId = 'YOUR_GOOGLE_SHEET_ID'; // Replace with your actual sheet ID
+        try {
+          await supabase.functions.invoke('sync-to-google-sheets', {
+            body: { 
+              submissionId: data[0].id,
+              spreadsheetId: spreadsheetId
+            }
+          });
+          console.log('Successfully synced to Google Sheets');
+        } catch (sheetError) {
+          console.error('Error syncing to Google Sheets:', sheetError);
+          // Form still submitted successfully, just sheet sync failed
+        }
+        
         alert('Thank you! We\'ll create your free braille menus and be in touch within 24 hours.');
         
         // Reset form
