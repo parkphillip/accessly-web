@@ -38,8 +38,10 @@ free braille menus for every restaurant.</p>
           </div>
 
           {/* Right Column: Globe */}
-          <div className="hidden lg:flex w-full lg:w-3/5 justify-center items-center">
-            <GlobeDemo size={650} />
+          <div className="hidden lg:flex w-full lg:w-3/5 justify-center items-center relative min-h-[650px]">
+            <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
+              <GlobeDemo size={650} />
+            </div>
           </div>
         </div>
       </div>
