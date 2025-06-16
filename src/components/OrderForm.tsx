@@ -128,8 +128,8 @@ const OrderForm = () => {
 
       console.log('Form submitted successfully:', data);
       
-      // Sync to Google Sheets (replace with your actual spreadsheet ID)
-      const spreadsheetId = 'YOUR_GOOGLE_SHEET_ID';
+      // Sync to Google Sheets with your specific spreadsheet ID
+      const spreadsheetId = '1minZg8Jy7-Sd4RD6RdL_NW0635JuGVyNnuipOzxGPXQ';
       try {
         const { error: sheetError } = await supabase.functions.invoke('sync-to-google-sheets', {
           body: { 
