@@ -91,7 +91,22 @@ const DiningLens = () => {
     useEffect(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
 
-        // Set initial state - first card starts in position, others start from bottom
+        // On mobile, we don't want any GSAP animations
+        if (isMobile) {
+            // Set all cards to their final positions immediately
+            cardsRef.current.forEach((card, index) => {
+                if (card) {
+                    gsap.set(card, {
+                        y: 0,
+                        rotate: 0,
+                        opacity: 1,
+                    });
+                }
+            });
+            return;
+        }
+
+        // Desktop animations
         cardsRef.current.forEach((card, index) => {
             if (card) {
                 if (index === 0) {
@@ -112,23 +127,15 @@ const DiningLens = () => {
             }
         });
 
-        // GSAP timeline for scroll-linked animation
+        // GSAP timeline for scroll-linked animation (desktop only)
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: 'top top',
-                end: `+=${cardsData.length * (isMobile ? 40 : 80)}%`, // Reduced scroll distance on mobile
+                end: `+=${cardsData.length * 80}%`,
                 pin: true,
-                scrub: isMobile ? 0.2 : 0.5, // Faster response on mobile
+                scrub: 0.5,
                 anticipatePin: 1,
-                fastScrollEnd: true, // Optimize for fast scrolling
-                preventOverlaps: true, // Prevent animation overlap
-                onEnter: () => {
-                    // Ensure smooth start on mobile
-                    if (isMobile) {
-                        gsap.set(cardsRef.current, { clearProps: 'all' });
-                    }
-                }
             },
         });
 
@@ -143,9 +150,9 @@ const DiningLens = () => {
             tl.to(card, {
                 y: finalY,
                 rotate: finalRotate,
-                duration: isMobile ? 0.3 : 0.5, // Faster animation on mobile
+                duration: 0.5,
                 ease: 'power2.out',
-            }, index * (isMobile ? 0.2 : 0.3)); // Faster stagger on mobile
+            }, index * 0.3);
         });
 
         return () => {
@@ -155,7 +162,7 @@ const DiningLens = () => {
 
     return (
         <section id="impact" ref={sectionRef} className="relative bg-slate-50">
-            <div className="h-screen flex items-center justify-center overflow-hidden">
+            <div className={`${isMobile ? 'min-h-screen' : 'h-screen'} flex items-center justify-center overflow-hidden`}>
                 <div className="max-w-6xl w-full mx-auto px-5 lg:px-7 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
                     <LeftColumn />
 
