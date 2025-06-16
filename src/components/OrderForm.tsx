@@ -91,15 +91,23 @@ const OrderForm = () => {
       ...prev,
       [field]: value
     }));
+    
+    // Clear validation errors when user starts typing
+    if (hasAttemptedContinue && validationErrors.length > 0) {
+      setValidationErrors([]);
+    }
   };
 
   const nextStep = () => {
     setHasAttemptedContinue(true);
     const validation = validateCurrentStep();
-    setValidationErrors(validation.errors);
     
     if (validation.isValid && currentStep < 4) {
       setCurrentStep(currentStep + 1);
+      setValidationErrors([]);
+      setHasAttemptedContinue(false);
+    } else {
+      setValidationErrors(validation.errors);
     }
   };
 
@@ -114,9 +122,9 @@ const OrderForm = () => {
   const handleSubmit = async () => {
     setHasAttemptedContinue(true);
     const validation = validateCurrentStep();
-    setValidationErrors(validation.errors);
     
     if (!validation.isValid) {
+      setValidationErrors(validation.errors);
       return;
     }
 
@@ -226,6 +234,7 @@ const OrderForm = () => {
     }
   };
 
+  // Calculate if user can proceed - always allow if validation passes
   const validation = validateCurrentStep();
   const canProceed = validation.isValid;
   const errorsToShow = hasAttemptedContinue ? validationErrors : [];
