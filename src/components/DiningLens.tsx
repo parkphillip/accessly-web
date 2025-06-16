@@ -1,8 +1,8 @@
-
 import React, { useRef, useEffect } from 'react';
 import { Eye, UsersRound, Accessibility } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -86,6 +86,7 @@ const DiningLens = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const cardsContainerRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
@@ -116,10 +117,18 @@ const DiningLens = () => {
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: 'top top',
-                end: `+=${cardsData.length * 80}%`, // Reduced from 150% to 80%
+                end: `+=${cardsData.length * (isMobile ? 40 : 80)}%`, // Reduced scroll distance on mobile
                 pin: true,
-                scrub: 0.5, // Reduced from 1 to 0.5 for faster response
+                scrub: isMobile ? 0.2 : 0.5, // Faster response on mobile
                 anticipatePin: 1,
+                fastScrollEnd: true, // Optimize for fast scrolling
+                preventOverlaps: true, // Prevent animation overlap
+                onEnter: () => {
+                    // Ensure smooth start on mobile
+                    if (isMobile) {
+                        gsap.set(cardsRef.current, { clearProps: 'all' });
+                    }
+                }
             },
         });
 
@@ -134,15 +143,15 @@ const DiningLens = () => {
             tl.to(card, {
                 y: finalY,
                 rotate: finalRotate,
-                duration: 0.5, // Reduced from 0.8 to 0.5
+                duration: isMobile ? 0.3 : 0.5, // Faster animation on mobile
                 ease: 'power2.out',
-            }, index * 0.3); // Reduced from 0.6 to 0.3 for faster stagger
+            }, index * (isMobile ? 0.2 : 0.3)); // Faster stagger on mobile
         });
 
         return () => {
             ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         };
-    }, []);
+    }, [isMobile]);
 
     return (
         <section id="impact" ref={sectionRef} className="relative bg-slate-50">
