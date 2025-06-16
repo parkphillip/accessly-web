@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { Eye, UsersRound, Accessibility } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -93,8 +93,9 @@ const DiningLens = () => {
     const cardsContainerRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
     const isMobile = useIsMobile();
+    const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
-    useEffect(() => {
+    const setupAnimations = useCallback(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
 
         // On mobile, we don't want any GSAP animations
@@ -133,6 +134,11 @@ const DiningLens = () => {
             }
         });
 
+        // Kill any existing timeline
+        if (timelineRef.current) {
+            timelineRef.current.kill();
+        }
+
         // GSAP timeline for scroll-linked animation (desktop only)
         const tl = gsap.timeline({
             scrollTrigger: {
@@ -144,6 +150,22 @@ const DiningLens = () => {
                 anticipatePin: 1,
                 fastScrollEnd: true,
                 preventOverlaps: true,
+                onEnter: () => {
+                    // Optimize performance when entering the section
+                    cardsRef.current.forEach(card => {
+                        if (card) {
+                            card.style.willChange = 'transform';
+                        }
+                    });
+                },
+                onLeaveBack: () => {
+                    // Reset will-change when leaving the section
+                    cardsRef.current.forEach(card => {
+                        if (card) {
+                            card.style.willChange = 'auto';
+                        }
+                    });
+                }
             },
         });
 
@@ -162,11 +184,19 @@ const DiningLens = () => {
             }, index * 0.3);
         });
 
-        return () => {
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-            tl.kill();
-        };
+        timelineRef.current = tl;
     }, [isMobile]);
+
+    useEffect(() => {
+        setupAnimations();
+
+        return () => {
+            if (timelineRef.current) {
+                timelineRef.current.kill();
+            }
+            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        };
+    }, [setupAnimations]);
 
     return (
         <section id="impact" ref={sectionRef} className="relative bg-slate-50">
