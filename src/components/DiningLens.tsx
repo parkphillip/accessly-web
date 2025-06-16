@@ -134,40 +134,25 @@ const DiningLens = () => {
                 start: 'top top',
                 end: `+=${cardsData.length * 80}%`,
                 pin: true,
-                scrub: 0.5,
+                scrub: 1, // Increased for smoother scrolling
                 anticipatePin: 1,
-                fastScrollEnd: true,
-                preventOverlaps: true,
+                fastScrollEnd: true, // Optimize for fast scrolling
+                preventOverlaps: true, // Prevent animation overlaps
                 onUpdate: (self) => {
-                    const progress = self.progress;
-                    cardsRef.current.forEach((card, index) => {
-                        if (!card || index === 0) return;
-                        const finalY = -index * STACK_OFFSET;
-                        const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
-                        
-                        gsap.set(card, {
-                            y: finalY * progress,
-                            rotate: finalRotate,
-                            force3D: true,
-                            willChange: 'transform',
-                            clearProps: 'all' // Clear any previous transforms
+                    // Use requestAnimationFrame for smoother updates
+                    requestAnimationFrame(() => {
+                        const progress = self.progress;
+                        cardsRef.current.forEach((card, index) => {
+                            if (!card || index === 0) return;
+                            const finalY = -index * STACK_OFFSET;
+                            const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
+                            gsap.set(card, {
+                                y: finalY * progress,
+                                rotate: finalRotate,
+                                force3D: true,
+                                willChange: 'transform'
+                            });
                         });
-                    });
-                },
-                onEnter: () => {
-                    // Ensure cards are visible when entering the section
-                    cardsRef.current.forEach((card) => {
-                        if (card) {
-                            gsap.set(card, { visibility: 'visible' });
-                        }
-                    });
-                },
-                onLeaveBack: () => {
-                    // Ensure cards are visible when leaving backwards
-                    cardsRef.current.forEach((card) => {
-                        if (card) {
-                            gsap.set(card, { visibility: 'visible' });
-                        }
                     });
                 }
             },

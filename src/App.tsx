@@ -26,15 +26,11 @@ const App = () => {
         -webkit-overflow-scrolling: touch;
       }
       
-      /* Optimize animations */
-      .optimized-scroll * {
+      /* Only apply hardware acceleration to elements that need it */
+      .optimized-scroll [data-animated],
+      .optimized-scroll [data-fixed] {
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
-      }
-      
-      /* Optimize fixed elements */
-      .optimized-scroll nav,
-      .optimized-scroll [data-fixed] {
         transform: translateZ(0);
         -webkit-transform: translateZ(0);
         will-change: transform;

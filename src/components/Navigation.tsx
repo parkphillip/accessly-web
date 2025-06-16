@@ -33,29 +33,38 @@ const Navigation = () => {
   useEffect(() => {
     let ticking = false;
     let scrollTimeout: NodeJS.Timeout;
+    let lastScrollY = window.scrollY;
+    const SCROLL_THRESHOLD = 20;
 
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 20);
+          const currentScrollY = window.scrollY;
+          const scrollDelta = Math.abs(currentScrollY - lastScrollY);
           
-          // Debounce section detection
-          clearTimeout(scrollTimeout);
-          scrollTimeout = setTimeout(() => {
-            const sections = navItems.map(item => item.id);
-            const currentSection = sections.find(section => {
-              const element = document.getElementById(section);
-              if (element) {
-                const rect = element.getBoundingClientRect();
-                return rect.top <= 100 && rect.bottom >= 100;
+          // Only update if scroll delta is significant
+          if (scrollDelta > 5) {
+            setIsScrolled(currentScrollY > SCROLL_THRESHOLD);
+            
+            // Debounce section detection
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+              const sections = navItems.map(item => item.id);
+              const currentSection = sections.find(section => {
+                const element = document.getElementById(section);
+                if (element) {
+                  const rect = element.getBoundingClientRect();
+                  return rect.top <= 100 && rect.bottom >= 100;
+                }
+                return false;
+              });
+              if (currentSection) {
+                setActiveSection(currentSection);
               }
-              return false;
-            });
-            if (currentSection) {
-              setActiveSection(currentSection);
-            }
-          }, 50); // Small delay to prevent excessive updates
+            }, 100); // Increased debounce time
+          }
           
+          lastScrollY = currentScrollY;
           ticking = false;
         });
         ticking = true;
@@ -65,7 +74,14 @@ const Navigation = () => {
     const handleOtherPageScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 20);
+          const currentScrollY = window.scrollY;
+          const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+          
+          if (scrollDelta > 5) {
+            setIsScrolled(currentScrollY > SCROLL_THRESHOLD);
+          }
+          
+          lastScrollY = currentScrollY;
           ticking = false;
         });
         ticking = true;
