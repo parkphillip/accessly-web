@@ -14,7 +14,7 @@ const navItems: {
   label: 'Impact'
 }, {
   id: 'process',
-  label: 'Our Process'
+  label: 'Our Mission'
 }, {
   id: 'network',
   label: 'Network',
