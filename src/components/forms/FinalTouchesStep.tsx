@@ -1,19 +1,17 @@
 
 import React from 'react';
-
-interface FormData {
-  materialPreference: string;
-  additionalNotes: string;
-}
+import { FormData } from '@/types/FormData';
 
 interface FinalTouchesStepProps {
   formData: FormData;
   onInputChange: (field: keyof FormData, value: string) => void;
+  errors?: string[];
 }
 
 const FinalTouchesStep: React.FC<FinalTouchesStepProps> = ({
   formData,
-  onInputChange
+  onInputChange,
+  errors = []
 }) => {
   return (
     <div className="space-y-6 animate-fade-in">

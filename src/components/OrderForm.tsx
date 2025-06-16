@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, User, BookOpen, Heart } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { FormData, validateStep1, validateStep2, validateStep3, validateStep4 } from '@/types/FormData';
 import FormStep from './forms/FormStep';
 import RestaurantInfoStep from './forms/RestaurantInfoStep';
 import ContactInfoStep from './forms/ContactInfoStep';
@@ -10,24 +11,11 @@ import MenuDetailsStep from './forms/MenuDetailsStep';
 import FinalTouchesStep from './forms/FinalTouchesStep';
 import FormNavigation from './forms/FormNavigation';
 
-interface FormData {
-  restaurantName: string;
-  contactName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  menuType: string;
-  menuContent: string;
-  materialPreference: string;
-  additionalNotes: string;
-}
-
 const OrderForm = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [formData, setFormData] = useState<FormData>({
     restaurantName: '',
     contactName: '',
@@ -66,11 +54,41 @@ const OrderForm = () => {
     note: 'Review & Submit'
   }];
 
+  const validateCurrentStep = () => {
+    let validation;
+    switch (currentStep) {
+      case 1:
+        validation = validateStep1(formData);
+        break;
+      case 2:
+        validation = validateStep2(formData);
+        break;
+      case 3:
+        validation = validateStep3(formData);
+        break;
+      case 4:
+        validation = validateStep4(formData);
+        break;
+      default:
+        validation = { isValid: true, errors: [] };
+    }
+    
+    setValidationErrors(validation.errors);
+    return validation.isValid;
+  };
+
   useEffect(() => {
     if (stepContentRef.current) {
       setContainerHeight(stepContentRef.current.scrollHeight);
     }
+    // Clear validation errors when step changes
+    setValidationErrors([]);
   }, [currentStep]);
+
+  // Validate whenever form data changes
+  useEffect(() => {
+    validateCurrentStep();
+  }, [formData, currentStep]);
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({
@@ -80,7 +98,7 @@ const OrderForm = () => {
   };
 
   const nextStep = () => {
-    if (currentStep < 4) {
+    if (validateCurrentStep() && currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -88,10 +106,15 @@ const OrderForm = () => {
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      setValidationErrors([]);
     }
   };
 
   const handleSubmit = async () => {
+    if (!validateCurrentStep()) {
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -140,13 +163,11 @@ const OrderForm = () => {
         
         if (sheetError) {
           console.error('Error syncing to Google Sheets:', sheetError);
-          // Form still submitted successfully, just sheet sync failed
         } else {
           console.log('Successfully synced to Google Sheets');
         }
       } catch (sheetError) {
         console.error('Error syncing to Google Sheets:', sheetError);
-        // Form still submitted successfully, just sheet sync failed
       }
       
       toast({
@@ -169,6 +190,7 @@ const OrderForm = () => {
         additionalNotes: ''
       });
       setCurrentStep(1);
+      setValidationErrors([]);
     } catch (error) {
       console.error('Unexpected error:', error);
       toast({
@@ -184,17 +206,19 @@ const OrderForm = () => {
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 1:
-        return <RestaurantInfoStep formData={formData} onInputChange={handleInputChange} />;
+        return <RestaurantInfoStep formData={formData} onInputChange={handleInputChange} errors={validationErrors} />;
       case 2:
-        return <ContactInfoStep formData={formData} onInputChange={handleInputChange} />;
+        return <ContactInfoStep formData={formData} onInputChange={handleInputChange} errors={validationErrors} />;
       case 3:
-        return <MenuDetailsStep formData={formData} onInputChange={handleInputChange} />;
+        return <MenuDetailsStep formData={formData} onInputChange={handleInputChange} errors={validationErrors} />;
       case 4:
-        return <FinalTouchesStep formData={formData} onInputChange={handleInputChange} />;
+        return <FinalTouchesStep formData={formData} onInputChange={handleInputChange} errors={validationErrors} />;
       default:
         return null;
     }
   };
+
+  const canProceed = validationErrors.length === 0;
 
   return (
     <section className="py-24 bg-light-bg">
@@ -223,6 +247,8 @@ const OrderForm = () => {
               onNextStep={nextStep} 
               onSubmit={handleSubmit}
               isSubmitting={isSubmitting}
+              canProceed={canProceed}
+              validationErrors={validationErrors}
             />
           </form>
         </div>

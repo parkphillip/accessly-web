@@ -1,17 +1,22 @@
 
 import React from 'react';
-
-interface FormData {
-  menuType: string;
-  menuContent: string;
-}
+import { FormData } from '@/types/FormData';
 
 interface MenuDetailsStepProps {
   formData: FormData;
   onInputChange: (field: keyof FormData, value: string) => void;
+  errors?: string[];
 }
 
-const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({ formData, onInputChange }) => {
+const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({ 
+  formData, 
+  onInputChange,
+  errors = []
+}) => {
+  const hasError = (fieldErrors: string[], fieldName: string) => {
+    return fieldErrors.some(error => error.toLowerCase().includes(fieldName.toLowerCase()));
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
@@ -34,14 +39,14 @@ const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({ formData, onInputChan
 
       <div>
         <label htmlFor="menuContent" className="form-label">
-          Provide your menu content
+          Provide your menu content *
         </label>
         <textarea
           id="menuContent"
           required
           value={formData.menuContent}
           onChange={(e) => onInputChange('menuContent', e.target.value)}
-          className="form-input min-h-[150px] resize-y"
+          className={`form-input min-h-[150px] resize-y ${hasError(errors, 'menu') ? 'border-red-500 bg-red-50' : ''}`}
           placeholder="Paste your menu here, or provide a link. We will format it for braille conversion."
         />
         <p className="text-xs text-medium-text mt-2">

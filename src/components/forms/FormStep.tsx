@@ -22,7 +22,7 @@ const FormStep: React.FC<FormStepProps> = ({ steps, currentStep }) => {
           const isCompleted = currentStep > step.number;
 
           return (
-            <React.Fragment key={step.number}>
+            <div key={step.number} className="flex items-center">
               <div className="flex flex-col items-center text-center w-24">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                   isCompleted
@@ -40,9 +40,9 @@ const FormStep: React.FC<FormStepProps> = ({ steps, currentStep }) => {
               </div>
               
               {index < steps.length - 1 && (
-                <div className={`flex-1 h-0.5 mt-6 transition-all duration-300 ${isCompleted ? 'bg-brand-navy' : 'bg-light-gray'}`}></div>
+                <div className={`flex-1 h-0.5 mt-6 mx-4 transition-all duration-300 ${isCompleted ? 'bg-brand-navy' : 'bg-light-gray'}`}></div>
               )}
-            </React.Fragment>
+            </div>
           );
         })}
       </div>

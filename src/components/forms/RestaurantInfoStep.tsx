@@ -1,22 +1,22 @@
 
 import React from 'react';
-
-interface FormData {
-  restaurantName: string;
-  address: string;
-  city: string;
-  state: string;
-}
+import { FormData } from '@/types/FormData';
 
 interface RestaurantInfoStepProps {
   formData: FormData;
   onInputChange: (field: keyof FormData, value: string) => void;
+  errors?: string[];
 }
 
 const RestaurantInfoStep: React.FC<RestaurantInfoStepProps> = ({
   formData,
-  onInputChange
+  onInputChange,
+  errors = []
 }) => {
+  const hasError = (fieldErrors: string[], fieldName: string) => {
+    return fieldErrors.some(error => error.toLowerCase().includes(fieldName.toLowerCase()));
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
@@ -29,7 +29,7 @@ const RestaurantInfoStep: React.FC<RestaurantInfoStepProps> = ({
           required
           value={formData.restaurantName}
           onChange={(e) => onInputChange('restaurantName', e.target.value)}
-          className="form-input"
+          className={`form-input ${hasError(errors, 'restaurant') ? 'border-red-500 bg-red-50' : ''}`}
           placeholder="e.g., Mario's Italian Kitchen"
         />
       </div>
@@ -45,7 +45,7 @@ const RestaurantInfoStep: React.FC<RestaurantInfoStepProps> = ({
             required
             value={formData.address}
             onChange={(e) => onInputChange('address', e.target.value)}
-            className="form-input"
+            className={`form-input ${hasError(errors, 'address') ? 'border-red-500 bg-red-50' : ''}`}
             placeholder="123 Main Street"
           />
         </div>
@@ -59,7 +59,7 @@ const RestaurantInfoStep: React.FC<RestaurantInfoStepProps> = ({
             required
             value={formData.city}
             onChange={(e) => onInputChange('city', e.target.value)}
-            className="form-input"
+            className={`form-input ${hasError(errors, 'city') ? 'border-red-500 bg-red-50' : ''}`}
             placeholder="Your wonderful city"
           />
         </div>
@@ -75,7 +75,7 @@ const RestaurantInfoStep: React.FC<RestaurantInfoStepProps> = ({
           required
           value={formData.state}
           onChange={(e) => onInputChange('state', e.target.value)}
-          className="form-input"
+          className={`form-input ${hasError(errors, 'state') ? 'border-red-500 bg-red-50' : ''}`}
           placeholder="State"
         />
       </div>
