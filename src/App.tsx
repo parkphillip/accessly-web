@@ -15,24 +15,36 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
-    // Enable smooth scrolling behavior
-    document.documentElement.style.scrollBehavior = 'smooth';
+    // Add a class to the html element for scroll optimizations
+    document.documentElement.classList.add('optimized-scroll');
     
-    // Optimize scroll performance
-    document.documentElement.style.overscrollBehavior = 'none';
-    
-    // Enable hardware acceleration for better performance
-    document.documentElement.style.transform = 'translateZ(0)';
-    document.documentElement.style.backfaceVisibility = 'hidden';
-    document.documentElement.style.perspective = '1000px';
-    
+    // Add CSS variables for scroll behavior
+    const style = document.createElement('style');
+    style.textContent = `
+      .optimized-scroll {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      /* Optimize animations */
+      .optimized-scroll * {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+      
+      /* Optimize fixed elements */
+      .optimized-scroll nav,
+      .optimized-scroll [data-fixed] {
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        will-change: transform;
+      }
+    `;
+    document.head.appendChild(style);
+
     return () => {
-      // Clean up styles
-      document.documentElement.style.scrollBehavior = '';
-      document.documentElement.style.overscrollBehavior = '';
-      document.documentElement.style.transform = '';
-      document.documentElement.style.backfaceVisibility = '';
-      document.documentElement.style.perspective = '';
+      document.documentElement.classList.remove('optimized-scroll');
+      style.remove();
     };
   }, []);
 

@@ -134,26 +134,40 @@ const DiningLens = () => {
                 start: 'top top',
                 end: `+=${cardsData.length * 80}%`,
                 pin: true,
-                scrub: 1, // Increased scrub time for smoother animation
+                scrub: 0.5,
                 anticipatePin: 1,
-                fastScrollEnd: true, // Optimize for fast scrolling
-                preventOverlaps: true, // Prevent animation overlap
+                fastScrollEnd: true,
+                preventOverlaps: true,
                 onUpdate: (self) => {
-                    // Use requestAnimationFrame for smoother updates
-                    requestAnimationFrame(() => {
-                        const progress = self.progress;
-                        cardsRef.current.forEach((card, index) => {
-                            if (!card || index === 0) return;
-                            const finalY = -index * STACK_OFFSET;
-                            const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
-                            
-                            gsap.set(card, {
-                                y: finalY * progress,
-                                rotate: finalRotate,
-                                force3D: true, // Enable hardware acceleration
-                                willChange: 'transform', // Hint to browser for optimization
-                            });
+                    const progress = self.progress;
+                    cardsRef.current.forEach((card, index) => {
+                        if (!card || index === 0) return;
+                        const finalY = -index * STACK_OFFSET;
+                        const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
+                        
+                        gsap.set(card, {
+                            y: finalY * progress,
+                            rotate: finalRotate,
+                            force3D: true,
+                            willChange: 'transform',
+                            clearProps: 'all' // Clear any previous transforms
                         });
+                    });
+                },
+                onEnter: () => {
+                    // Ensure cards are visible when entering the section
+                    cardsRef.current.forEach((card) => {
+                        if (card) {
+                            gsap.set(card, { visibility: 'visible' });
+                        }
+                    });
+                },
+                onLeaveBack: () => {
+                    // Ensure cards are visible when leaving backwards
+                    cardsRef.current.forEach((card) => {
+                        if (card) {
+                            gsap.set(card, { visibility: 'visible' });
+                        }
                     });
                 }
             },
@@ -161,7 +175,7 @@ const DiningLens = () => {
 
         return () => {
             ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-            tl.kill(); // Clean up timeline
+            tl.kill();
         };
     }, [isMobile]);
 

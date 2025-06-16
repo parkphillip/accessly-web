@@ -32,22 +32,30 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   useEffect(() => {
     let ticking = false;
+    let scrollTimeout: NodeJS.Timeout;
+
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           setIsScrolled(window.scrollY > 20);
-          const sections = navItems.map(item => item.id);
-          const currentSection = sections.find(section => {
-            const element = document.getElementById(section);
-            if (element) {
-              const rect = element.getBoundingClientRect();
-              return rect.top <= 100 && rect.bottom >= 100;
+          
+          // Debounce section detection
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
+            const sections = navItems.map(item => item.id);
+            const currentSection = sections.find(section => {
+              const element = document.getElementById(section);
+              if (element) {
+                const rect = element.getBoundingClientRect();
+                return rect.top <= 100 && rect.bottom >= 100;
+              }
+              return false;
+            });
+            if (currentSection) {
+              setActiveSection(currentSection);
             }
-            return false;
-          });
-          if (currentSection) {
-            setActiveSection(currentSection);
-          }
+          }, 50); // Small delay to prevent excessive updates
+          
           ticking = false;
         });
         ticking = true;
@@ -79,6 +87,7 @@ const Navigation = () => {
       } else {
         window.removeEventListener('scroll', handleOtherPageScroll);
       }
+      clearTimeout(scrollTimeout);
     };
   }, [isHomePage]);
   const scrollToSection = (sectionId: string) => {
