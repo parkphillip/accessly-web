@@ -134,29 +134,34 @@ const DiningLens = () => {
                 start: 'top top',
                 end: `+=${cardsData.length * 80}%`,
                 pin: true,
-                scrub: 0.5,
+                scrub: 1, // Increased scrub time for smoother animation
                 anticipatePin: 1,
+                fastScrollEnd: true, // Optimize for fast scrolling
+                preventOverlaps: true, // Prevent animation overlap
+                onUpdate: (self) => {
+                    // Use requestAnimationFrame for smoother updates
+                    requestAnimationFrame(() => {
+                        const progress = self.progress;
+                        cardsRef.current.forEach((card, index) => {
+                            if (!card || index === 0) return;
+                            const finalY = -index * STACK_OFFSET;
+                            const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
+                            
+                            gsap.set(card, {
+                                y: finalY * progress,
+                                rotate: finalRotate,
+                                force3D: true, // Enable hardware acceleration
+                                willChange: 'transform', // Hint to browser for optimization
+                            });
+                        });
+                    });
+                }
             },
-        });
-
-        // Animate only the cards that need to move (skip first card)
-        cardsRef.current.forEach((card, index) => {
-            if (!card || index === 0) return; // Skip first card
-            
-            // Cards stack upward with tighter spacing
-            const finalY = -index * STACK_OFFSET;
-            const finalRotate = index === cardsData.length - 1 ? '0deg' : (index % 2 === 0 ? '-4deg' : '4deg');
-            
-            tl.to(card, {
-                y: finalY,
-                rotate: finalRotate,
-                duration: 0.5,
-                ease: 'power2.out',
-            }, index * 0.3);
         });
 
         return () => {
             ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            tl.kill(); // Clean up timeline
         };
     }, [isMobile]);
 

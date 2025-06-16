@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,27 +9,52 @@ import Partner from "./pages/Partner";
 import Network from "./pages/Network";
 import Fund from "./pages/Fund";
 import ScrollToTop from "./components/ScrollToTop";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/partner" element={<Partner />} />
-          <Route path="/network" element={<Network />} />
-          <Route path="/fund" element={<Fund />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  useEffect(() => {
+    // Enable smooth scrolling behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+    // Optimize scroll performance
+    document.documentElement.style.overscrollBehavior = 'none';
+    
+    // Enable hardware acceleration for better performance
+    document.documentElement.style.transform = 'translateZ(0)';
+    document.documentElement.style.backfaceVisibility = 'hidden';
+    document.documentElement.style.perspective = '1000px';
+    
+    return () => {
+      // Clean up styles
+      document.documentElement.style.scrollBehavior = '';
+      document.documentElement.style.overscrollBehavior = '';
+      document.documentElement.style.transform = '';
+      document.documentElement.style.backfaceVisibility = '';
+      document.documentElement.style.perspective = '';
+    };
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/partner" element={<Partner />} />
+            <Route path="/network" element={<Network />} />
+            <Route path="/fund" element={<Fund />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
