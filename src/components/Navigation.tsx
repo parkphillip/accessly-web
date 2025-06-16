@@ -35,6 +35,8 @@ const Navigation = () => {
     let scrollTimeout: NodeJS.Timeout;
     let lastScrollY = window.scrollY;
     const SCROLL_THRESHOLD = 20;
+    const SCROLL_DELTA_THRESHOLD = 5;
+    const SECTION_CHECK_DELAY = 150; // Increased debounce time for section detection
 
     const handleScroll = () => {
       if (!ticking) {
@@ -43,10 +45,10 @@ const Navigation = () => {
           const scrollDelta = Math.abs(currentScrollY - lastScrollY);
           
           // Only update if scroll delta is significant
-          if (scrollDelta > 5) {
+          if (scrollDelta > SCROLL_DELTA_THRESHOLD) {
             setIsScrolled(currentScrollY > SCROLL_THRESHOLD);
             
-            // Debounce section detection
+            // Debounce section detection with increased delay
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
               const sections = navItems.map(item => item.id);
@@ -61,7 +63,7 @@ const Navigation = () => {
               if (currentSection) {
                 setActiveSection(currentSection);
               }
-            }, 100); // Increased debounce time
+            }, SECTION_CHECK_DELAY);
           }
           
           lastScrollY = currentScrollY;
@@ -77,7 +79,7 @@ const Navigation = () => {
           const currentScrollY = window.scrollY;
           const scrollDelta = Math.abs(currentScrollY - lastScrollY);
           
-          if (scrollDelta > 5) {
+          if (scrollDelta > SCROLL_DELTA_THRESHOLD) {
             setIsScrolled(currentScrollY > SCROLL_THRESHOLD);
           }
           

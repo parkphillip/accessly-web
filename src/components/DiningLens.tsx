@@ -7,6 +7,12 @@ import { useIsMobile } from '@/hooks/use-mobile';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
+// Optimize GSAP defaults
+gsap.defaults({
+  ease: 'power2.out',
+  force3D: true,
+});
+
 // Data for the cards
 const cardsData = [
   {
@@ -80,7 +86,7 @@ const CARD_WIDTH = '420px';
 const CARD_HEIGHT = '520px';
 const IMAGE_HEIGHT = '320px';
 const CARD_PADDING = '2.5rem';
-const STACK_OFFSET = 8; // Much tighter stacking
+const STACK_OFFSET = 8;
 
 const DiningLens = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -136,6 +142,8 @@ const DiningLens = () => {
                 pin: true,
                 scrub: 0.5,
                 anticipatePin: 1,
+                fastScrollEnd: true,
+                preventOverlaps: true,
             },
         });
 
@@ -151,8 +159,6 @@ const DiningLens = () => {
                 y: finalY,
                 rotate: finalRotate,
                 duration: 0.5,
-                ease: 'power2.out',
-                force3D: true, // Keep hardware acceleration
             }, index * 0.3);
         });
 
@@ -187,6 +193,8 @@ const DiningLens = () => {
                                     touchAction: 'none',
                                     userSelect: 'none',
                                     WebkitUserSelect: 'none',
+                                    willChange: 'transform',
+                                    transform: 'translateZ(0)',
                                 }}
                             >
                                 <div

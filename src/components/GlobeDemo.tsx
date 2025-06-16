@@ -6,6 +6,8 @@ import createGlobe from "cobe";
 
 function GlobeDemo({ size = 600 }: { size?: number }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const lastScrollTimeRef = useRef(0);
+  const SCROLL_THROTTLE = 16; // ~60fps
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -15,6 +17,10 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
     let lastScrollY = window.scrollY;
 
     const onScroll = () => {
+      const now = Date.now();
+      if (now - lastScrollTimeRef.current < SCROLL_THROTTLE) return;
+      lastScrollTimeRef.current = now;
+
       const currentScrollY = window.scrollY;
       const scrollDelta = currentScrollY - lastScrollY;
       // Adjust target rotation based on scroll. The multiplier controls sensitivity.
@@ -58,10 +64,11 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
       },
     });
 
-    // Add mouse interaction
+    // Add mouse interaction with throttling
     let isDragging = false;
     let lastX = 0;
     let lastY = 0;
+    let lastMouseTime = 0;
 
     const handleMouseDown = (e: MouseEvent) => {
       isDragging = true;
@@ -71,6 +78,11 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
+      
+      const now = Date.now();
+      if (now - lastMouseTime < SCROLL_THROTTLE) return;
+      lastMouseTime = now;
+
       const deltaX = e.clientX - lastX;
       targetPhi += deltaX * 0.01;
       lastX = e.clientX;
@@ -98,7 +110,14 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
     <div className="w-full h-full flex justify-center items-center">
       <canvas
         ref={canvasRef}
-        style={{ width: size, height: size, maxWidth: "100%", aspectRatio: 1 }}
+        style={{ 
+          width: size, 
+          height: size, 
+          maxWidth: "100%", 
+          aspectRatio: 1,
+          willChange: 'transform',
+          transform: 'translateZ(0)'
+        }}
         className="[filter:drop-shadow(0_10px_20px_rgba(0,0,0,0.4))] focus:outline-none"
       />
     </div>
