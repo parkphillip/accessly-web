@@ -5,12 +5,12 @@ import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
 
 const Hero = () => {
-  return <section id="hero" className="relative min-h-screen flex items-center bg-off-white overflow-hidden">
+  return <section id="hero" className="relative min-h-screen flex items-center bg-off-white overflow-visible">
       {/* Background Texture */}
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8">
-        <div className="flex flex-wrap lg:flex-nowrap gap-8 items-center">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 w-full">
+        <div className="flex flex-wrap lg:flex-nowrap gap-8 items-center min-h-[650px]">
           {/* Left Column: Text Content */}
           <div className="w-full lg:flex-shrink-0 lg:w-2/5 text-center lg:text-left">
             <div>
@@ -38,7 +38,7 @@ free braille menus for every restaurant.</p>
           </div>
 
           {/* Right Column: Globe */}
-          <div className="hidden lg:flex w-full lg:w-3/5 justify-center items-center">
+          <div className="hidden lg:flex lg:w-3/5 min-h-[650px] flex items-center justify-center">
             <div className="flex items-center justify-center w-[650px] h-[650px]">
               <GlobeDemo size={650} />
             </div>
