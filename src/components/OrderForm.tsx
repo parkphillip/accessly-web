@@ -16,6 +16,7 @@ const OrderForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [hasAttemptedContinue, setHasAttemptedContinue] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     restaurantName: '',
     contactName: '',
@@ -73,22 +74,17 @@ const OrderForm = () => {
         validation = { isValid: true, errors: [] };
     }
     
-    setValidationErrors(validation.errors);
-    return validation.isValid;
+    return validation;
   };
 
   useEffect(() => {
     if (stepContentRef.current) {
       setContainerHeight(stepContentRef.current.scrollHeight);
     }
-    // Clear validation errors when step changes
+    // Clear validation errors and reset attempt flag when step changes
     setValidationErrors([]);
+    setHasAttemptedContinue(false);
   }, [currentStep]);
-
-  // Validate whenever form data changes
-  useEffect(() => {
-    validateCurrentStep();
-  }, [formData, currentStep]);
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({
@@ -98,7 +94,11 @@ const OrderForm = () => {
   };
 
   const nextStep = () => {
-    if (validateCurrentStep() && currentStep < 4) {
+    setHasAttemptedContinue(true);
+    const validation = validateCurrentStep();
+    setValidationErrors(validation.errors);
+    
+    if (validation.isValid && currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -107,11 +107,16 @@ const OrderForm = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
       setValidationErrors([]);
+      setHasAttemptedContinue(false);
     }
   };
 
   const handleSubmit = async () => {
-    if (!validateCurrentStep()) {
+    setHasAttemptedContinue(true);
+    const validation = validateCurrentStep();
+    setValidationErrors(validation.errors);
+    
+    if (!validation.isValid) {
       return;
     }
 
@@ -191,6 +196,7 @@ const OrderForm = () => {
       });
       setCurrentStep(1);
       setValidationErrors([]);
+      setHasAttemptedContinue(false);
     } catch (error) {
       console.error('Unexpected error:', error);
       toast({
@@ -204,21 +210,25 @@ const OrderForm = () => {
   };
 
   const renderCurrentStep = () => {
+    const errorsToShow = hasAttemptedContinue ? validationErrors : [];
+    
     switch (currentStep) {
       case 1:
-        return <RestaurantInfoStep formData={formData} onInputChange={handleInputChange} errors={validationErrors} />;
+        return <RestaurantInfoStep formData={formData} onInputChange={handleInputChange} errors={errorsToShow} />;
       case 2:
-        return <ContactInfoStep formData={formData} onInputChange={handleInputChange} errors={validationErrors} />;
+        return <ContactInfoStep formData={formData} onInputChange={handleInputChange} errors={errorsToShow} />;
       case 3:
-        return <MenuDetailsStep formData={formData} onInputChange={handleInputChange} errors={validationErrors} />;
+        return <MenuDetailsStep formData={formData} onInputChange={handleInputChange} errors={errorsToShow} />;
       case 4:
-        return <FinalTouchesStep formData={formData} onInputChange={handleInputChange} errors={validationErrors} />;
+        return <FinalTouchesStep formData={formData} onInputChange={handleInputChange} errors={errorsToShow} />;
       default:
         return null;
     }
   };
 
-  const canProceed = validationErrors.length === 0;
+  const validation = validateCurrentStep();
+  const canProceed = validation.isValid;
+  const errorsToShow = hasAttemptedContinue ? validationErrors : [];
 
   return (
     <section className="py-24 bg-light-bg">
@@ -248,7 +258,7 @@ const OrderForm = () => {
               onSubmit={handleSubmit}
               isSubmitting={isSubmitting}
               canProceed={canProceed}
-              validationErrors={validationErrors}
+              validationErrors={errorsToShow}
             />
           </form>
         </div>
