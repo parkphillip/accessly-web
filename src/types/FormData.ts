@@ -1,4 +1,3 @@
-
 export interface FormData {
   restaurantName: string;
   contactName: string;
@@ -42,21 +41,26 @@ export const validateStep1 = (formData: FormData): ValidationResult => {
 
 export const validateStep2 = (formData: FormData): ValidationResult => {
   const errors: string[] = [];
-  
+  let isValid = true;
+
   if (!formData.contactName.trim()) {
     errors.push('Contact name is required');
+    isValid = false;
   }
   if (!formData.email.trim()) {
     errors.push('Email is required');
+    isValid = false;
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    errors.push('Valid email is required');
+    errors.push('Please use a valid email');
+    isValid = false;
   }
   if (!formData.phone.trim()) {
     errors.push('Phone number is required');
+    isValid = false;
   }
-  
+
   return {
-    isValid: errors.length === 0,
+    isValid,
     errors
   };
 };

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
@@ -16,7 +15,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ locations }) => {
   useEffect(() => {
     const initMap = async () => {
       const loader = new Loader({
-        apiKey: "YOUR_GOOGLE_MAPS_API_KEY",
+        apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         version: "weekly",
       });
 

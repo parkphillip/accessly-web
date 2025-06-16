@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, User, BookOpen, Heart } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -228,28 +227,6 @@ const OrderForm = () => {
 
       console.log('✅ Form submitted successfully to database:', data);
       
-      // Sync to Google Sheets with your specific spreadsheet ID
-      const spreadsheetId = '1minZg8Jy7-Sd4RD6RdL_NW0635JuGVyNnuipOzxGPXQ';
-      console.log('📊 Attempting to sync to Google Sheets...');
-      
-      try {
-        const { error: sheetError } = await supabase.functions.invoke('sync-to-google-sheets', {
-          body: { 
-            submissionId: data[0].id,
-            spreadsheetId: spreadsheetId
-          }
-        });
-        
-        if (sheetError) {
-          console.error('❌ Error syncing to Google Sheets:', sheetError);
-        } else {
-          console.log('✅ Successfully synced to Google Sheets');
-        }
-      } catch (sheetError) {
-        console.error('❌ Exception during Google Sheets sync:', sheetError);
-      }
-      
-      console.log('🎉 Showing success toast...');
       toast({
         title: "Request Submitted!",
         description: "Thank you! We'll create your free braille menus and be in touch within 24 hours.",
