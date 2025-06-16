@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 import { Eye, UsersRound, Accessibility } from 'lucide-react';
 import gsap from 'gsap';
@@ -12,19 +13,19 @@ const cardsData = [
     id: 1,
     title: 'Standard Menus',
     description: 'Often unreadable for those with low vision, dyslexia, or other print disabilities.',
-    image: '/lovable-uploads/041e69a8-3fb1-4f07-b069-24be3b2c258d.png',
+    image: '/lovable-uploads/32488343-2d94-4cbe-84d2-527d8d597f56.png',
   },
   {
     id: 2,
     title: 'PDF Menus Online',
     description: 'Inaccessible to screen readers and difficult to navigate on mobile devices.',
-    image: '/lovable-uploads/8515ac8d-89f4-4740-a0f3-df3263c478ff.png',
+    image: '/lovable-uploads/ed66917f-f3b3-40eb-8843-586c39bf526a.png',
   },
   {
     id: 3,
     title: 'Lack of Braille',
     description: 'Excludes blind patrons from independently choosing their meal.',
-    image: '/lovable-uploads/64dcd833-4083-4f83-8da1-a47b50b1568b.png',
+    image: '/lovable-uploads/242e912c-bbe6-4cc1-97cd-8851c1cd8a5c.png',
   },
 ];
 
