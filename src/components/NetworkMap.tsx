@@ -1,100 +1,31 @@
+
 import React from 'react';
 import GoogleMap from './GoogleMap';
 
+// Sample restaurant locations for demonstration
+const restaurantLocations = [
+  { lat: 40.7128, lng: -74.0060, name: "NYC Restaurant" },
+  { lat: 34.0522, lng: -118.2437, name: "LA Restaurant" },
+  { lat: 41.8781, lng: -87.6298, name: "Chicago Restaurant" },
+  { lat: 29.7604, lng: -95.3698, name: "Houston Restaurant" },
+  { lat: 33.4484, lng: -112.0740, name: "Phoenix Restaurant" },
+];
+
 const NetworkMap = () => {
-  const restaurants = [{
-    name: "Bella's Corner Bistro",
-    city: "Brooklyn, NY",
-    x: 75,
-    y: 25,
-    type: "Italian",
-    years: "2 years with us"
-  }, {
-    name: "Golden Gate Dim Sum",
-    city: "San Francisco, CA",
-    x: 10,
-    y: 35,
-    type: "Chinese",
-    years: "6 months with us"
-  }, {
-    name: "Deep Dish Dreams",
-    city: "Chicago, IL",
-    x: 55,
-    y: 30,
-    type: "Pizza",
-    years: "1 year with us"
-  }, {
-    name: "Hill Country BBQ",
-    city: "Austin, TX",
-    x: 45,
-    y: 60,
-    type: "Barbecue",
-    years: "3 years with us"
-  }, {
-    name: "Ocean Breeze Cafe",
-    city: "Miami, FL",
-    x: 80,
-    y: 75,
-    type: "Seafood",
-    years: "8 months with us"
-  }, {
-    name: "Mountain View Diner",
-    city: "Denver, CO",
-    x: 40,
-    y: 40,
-    type: "American",
-    years: "1.5 years with us"
-  }, {
-    name: "Portland Coffee Co.",
-    city: "Portland, OR",
-    x: 15,
-    y: 20,
-    type: "Cafe",
-    years: "4 months with us"
-  }, {
-    name: "Peach Tree Kitchen",
-    city: "Atlanta, GA",
-    x: 70,
-    y: 65,
-    type: "Southern",
-    years: "2.5 years with us"
-  }];
   return (
-    <section id="network" className="py-24 bg-subtle-gray/50 bg-slate-200">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-heading font-bold text-dark-text mb-4">
-            A Nationwide Network of Inclusion
+            Our Network
           </h2>
           <p className="text-lg text-medium-text max-w-3xl mx-auto">
-            From local diners to fine dining, our partners are leading the charge in making their communities more accessible.
+            See where we're making dining more accessible across the country.
           </p>
         </div>
-
-        {/* Map area */}
-        <div className="structured-card p-4 md:p-8 mb-16">
-          <GoogleMap />
-        </div>
-
-        {/* Stats cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="structured-card p-8">
-            <div className="text-5xl font-mono font-bold text-brand-navy mb-2">47</div>
-            <div className="text-lg font-heading font-semibold text-dark-text">States Covered</div>
-            <p className="text-sm text-medium-text mt-1">Spreading accessibility coast to coast.</p>
-          </div>
-          
-          <div className="structured-card p-8">
-            <div className="text-5xl font-mono font-bold text-brand-navy mb-2">100%</div>
-            <div className="text-lg font-heading font-semibold text-dark-text">Free of Charge</div>
-            <p className="text-sm text-medium-text mt-1">Funded by grants and donations.</p>
-          </div>
-          
-          <div className="structured-card p-8">
-            <div className="text-5xl font-mono font-bold text-brand-navy mb-2">24/7</div>
-            <div className="text-lg font-heading font-semibold text-dark-text">Support</div>
-            <p className="text-sm text-medium-text mt-1">Always here to help our partners.</p>
-          </div>
+        
+        <div className="bg-light-bg rounded-2xl p-8">
+          <GoogleMap locations={restaurantLocations} />
         </div>
       </div>
     </section>

@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, User, BookOpen, Heart } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import FormStep from './forms/FormStep';
 import RestaurantInfoStep from './forms/RestaurantInfoStep';
 import ContactInfoStep from './forms/ContactInfoStep';
@@ -24,6 +25,7 @@ interface FormData {
 }
 
 const OrderForm = () => {
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -93,6 +95,8 @@ const OrderForm = () => {
     setIsSubmitting(true);
     
     try {
+      console.log('Submitting form data:', formData);
+      
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([
@@ -114,46 +118,64 @@ const OrderForm = () => {
 
       if (error) {
         console.error('Error submitting form:', error);
-        alert('There was an error submitting your request. Please try again.');
-      } else {
-        console.log('Form submitted successfully:', data);
+        toast({
+          title: "Submission Error",
+          description: "There was an error submitting your request. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log('Form submitted successfully:', data);
+      
+      // Sync to Google Sheets (replace with your actual spreadsheet ID)
+      const spreadsheetId = 'YOUR_GOOGLE_SHEET_ID';
+      try {
+        const { error: sheetError } = await supabase.functions.invoke('sync-to-google-sheets', {
+          body: { 
+            submissionId: data[0].id,
+            spreadsheetId: spreadsheetId
+          }
+        });
         
-        // Sync to Google Sheets (you'll need to provide your spreadsheet ID)
-        const spreadsheetId = 'YOUR_GOOGLE_SHEET_ID'; // Replace with your actual sheet ID
-        try {
-          await supabase.functions.invoke('sync-to-google-sheets', {
-            body: { 
-              submissionId: data[0].id,
-              spreadsheetId: spreadsheetId
-            }
-          });
-          console.log('Successfully synced to Google Sheets');
-        } catch (sheetError) {
+        if (sheetError) {
           console.error('Error syncing to Google Sheets:', sheetError);
           // Form still submitted successfully, just sheet sync failed
+        } else {
+          console.log('Successfully synced to Google Sheets');
         }
-        
-        alert('Thank you! We\'ll create your free braille menus and be in touch within 24 hours.');
-        
-        // Reset form
-        setFormData({
-          restaurantName: '',
-          contactName: '',
-          email: '',
-          phone: '',
-          address: '',
-          city: '',
-          state: '',
-          menuType: 'full-menu',
-          menuContent: '',
-          materialPreference: 'standard',
-          additionalNotes: ''
-        });
-        setCurrentStep(1);
+      } catch (sheetError) {
+        console.error('Error syncing to Google Sheets:', sheetError);
+        // Form still submitted successfully, just sheet sync failed
       }
+      
+      toast({
+        title: "Request Submitted!",
+        description: "Thank you! We'll create your free braille menus and be in touch within 24 hours.",
+      });
+      
+      // Reset form
+      setFormData({
+        restaurantName: '',
+        contactName: '',
+        email: '',
+        phone: '',
+        address: '',
+        city: '',
+        state: '',
+        menuType: 'full-menu',
+        menuContent: '',
+        materialPreference: 'standard',
+        additionalNotes: ''
+      });
+      setCurrentStep(1);
     } catch (error) {
       console.error('Unexpected error:', error);
-      alert('There was an unexpected error. Please try again.');
+      toast({
+        title: "Unexpected Error",
+        description: "There was an unexpected error. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
