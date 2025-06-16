@@ -1,10 +1,15 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
+declare global {
+  interface Window {
+    google: typeof google;
+  }
+}
+
 const GoogleMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const mapInstanceRef = useRef<any>(null);
 
   useEffect(() => {
     const initMap = async () => {
@@ -18,9 +23,9 @@ const GoogleMap = () => {
         await loader.load();
         
         if (mapRef.current && !mapInstanceRef.current) {
-          mapInstanceRef.current = new google.maps.Map(mapRef.current, {
-            center: { lat: 39.8283, lng: -98.5795 }, // Center of US
-            zoom: 4,
+          mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
+            center: { lat: 34.0522, lng: -118.2437 }, // Los Angeles, CA
+            zoom: 8,
             styles: [
               {
                 "featureType": "all",
@@ -197,7 +202,8 @@ const GoogleMap = () => {
             scaleControl: false,
             streetViewControl: false,
             rotateControl: false,
-            fullscreenControl: true
+            fullscreenControl: true,
+            keyboardShortcuts: false
           });
         }
       } catch (error) {
