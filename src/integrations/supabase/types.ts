@@ -9,7 +9,60 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      form_submissions: {
+        Row: {
+          additional_notes: string | null
+          address: string
+          city: string
+          contact_name: string
+          created_at: string
+          email: string
+          id: string
+          material_preference: string
+          menu_content: string
+          menu_type: string
+          phone: string
+          restaurant_name: string
+          state: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          additional_notes?: string | null
+          address: string
+          city: string
+          contact_name: string
+          created_at?: string
+          email: string
+          id?: string
+          material_preference: string
+          menu_content: string
+          menu_type: string
+          phone: string
+          restaurant_name: string
+          state: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          additional_notes?: string | null
+          address?: string
+          city?: string
+          contact_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          material_preference?: string
+          menu_content?: string
+          menu_type?: string
+          phone?: string
+          restaurant_name?: string
+          state?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

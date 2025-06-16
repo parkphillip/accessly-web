@@ -1,11 +1,14 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, User, BookOpen, Heart } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import FormStep from './forms/FormStep';
 import RestaurantInfoStep from './forms/RestaurantInfoStep';
 import ContactInfoStep from './forms/ContactInfoStep';
 import MenuDetailsStep from './forms/MenuDetailsStep';
 import FinalTouchesStep from './forms/FinalTouchesStep';
 import FormNavigation from './forms/FormNavigation';
+
 interface FormData {
   restaurantName: string;
   contactName: string;
@@ -19,8 +22,10 @@ interface FormData {
   materialPreference: string;
   additionalNotes: string;
 }
+
 const OrderForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     restaurantName: '',
     contactName: '',
@@ -36,6 +41,7 @@ const OrderForm = () => {
   });
   const [containerHeight, setContainerHeight] = useState<number | undefined>();
   const stepContentRef = useRef<HTMLDivElement>(null);
+
   const steps = [{
     number: 1,
     title: 'Restaurant Info',
@@ -57,31 +63,86 @@ const OrderForm = () => {
     icon: Heart,
     note: 'Review & Submit'
   }];
+
   useEffect(() => {
     if (stepContentRef.current) {
       setContainerHeight(stepContentRef.current.scrollHeight);
     }
   }, [currentStep]);
+
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
+
   const nextStep = () => {
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
   };
+
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
-  const handleSubmit = () => {
-    console.log('Form submitted:', formData);
-    alert('Thank you! We\'ll create your free braille menus and be in touch within 24 hours.');
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    
+    try {
+      const { data, error } = await supabase
+        .from('form_submissions')
+        .insert([
+          {
+            restaurant_name: formData.restaurantName,
+            contact_name: formData.contactName,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            menu_type: formData.menuType,
+            menu_content: formData.menuContent,
+            material_preference: formData.materialPreference,
+            additional_notes: formData.additionalNotes
+          }
+        ])
+        .select();
+
+      if (error) {
+        console.error('Error submitting form:', error);
+        alert('There was an error submitting your request. Please try again.');
+      } else {
+        console.log('Form submitted successfully:', data);
+        alert('Thank you! We\'ll create your free braille menus and be in touch within 24 hours.');
+        
+        // Reset form
+        setFormData({
+          restaurantName: '',
+          contactName: '',
+          email: '',
+          phone: '',
+          address: '',
+          city: '',
+          state: '',
+          menuType: 'full-menu',
+          menuContent: '',
+          materialPreference: 'standard',
+          additionalNotes: ''
+        });
+        setCurrentStep(1);
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      alert('There was an unexpected error. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
   const renderCurrentStep = () => {
     switch (currentStep) {
       case 1:
@@ -96,13 +157,15 @@ const OrderForm = () => {
         return null;
     }
   };
-  return <section className="py-24 bg-light-bg">
+
+  return (
+    <section className="py-24 bg-light-bg">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-heading font-bold text-dark-text mb-4 headline-underline">
             Partner with Us
           </h2>
-          <p className="text-lg text-medium-text max-w-3xl mx-auto">Join hundreds of restaurants in making dining more accessible. </p>
+          <p className="text-lg text-medium-text max-w-3xl mx-auto">Join hundreds of restaurants in making dining more accessible.</p>
         </div>
 
         <div className="structured-card overflow-hidden">
@@ -111,17 +174,23 @@ const OrderForm = () => {
           </div>
 
           <form className="p-8 md:p-12">
-            <div style={{
-            height: containerHeight
-          }} className="overflow-hidden transition-[height] duration-500 ease-in-out">
+            <div style={{ height: containerHeight }} className="overflow-hidden transition-[height] duration-500 ease-in-out">
               <div ref={stepContentRef}>
                 {renderCurrentStep()}
               </div>
             </div>
-            <FormNavigation currentStep={currentStep} onPrevStep={prevStep} onNextStep={nextStep} onSubmit={handleSubmit} />
+            <FormNavigation 
+              currentStep={currentStep} 
+              onPrevStep={prevStep} 
+              onNextStep={nextStep} 
+              onSubmit={handleSubmit}
+              isSubmitting={isSubmitting}
+            />
           </form>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default OrderForm;
