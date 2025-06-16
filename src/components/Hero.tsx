@@ -12,7 +12,7 @@ const Hero = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 w-full">
         <div className="flex flex-wrap lg:flex-nowrap gap-8 items-center min-h-[650px]">
           {/* Left Column: Text Content */}
-          <div className="w-full lg:flex-shrink-0 lg:w-2/5 text-center lg:text-left">
+          <div className="w-full lg:w-2/5 text-center lg:text-left flex flex-col justify-center">
             <div>
               <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight">
                 <span className="block mb-1">Building an</span>
@@ -39,9 +39,7 @@ free braille menus for every restaurant.</p>
 
           {/* Right Column: Globe */}
           <div className="hidden lg:flex lg:w-3/5 min-h-[650px] flex items-center justify-center">
-            <div className="flex items-center justify-center w-[650px] h-[650px]">
-              <GlobeDemo size={650} />
-            </div>
+            <GlobeDemo size={650} />
           </div>
         </div>
       </div>
