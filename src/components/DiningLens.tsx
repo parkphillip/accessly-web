@@ -19,13 +19,13 @@ const cardsData = [
     id: 2,
     title: 'PDF Menus Online',
     description: 'Inaccessible to screen readers and difficult to navigate on mobile devices.',
-    image: '/lovable-uploads/ed66917f-f3b3-40eb-8843-586c39bf526a.png',
+    image: '/lovable-uploads/242e912c-bbe6-4cc1-97cd-8851c1cd8a5c.png',
   },
   {
     id: 3,
     title: 'Lack of Braille',
     description: 'Excludes blind patrons from independently choosing their meal.',
-    image: '/lovable-uploads/242e912c-bbe6-4cc1-97cd-8851c1cd8a5c.png',
+    image: '/lovable-uploads/ed66917f-f3b3-40eb-8843-586c39bf526a.png',
   },
 ];
 
