@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -6,11 +5,7 @@ import GlobeDemo from './GlobeDemo';
 import AnimatedText from './AnimatedText';
 
 const Hero = () => {
-  return (
-    <section 
-      id="hero" 
-      className="hero-section relative min-h-screen flex items-center bg-off-white overflow-hidden"
-    >
+  return <section id="hero" className="relative min-h-screen flex items-center bg-off-white overflow-visible">
       {/* Background Texture */}
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>
       
@@ -25,15 +20,14 @@ const Hero = () => {
                 <span className="block mt-1">World</span>
               </h1>
               <p className="text-3xl lg:text-4xl text-brand-navy font-normal font-sans mt-4">One Menu at a Time</p>
-              <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Accessly is a civic startup building a future where access is standard, not special. We're starting with
-                free braille menus for every restaurant.
-              </p>
+              <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto lg:mx-0 leading-relaxed">Accessly is a civic startup building a future where access is standard, not special. We're starting with
+free braille menus for every restaurant.</p>
             </div>
 
             {/* Call to Action */}
             <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center lg:justify-start items-center">
               <Link to="/partner" className="primary-button inline-flex items-center gap-2 px-[16px]">
+                
                 Apply to be a Partner
               </Link>
               <Link to="/fund" className="font-medium text-brand-navy hover:underline text-base flex items-center gap-2 group">
@@ -49,8 +43,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;

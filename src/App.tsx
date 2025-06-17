@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -19,24 +18,22 @@ const App = () => {
     // Initialize scroll manager
     const scrollManager = ScrollManager.getInstance();
 
-    // Add optimized scroll styles
+    // Add scroll optimization styles
     const style = document.createElement('style');
     style.textContent = `
       html {
+        scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior-y: none;
-        scroll-behavior: auto !important;
       }
       
-      body {
-        overscroll-behavior-y: none;
-      }
-      
-      /* Optimize scroll performance for heavy components */
-      .globe-container,
-      .animated-text-container {
-        will-change: transform;
+      [data-animated],
+      [data-fixed] {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
         transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        will-change: transform;
       }
 
       /* Optimize animations for different devices */
@@ -54,12 +51,6 @@ const App = () => {
         [data-animated] {
           transform: translate3d(0, 0, 0);
         }
-      }
-
-      /* Prevent layout shifts during scroll */
-      .hero-section,
-      .main-content {
-        contain: layout;
       }
     `;
     document.head.appendChild(style);

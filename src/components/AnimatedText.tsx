@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { translateToBraille } from '../utils/brailleUtils';
 import BrailleChar from './BrailleChar';
@@ -47,8 +46,8 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     let currentIndex = 0;
     let revealedText = '';
     let scrambleIteration = 0;
-    const scramblePerChar = 2; // Reduced for better performance
-    const frameRate = 50; // Slightly increased for smoother animation
+    const scramblePerChar = 3; // Number of scramble frames for each character
+    const frameRate = 40; // ms per frame
 
     // Reset displayed text to empty to start the typing animation from scratch
     setDisplayedText('');
@@ -111,9 +110,9 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
         style={{ 
           display: 'block',
           lineHeight: '1.1',
-          height: '1.2em',
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
+          height: '1.2em', // Adjusted for better vertical alignment
+          whiteSpace: 'nowrap', // Prevent the line from wrapping
+          overflow: 'hidden', // Hide any content that overflows
         }}
       >
         {[...line].map((char, j) => {
@@ -132,7 +131,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       style={{ 
         display: 'inline-block', 
         verticalAlign: 'bottom',
-        position: 'relative',
+        position: 'relative'
       }}
     >
       {/* Ghost element for sizing, prevents layout jumps */}
