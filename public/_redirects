@@ -1,3 +1,8 @@
 
 # Handle client-side routing for single-page application
 /*    /index.html   200
+
+# Specific routes for common SPA patterns
+/partner    /index.html   200
+/network    /index.html   200
+/fund       /index.html   200
