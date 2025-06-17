@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from 'react';
 
 // Detect if the device is using a touchpad or mouse
@@ -16,14 +17,21 @@ const hasHighRefreshRate = () => {
 const hasDedicatedGPU = () => {
   if (typeof window === 'undefined') return false;
   const canvas = document.createElement('canvas');
-  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl') as WebGLRenderingContext;
   if (!gl) return false;
-  const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-  if (!debugInfo) return false;
-  const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-  return renderer.toLowerCase().includes('nvidia') || 
-         renderer.toLowerCase().includes('amd') || 
-         renderer.toLowerCase().includes('radeon');
+  
+  try {
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    if (!debugInfo) return false;
+    const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+    return renderer && (
+      renderer.toLowerCase().includes('nvidia') || 
+      renderer.toLowerCase().includes('amd') || 
+      renderer.toLowerCase().includes('radeon')
+    );
+  } catch (e) {
+    return false;
+  }
 };
 
 // Create a scroll manager class
@@ -53,11 +61,32 @@ class ScrollManager {
   }
 
   private init() {
-    // Add passive scroll listener
+    // Add passive scroll listener with proper throttling
     window.addEventListener('scroll', this.handleScroll, { passive: true });
     
     // Add resize listener for device capability updates
     window.addEventListener('resize', this.updateDeviceCapabilities, { passive: true });
+    
+    // Optimize scroll behavior based on device capabilities
+    this.optimizeScrollBehavior();
+  }
+
+  private optimizeScrollBehavior() {
+    const html = document.documentElement;
+    
+    // Remove conflicting scroll-behavior styles that can cause jank
+    html.style.scrollBehavior = 'auto';
+    
+    // Add optimizations based on device capabilities
+    if (this.deviceCapabilities.hasHighRefreshRate) {
+      html.style.scrollSnapType = 'none';
+    }
+    
+    if (this.deviceCapabilities.hasDedicatedGPU) {
+      // Enable hardware acceleration for better scroll performance
+      document.body.style.transform = 'translateZ(0)';
+      document.body.style.willChange = 'scroll-position';
+    }
   }
 
   private handleScroll = () => {
@@ -68,8 +97,14 @@ class ScrollManager {
         this.lastScrollY = currentScrollY;
         this.isScrolling = true;
 
-        // Notify all listeners
-        this.scrollListeners.forEach(listener => listener(currentScrollY));
+        // Notify all listeners with throttling
+        this.scrollListeners.forEach(listener => {
+          try {
+            listener(currentScrollY);
+          } catch (e) {
+            console.warn('Scroll listener error:', e);
+          }
+        });
 
         // Clear scroll timeout
         if (this.scrollTimeout) {
@@ -79,7 +114,7 @@ class ScrollManager {
         // Set scroll timeout
         this.scrollTimeout = setTimeout(() => {
           this.isScrolling = false;
-        }, 150);
+        }, 100); // Reduced timeout for better responsiveness
 
         this.rafId = null;
       });
@@ -92,6 +127,7 @@ class ScrollManager {
       hasHighRefreshRate: hasHighRefreshRate(),
       hasDedicatedGPU: hasDedicatedGPU(),
     };
+    this.optimizeScrollBehavior();
   };
 
   public addScrollListener(listener: (scrollY: number) => void) {
@@ -129,7 +165,7 @@ export const useScrollManager = () => {
 
   useEffect(() => {
     return () => {
-      scrollManager.current.destroy();
+      // Don't destroy the singleton on unmount, just clean up the reference
     };
   }, []);
 
