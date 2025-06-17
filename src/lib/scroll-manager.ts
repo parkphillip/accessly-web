@@ -26,6 +26,12 @@ const hasDedicatedGPU = () => {
          renderer.toLowerCase().includes('radeon');
 };
 
+// Detect if the device is using Windows
+const isWindows = () => {
+  if (typeof window === 'undefined') return false;
+  return navigator.platform.toLowerCase().includes('win');
+};
+
 // Create a scroll manager class
 class ScrollManager {
   private static instance: ScrollManager;
@@ -35,10 +41,12 @@ class ScrollManager {
   private scrollDelta: number = 0;
   private isScrolling: boolean = false;
   private scrollTimeout: NodeJS.Timeout | null = null;
+  private lastScrollTime: number = 0;
   private deviceCapabilities = {
     isTouchpad: isTouchpad(),
     hasHighRefreshRate: hasHighRefreshRate(),
     hasDedicatedGPU: hasDedicatedGPU(),
+    isWindows: isWindows(),
   };
 
   private constructor() {
@@ -61,25 +69,41 @@ class ScrollManager {
   }
 
   private handleScroll = () => {
+    const now = performance.now();
+    const timeSinceLastScroll = now - this.lastScrollTime;
+    
+    // Throttle scroll events on Windows
+    if (this.deviceCapabilities.isWindows && timeSinceLastScroll < 16) {
+      return;
+    }
+
     if (!this.rafId) {
       this.rafId = requestAnimationFrame(() => {
         const currentScrollY = window.scrollY;
         this.scrollDelta = currentScrollY - this.lastScrollY;
         this.lastScrollY = currentScrollY;
+        this.lastScrollTime = now;
         this.isScrolling = true;
 
-        // Notify all listeners
-        this.scrollListeners.forEach(listener => listener(currentScrollY));
+        // Batch scroll listener updates
+        const scrollY = currentScrollY;
+        this.scrollListeners.forEach(listener => {
+          try {
+            listener(scrollY);
+          } catch (error) {
+            console.error('Error in scroll listener:', error);
+          }
+        });
 
         // Clear scroll timeout
         if (this.scrollTimeout) {
           clearTimeout(this.scrollTimeout);
         }
 
-        // Set scroll timeout
+        // Set scroll timeout with reduced duration for Windows
         this.scrollTimeout = setTimeout(() => {
           this.isScrolling = false;
-        }, 150);
+        }, this.deviceCapabilities.isWindows ? 100 : 150);
 
         this.rafId = null;
       });
@@ -91,6 +115,7 @@ class ScrollManager {
       isTouchpad: isTouchpad(),
       hasHighRefreshRate: hasHighRefreshRate(),
       hasDedicatedGPU: hasDedicatedGPU(),
+      isWindows: isWindows(),
     };
   };
 

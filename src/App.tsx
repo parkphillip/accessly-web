@@ -9,22 +9,17 @@ import Network from "./pages/Network";
 import Fund from "./pages/Fund";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
-import ScrollManager from "./lib/scroll-manager";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
-    // Initialize scroll manager
-    const scrollManager = ScrollManager.getInstance();
-
     // Add scroll optimization styles
     const style = document.createElement('style');
     style.textContent = `
       html {
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: none;
       }
       
       [data-animated],
@@ -35,30 +30,10 @@ const App = () => {
         -webkit-transform: translateZ(0);
         will-change: transform;
       }
-
-      /* Optimize animations for different devices */
-      @media (prefers-reduced-motion: reduce) {
-        * {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0.01ms !important;
-          scroll-behavior: auto !important;
-        }
-      }
-
-      /* Optimize for high refresh rate displays */
-      @media (min-resolution: 2dppx) {
-        [data-animated] {
-          transform: translate3d(0, 0, 0);
-        }
-      }
     `;
     document.head.appendChild(style);
 
-    return () => {
-      style.remove();
-      scrollManager.destroy();
-    };
+    return () => style.remove();
   }, []);
 
   return (
