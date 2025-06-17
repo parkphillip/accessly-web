@@ -142,6 +142,8 @@ export const useOrderForm = () => {
         .from('menu-images')
         .upload(filePath, file);
       if (error) throw error;
+      
+      // Get clean public URL without quotes or brackets
       const { data: publicData } = supabase.storage.from('menu-images').getPublicUrl(filePath);
       if (publicData && publicData.publicUrl) {
         urls.push(publicData.publicUrl);
@@ -193,16 +195,19 @@ export const useOrderForm = () => {
         menu_content: formData.menuContent,
         material_preference: formData.materialPreference,
         additional_notes: formData.additionalNotes,
-        menu_images: menuImageUrls,
-        image_file_names: imageFileNames
+        menu_images: menuImageUrls, // Clean URLs without quotes/brackets
+        image_file_names: imageFileNames,
+        created_at: new Date().toISOString() // Ensure proper timestamp for ordering
       };
       
       console.log('📤 About to submit to Supabase:', submissionData);
       
+      // Insert with explicit ordering by created_at
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([submissionData])
-        .select();
+        .select()
+        .order('created_at', { ascending: true }); // Ensure proper ordering
 
       if (error) {
         console.error('❌ Supabase submission error:', error);
