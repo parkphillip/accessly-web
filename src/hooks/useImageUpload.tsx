@@ -5,7 +5,6 @@ import { FormData } from '@/types/FormData';
 export const useImageUpload = () => {
   const uploadImagesAndGetUrls = async (files: File[], formData: FormData) => {
     const urls: string[] = [];
-    const fileNames: string[] = [];
     
     // Create a clean filename from restaurant name
     const cleanRestaurantName = formData.restaurantName
@@ -29,14 +28,13 @@ export const useImageUpload = () => {
         .upload(filePath, file);
       if (error) throw error;
       
-      // Get clean public URL without quotes or brackets
+      // Get clean public URL
       const { data: publicData } = supabase.storage.from('menu-images').getPublicUrl(filePath);
       if (publicData && publicData.publicUrl) {
         urls.push(publicData.publicUrl);
-        fileNames.push(fileName); // Store the clean filename
       }
     }
-    return { urls, fileNames };
+    return urls;
   };
 
   return {

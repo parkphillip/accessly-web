@@ -35,12 +35,9 @@ export const useFormSubmission = () => {
       console.log('📋 Preparing submission data...');
       
       let menuImageUrls: string[] = [];
-      let imageFileNames: string[] = [];
       
       if (formData.menuInputType === 'image' && formData.menuImages.length > 0) {
-        const { urls, fileNames } = await uploadImagesAndGetUrls(formData.menuImages, formData);
-        menuImageUrls = urls;
-        imageFileNames = fileNames;
+        menuImageUrls = await uploadImagesAndGetUrls(formData.menuImages, formData);
       }
 
       // Combine address fields into full_address
@@ -56,19 +53,17 @@ export const useFormSubmission = () => {
         menu_content: formData.menuContent,
         material_preference: formData.materialPreference,
         additional_notes: formData.additionalNotes,
-        menu_images: menuImageUrls, // Clean URLs without quotes/brackets
-        image_file_names: imageFileNames,
-        created_at: new Date().toISOString() // Ensure proper timestamp for ordering
+        menu_images: menuImageUrls, // Only store the URLs
+        created_at: new Date().toISOString()
       };
       
       console.log('📤 About to submit to Supabase:', submissionData);
       
-      // Insert with explicit ordering by created_at
       const { data, error } = await supabase
         .from('form_submissions')
         .insert([submissionData])
         .select()
-        .order('created_at', { ascending: true }); // Ensure proper ordering
+        .order('created_at', { ascending: true });
 
       if (error) {
         console.error('❌ Supabase submission error:', error);
