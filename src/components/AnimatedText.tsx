@@ -27,6 +27,11 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       .join('\n');
   }, [text]);
 
+  // Compute the widest text (English or Braille) for ghost sizing
+  const widestText = useMemo(() => {
+    return brailleText.length > text.length ? brailleText : text;
+  }, [brailleText, text]);
+
   const targetText = isBraille ? brailleText : text;
 
   // This effect runs the combined typewriter and decode animation.
@@ -46,8 +51,8 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     let currentIndex = 0;
     let revealedText = '';
     let scrambleIteration = 0;
-    const scramblePerChar = 3; // Number of scramble frames for each character
-    const frameRate = 40; // ms per frame
+    const scramblePerChar = 3; // Slightly slower
+    const frameRate = 35; // Slightly slower
 
     // Reset displayed text to empty to start the typing animation from scratch
     setDisplayedText('');
@@ -85,7 +90,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     
     toggleIntervalRef.current = setInterval(() => {
         setIsBraille(prev => !prev);
-    }, 5000); 
+    }, 5000); // Faster toggle between English and Braille
 
     return () => {
       if (toggleIntervalRef.current) clearInterval(toggleIntervalRef.current);
@@ -96,7 +101,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   const dynamicClassName = [
     className,
     'whitespace-pre-wrap',
-    'transition-all duration-300',
+    'transition-all duration-500',
     'animated-text-container',
     isBraille ? 'font-mono' : '',
   ].filter(Boolean).join(' ');
@@ -104,15 +109,14 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   const renderTextWithBraille = (textToRender: string) => {
     const linesToRender = textToRender.split('\n');
     return linesToRender.map((line, lineIndex) => (
-      <div 
+      <span 
         key={lineIndex} 
         className="animated-text-line" 
-        style={{ 
-          display: 'block',
-          lineHeight: '1.1',
-          height: '1.2em', // Adjusted for better vertical alignment
-          whiteSpace: 'nowrap', // Prevent the line from wrapping
-          overflow: 'hidden', // Hide any content that overflows
+        style={{
+          display: 'inline', // Inline for no line break
+          lineHeight: 'inherit', // Inherit for natural alignment
+          whiteSpace: 'pre', // Preserve spaces, no wrapping
+          overflow: 'visible', // Never cut off
         }}
       >
         {[...line].map((char, j) => {
@@ -121,26 +125,49 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
           }
           return char;
         })}
-      </div>
+      </span>
     ));
   };
 
   return (
     <span 
       className={dynamicClassName} 
-      style={{ 
-        display: 'inline-block', 
-        verticalAlign: 'bottom',
-        position: 'relative'
+      style={{
+        display: 'inline-block',
+        verticalAlign: 'baseline',
+        position: 'relative',
+        height: '1.1em', // Fixed height matching heading line height
+        lineHeight: '1.1',
       }}
     >
       {/* Ghost element for sizing, prevents layout jumps */}
-      <span style={{ visibility: 'hidden' }}>
-        {renderTextWithBraille(targetText)}
+      <span style={{
+        opacity: 0,
+        pointerEvents: 'none',
+        userSelect: 'none',
+        display: 'inline-block',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        verticalAlign: 'baseline',
+        lineHeight: '1.1',
+      }}>
+        {renderTextWithBraille(widestText)}
       </span>
-
       {/* Visible animated element */}
-      <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+      <span style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        userSelect: 'none',
+        verticalAlign: 'baseline',
+        lineHeight: '1.1',
+      }}>
         {renderTextWithBraille(displayedText)}
       </span>
     </span>
