@@ -12,13 +12,6 @@ interface AnimatedTextProps {
 }
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
-  const [displayedText, setDisplayedText] = useState(text);
-  const [isBraille, setIsBraille] = useState(false);
-  
-  const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const toggleIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const isInitialMount = useRef(true);
-
   // Memoize braille translation to avoid re-computation.
   const brailleText = useMemo(() => {
     return text
@@ -26,6 +19,13 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       .map(line => translateToBraille(line))
       .join('\n');
   }, [text]);
+
+  const [displayedText, setDisplayedText] = useState(brailleText); // Start with Braille text
+  const [isBraille, setIsBraille] = useState(true);
+  
+  const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const toggleIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isInitialMount = useRef(true);
 
   // Compute the widest text (English or Braille) for ghost sizing
   const widestText = useMemo(() => {
@@ -51,8 +51,8 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     let currentIndex = 0;
     let revealedText = '';
     let scrambleIteration = 0;
-    const scramblePerChar = 3; // Slightly slower
-    const frameRate = 35; // Slightly slower
+    const scramblePerChar = 3; // Keep consistent animation speed
+    const frameRate = 35; // Keep consistent animation speed
 
     // Reset displayed text to empty to start the typing animation from scratch
     setDisplayedText('');
@@ -88,13 +88,20 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   useEffect(() => {
     if (toggleIntervalRef.current) clearInterval(toggleIntervalRef.current);
     
-    toggleIntervalRef.current = setInterval(() => {
+    // Initial delay before first transition
+    const initialDelay = setTimeout(() => {
+      setIsBraille(false); // First transition to English
+      
+      // Set up subsequent transitions
+      toggleIntervalRef.current = setInterval(() => {
         setIsBraille(prev => !prev);
-    }, 5000); // Faster toggle between English and Braille
+      }, 5000); // Keep the same interval for subsequent transitions
+    }, 1000); // Wait 1 second before first transition
 
     return () => {
       if (toggleIntervalRef.current) clearInterval(toggleIntervalRef.current);
       if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
+      clearTimeout(initialDelay);
     };
   }, []);
 
