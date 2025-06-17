@@ -16,7 +16,7 @@ const hasHighRefreshRate = () => {
 const hasDedicatedGPU = () => {
   if (typeof window === 'undefined') return false;
   const canvas = document.createElement('canvas');
-  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl') as WebGLRenderingContext | null;
   if (!gl) return false;
   const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
   if (!debugInfo) return false;
@@ -161,4 +161,4 @@ export const useScrollManager = () => {
   return scrollManager.current;
 };
 
-export default ScrollManager; 
+export default ScrollManager;
