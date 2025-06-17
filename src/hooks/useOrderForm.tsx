@@ -71,20 +71,35 @@ export const useOrderForm = () => {
     testSupabaseConnection();
   }, [toast]);
 
+  // Handle container height and clear validation errors when step changes
   useEffect(() => {
     if (stepContentRef.current) {
       setContainerHeight(stepContentRef.current.scrollHeight);
     }
     clearValidationErrors();
-  }, [currentStep]);
+  }, [currentStep, clearValidationErrors]);
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
-    console.log(`📝 Input changed - ${field}:`, value);
+  // Reset form to initial state after successful submission
+  useEffect(() => {
+    if (isSubmitted) {
+      const timer = setTimeout(() => {
+        console.log('🔄 Auto-resetting form after successful submission...');
+        resetForm();
+      }, 3000); // Reset after 3 seconds to let user see success message
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSubmitted]);
+
+  const handleInputChange = (field: keyof FormData, value: string | File[]) => {
+    console.log(`📝 Input changed - ${field}:`, value instanceof Array ? `${value.length} files` : value);
+    
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
     
+    // Clear validation errors when user starts typing/changing values
     if (hasAttemptedContinue && validationErrors.length > 0) {
       clearValidationErrors();
     }
@@ -117,6 +132,9 @@ export const useOrderForm = () => {
   };
 
   const resetForm = () => {
+    console.log('🔄 Resetting form to initial state...');
+    
+    // Reset all form data to initial values
     setFormData({
       restaurantName: '',
       contactName: '',
@@ -133,11 +151,16 @@ export const useOrderForm = () => {
       materialPreference: 'standard',
       additionalNotes: ''
     });
+    
+    // Reset form state
     setCurrentStep(1);
     clearValidationErrors();
+    
+    console.log('✅ Form reset complete');
   };
 
   const handleSubmit = async () => {
+    console.log('🚀 handleSubmit called from useOrderForm');
     const validation = validateCurrentStep(currentStep, formData);
     await submitForm(formData, validation, setValidationState, resetForm);
   };

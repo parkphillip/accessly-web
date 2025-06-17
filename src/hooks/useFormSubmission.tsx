@@ -30,6 +30,7 @@ export const useFormSubmission = () => {
 
     console.log('✅ Validation passed, proceeding with submission...');
     setIsSubmitting(true);
+    setIsSubmitted(false); // Reset submission state
     
     try {
       console.log('📋 Preparing submission data...');
@@ -37,7 +38,9 @@ export const useFormSubmission = () => {
       let menuImageUrls: string[] = [];
       
       if (formData.menuInputType === 'image' && formData.menuImages.length > 0) {
+        console.log('📸 Uploading menu images...');
         menuImageUrls = await uploadImagesAndGetUrls(formData.menuImages, formData);
+        console.log('✅ Image upload complete:', menuImageUrls);
       }
 
       // Combine address fields into full_address
@@ -53,7 +56,7 @@ export const useFormSubmission = () => {
         menu_content: formData.menuContent,
         material_preference: formData.materialPreference,
         additional_notes: formData.additionalNotes,
-        menu_images: menuImageUrls, // Only store the URLs
+        menu_images: menuImageUrls,
         created_at: new Date().toISOString()
       };
       
@@ -92,10 +95,10 @@ export const useFormSubmission = () => {
         description: "Thank you! We'll create your free braille menus and be in touch within 24 hours.",
       });
       
-      console.log('🔄 Resetting form...');
-      resetForm();
+      // Set submission success state
       setIsSubmitted(true);
-      console.log('✅ Form reset complete');
+      
+      console.log('✅ Submission process complete');
     } catch (error) {
       console.error('💥 Unexpected error during submission:', error);
       toast({

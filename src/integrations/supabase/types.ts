@@ -17,7 +17,6 @@ export type Database = {
           email: string
           full_address: string
           id: string
-          image_file_names: string[] | null
           material_preference: string
           menu_content: string
           menu_images: string[] | null
@@ -34,7 +33,6 @@ export type Database = {
           email: string
           full_address: string
           id?: string
-          image_file_names?: string[] | null
           material_preference: string
           menu_content: string
           menu_images?: string[] | null
@@ -51,7 +49,6 @@ export type Database = {
           email?: string
           full_address?: string
           id?: string
-          image_file_names?: string[] | null
           material_preference?: string
           menu_content?: string
           menu_images?: string[] | null
