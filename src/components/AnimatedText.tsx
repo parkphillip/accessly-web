@@ -182,3 +182,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
 };
 
 export default AnimatedText;
+
+
+// test comment
