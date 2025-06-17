@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Menu, ArrowRight } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useScrollManager } from '@/lib/scroll-manager';
+
 const navItems: {
   id: string;
   label: string;
@@ -24,90 +26,49 @@ const navItems: {
   label: 'Fund Our Mission',
   href: '/fund'
 }];
-const Navigation = () => {
+
+const Navigation = ({ isHomePage = false }) => {
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
-  const [activeSection, setActiveSection] = useState(isHomePage ? 'hero' : '');
+  const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const scrollManager = useScrollManager();
+
   useEffect(() => {
-    let ticking = false;
-    let scrollTimeout: NodeJS.Timeout;
-    let lastScrollY = window.scrollY;
     const SCROLL_THRESHOLD = 20;
-    const SCROLL_DELTA_THRESHOLD = 5;
-    const SECTION_CHECK_DELAY = 150; // Increased debounce time for section detection
+    const SECTION_CHECK_DELAY = 150;
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          const scrollDelta = Math.abs(currentScrollY - lastScrollY);
-          
-          // Only update if scroll delta is significant
-          if (scrollDelta > SCROLL_DELTA_THRESHOLD) {
-            setIsScrolled(currentScrollY > SCROLL_THRESHOLD);
-            
-            // Debounce section detection with increased delay
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-              const sections = navItems.map(item => item.id);
-              const currentSection = sections.find(section => {
-                const element = document.getElementById(section);
-                if (element) {
-                  const rect = element.getBoundingClientRect();
-                  return rect.top <= 100 && rect.bottom >= 100;
-                }
-                return false;
-              });
-              if (currentSection) {
-                setActiveSection(currentSection);
-              }
-            }, SECTION_CHECK_DELAY);
+    const handleScroll = (scrollY: number) => {
+      setIsScrolled(scrollY > SCROLL_THRESHOLD);
+      
+      // Only check for active section if we're on the home page
+      if (isHomePage) {
+        const sections = navItems.map(item => item.id);
+        const currentSection = sections.find(section => {
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            return rect.top <= 100 && rect.bottom >= 100;
           }
-          
-          lastScrollY = currentScrollY;
-          ticking = false;
+          return false;
         });
-        ticking = true;
+        if (currentSection) {
+          setActiveSection(currentSection);
+        }
       }
     };
 
-    const handleOtherPageScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          const scrollDelta = Math.abs(currentScrollY - lastScrollY);
-          
-          if (scrollDelta > SCROLL_DELTA_THRESHOLD) {
-            setIsScrolled(currentScrollY > SCROLL_THRESHOLD);
-          }
-          
-          lastScrollY = currentScrollY;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    if (isHomePage) {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      handleScroll();
-    } else {
-      setActiveSection('');
-      window.addEventListener('scroll', handleOtherPageScroll, { passive: true });
-      handleOtherPageScroll();
-    }
+    // Add scroll listener
+    const removeListener = scrollManager.addScrollListener(handleScroll);
+    
+    // Initial check
+    handleScroll(window.scrollY);
 
     return () => {
-      if (isHomePage) {
-        window.removeEventListener('scroll', handleScroll);
-      } else {
-        window.removeEventListener('scroll', handleOtherPageScroll);
-      }
-      clearTimeout(scrollTimeout);
+      removeListener();
     };
-  }, [isHomePage]);
+  }, [isHomePage, scrollManager]);
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -117,6 +78,7 @@ const Navigation = () => {
       });
     }
   };
+
   return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'p-2' : ''}`}>
       <div className={`transition-all duration-300 max-w-6xl mx-auto ${isScrolled ? 'bg-off-white/95 backdrop-blur-sm rounded-xl shadow-medium border border-light-gray/50' : 'bg-transparent'}`}>
         <div className="flex items-center justify-between h-16 px-6 lg:px-8">
@@ -166,4 +128,5 @@ const Navigation = () => {
       </div>
     </nav>;
 };
+
 export default Navigation;
