@@ -12,56 +12,53 @@ export type Database = {
       form_submissions: {
         Row: {
           additional_notes: string | null
-          address: string
-          city: string
           contact_name: string
           created_at: string
           email: string
+          full_address: string
           id: string
+          image_file_names: string[] | null
           material_preference: string
           menu_content: string
+          menu_images: string[] | null
           menu_type: string
           phone: string
           restaurant_name: string
-          state: string
-          zip_code: string
-          status: string
+          submission_number: number
           updated_at: string
         }
         Insert: {
           additional_notes?: string | null
-          address: string
-          city: string
           contact_name: string
           created_at?: string
           email: string
+          full_address: string
           id?: string
+          image_file_names?: string[] | null
           material_preference: string
           menu_content: string
+          menu_images?: string[] | null
           menu_type: string
           phone: string
           restaurant_name: string
-          state: string
-          zip_code: string
-          status?: string
+          submission_number?: number
           updated_at?: string
         }
         Update: {
           additional_notes?: string | null
-          address?: string
-          city?: string
           contact_name?: string
           created_at?: string
           email?: string
+          full_address?: string
           id?: string
+          image_file_names?: string[] | null
           material_preference?: string
           menu_content?: string
+          menu_images?: string[] | null
           menu_type?: string
           phone?: string
           restaurant_name?: string
-          state?: string
-          zip_code?: string
-          status?: string
+          submission_number?: number
           updated_at?: string
         }
         Relationships: []
@@ -71,7 +68,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_formatted_submission_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

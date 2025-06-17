@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, User, BookOpen, Heart, Facebook, Twitter, Instagram } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -41,7 +42,6 @@ const OrderForm = () => {
     const testSupabaseConnection = async () => {
       console.log('🔍 Testing Supabase connection...');
       try {
-        // Use a simple select query instead of count(*) which causes parsing errors
         const { data, error } = await supabase
           .from('form_submissions')
           .select('id')
@@ -115,7 +115,6 @@ const OrderForm = () => {
     if (stepContentRef.current) {
       setContainerHeight(stepContentRef.current.scrollHeight);
     }
-    // Clear validation errors and reset attempt flag when step changes
     setValidationErrors([]);
     setHasAttemptedContinue(false);
   }, [currentStep]);
@@ -127,7 +126,6 @@ const OrderForm = () => {
       [field]: value
     }));
     
-    // Clear validation errors when user starts typing
     if (hasAttemptedContinue && validationErrors.length > 0) {
       setValidationErrors([]);
     }
@@ -135,7 +133,6 @@ const OrderForm = () => {
 
   const nextStep = () => {
     console.log(`➡️ NEXT STEP CLICKED - Current step: ${currentStep}`);
-    console.log(`➡️ Form data:`, formData);
     
     setHasAttemptedContinue(true);
     const validation = validateCurrentStep();
@@ -165,6 +162,8 @@ const OrderForm = () => {
 
   const uploadImagesAndGetUrls = async (files: File[]) => {
     const urls: string[] = [];
+    const fileNames: string[] = [];
+    
     for (const file of files) {
       const filePath = `menus/${Date.now()}-${file.name}`;
       const { data, error } = await supabase.storage
@@ -172,15 +171,16 @@ const OrderForm = () => {
         .upload(filePath, file);
       if (error) throw error;
       const { data: publicData } = supabase.storage.from('menu-images').getPublicUrl(filePath);
-      if (publicData && publicData.publicUrl) urls.push(publicData.publicUrl);
+      if (publicData && publicData.publicUrl) {
+        urls.push(publicData.publicUrl);
+        fileNames.push(file.name);
+      }
     }
-    return urls;
+    return { urls, fileNames };
   };
 
   const handleSubmit = async () => {
-    console.log('🚀🚀🚀 SUBMIT FUNCTION CALLED!');
-    console.log('📊 Current form data:', formData);
-    console.log('📊 Current step:', currentStep);
+    console.log('🚀 SUBMIT FUNCTION CALLED!');
     
     setHasAttemptedContinue(true);
     const validation = validateCurrentStep();
@@ -200,23 +200,29 @@ const OrderForm = () => {
       console.log('📋 Preparing submission data...');
       
       let menuImageUrls: string[] = [];
+      let imageFileNames: string[] = [];
+      
       if (formData.menuInputType === 'image' && formData.menuImages.length > 0) {
-        menuImageUrls = await uploadImagesAndGetUrls(formData.menuImages);
+        const { urls, fileNames } = await uploadImagesAndGetUrls(formData.menuImages);
+        menuImageUrls = urls;
+        imageFileNames = fileNames;
       }
+
+      // Combine address fields into full_address
+      const fullAddress = `${formData.address}, ${formData.city}, ${formData.state} ${formData.zipCode}`;
+      
       const submissionData = {
         restaurant_name: formData.restaurantName,
         contact_name: formData.contactName,
         email: formData.email,
         phone: formData.phone,
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        zip_code: formData.zipCode,
+        full_address: fullAddress,
         menu_type: formData.menuType,
         menu_content: formData.menuContent,
         material_preference: formData.materialPreference,
         additional_notes: formData.additionalNotes,
-        menu_images: menuImageUrls
+        menu_images: menuImageUrls,
+        image_file_names: imageFileNames
       };
       
       console.log('📤 About to submit to Supabase:', submissionData);
@@ -281,7 +287,6 @@ const OrderForm = () => {
       console.log('✅ Form reset complete');
     } catch (error) {
       console.error('💥 Unexpected error during submission:', error);
-      console.error('💥 Error stack:', error instanceof Error ? error.stack : 'No stack trace');
       toast({
         title: "Unexpected Error",
         description: `There was an unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
@@ -310,7 +315,6 @@ const OrderForm = () => {
     }
   };
 
-  // Calculate if user can proceed - always allow if validation passes
   const validation = validateCurrentStep();
   const canProceed = validation.isValid;
   const errorsToShow = hasAttemptedContinue ? validationErrors : [];
