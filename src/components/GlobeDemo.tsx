@@ -1,13 +1,11 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import createGlobe from "cobe";
-import { useScrollManager } from '@/lib/scroll-manager';
 
 // Based on: https://github.com/shuding/cobe
 
 function GlobeDemo({ size = 600 }: { size?: number }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const scrollManager = useScrollManager();
   const globeRef = useRef<any>(null);
   const targetPhiRef = useRef(0);
   const phiRef = useRef(0);
@@ -51,12 +49,6 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
       },
     });
 
-    // Add scroll listener
-    const removeScrollListener = scrollManager.addScrollListener((scrollY) => {
-      const scrollDelta = scrollManager.getScrollDelta();
-      targetPhiRef.current += scrollDelta * 0.003;
-    });
-
     // Add mouse interaction
     let isDragging = false;
     let lastX = 0;
@@ -88,15 +80,20 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
       if (globeRef.current) {
         globeRef.current.destroy();
       }
-      removeScrollListener();
       canvasRef.current?.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [size, scrollManager]);
+  }, [size]);
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div 
+      className="w-full flex justify-center items-center"
+      style={{
+        minHeight: size, // Ensures the globe's space is reserved
+        width: '100%',
+      }}
+    >
       <canvas
         ref={canvasRef}
         style={{ 
@@ -104,8 +101,8 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
           height: size, 
           maxWidth: "100%", 
           aspectRatio: 1,
-          transform: 'translateZ(0)',
-          willChange: 'transform'
+          willChange: 'transform',
+          pointerEvents: 'auto'
         }}
         className="[filter:drop-shadow(0_10px_20px_rgba(0,0,0,0.4))] focus:outline-none"
       />
