@@ -32,21 +32,11 @@ const App = () => {
         overscroll-behavior-y: none;
       }
       
-      [data-animated],
-      [data-fixed] {
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        will-change: transform;
-      }
-
       /* Optimize scroll performance for heavy components */
       .globe-container,
       .animated-text-container {
         will-change: transform;
         transform: translateZ(0);
-        contain: layout style paint;
       }
 
       /* Optimize animations for different devices */

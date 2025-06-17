@@ -98,6 +98,13 @@ const DiningLens = () => {
     const setupAnimations = useCallback(() => {
         if (!sectionRef.current || !cardsContainerRef.current) return;
 
+        // Kill any existing ScrollTrigger instances for this section
+        ScrollTrigger.getAll().forEach(trigger => {
+            if (trigger.trigger === sectionRef.current) {
+                trigger.kill();
+            }
+        });
+
         // On mobile, we don't want any GSAP animations
         if (isMobile) {
             // Set all cards to their final positions immediately
@@ -150,22 +157,6 @@ const DiningLens = () => {
                 anticipatePin: 1,
                 fastScrollEnd: true,
                 preventOverlaps: true,
-                onEnter: () => {
-                    // Optimize performance when entering the section
-                    cardsRef.current.forEach(card => {
-                        if (card) {
-                            card.style.willChange = 'transform';
-                        }
-                    });
-                },
-                onLeaveBack: () => {
-                    // Reset will-change when leaving the section
-                    cardsRef.current.forEach(card => {
-                        if (card) {
-                            card.style.willChange = 'auto';
-                        }
-                    });
-                }
             },
         });
 
@@ -194,13 +185,18 @@ const DiningLens = () => {
             if (timelineRef.current) {
                 timelineRef.current.kill();
             }
-            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+            // Only kill ScrollTriggers for this specific section
+            ScrollTrigger.getAll().forEach(trigger => {
+                if (trigger.trigger === sectionRef.current) {
+                    trigger.kill();
+                }
+            });
         };
     }, [setupAnimations]);
 
     return (
         <section id="impact" ref={sectionRef} className="relative bg-slate-50">
-            <div className={`${isMobile ? 'min-h-screen' : 'h-screen'} flex items-center justify-center overflow-hidden`}>
+            <div className={`${isMobile ? 'min-h-screen' : 'h-screen'} flex items-center justify-center`}>
                 <div className="max-w-6xl w-full mx-auto px-5 lg:px-7 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
                     <LeftColumn />
 
@@ -219,12 +215,6 @@ const DiningLens = () => {
                                     width: CARD_WIDTH,
                                     height: CARD_HEIGHT,
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.13)',
-                                    pointerEvents: 'auto',
-                                    touchAction: 'none',
-                                    userSelect: 'none',
-                                    WebkitUserSelect: 'none',
-                                    willChange: 'transform',
-                                    transform: 'translateZ(0)',
                                 }}
                             >
                                 <div

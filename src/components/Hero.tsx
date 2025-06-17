@@ -9,8 +9,7 @@ const Hero = () => {
   return (
     <section 
       id="hero" 
-      className="hero-section relative min-h-screen flex items-center bg-off-white overflow-visible"
-      style={{ contain: 'layout' }}
+      className="hero-section relative min-h-screen flex items-center bg-off-white overflow-hidden"
     >
       {/* Background Texture */}
       <div className="absolute inset-0 bg-subtle-dots opacity-20 animate-move-bg bg-slate-300"></div>

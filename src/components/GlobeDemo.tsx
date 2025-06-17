@@ -97,7 +97,6 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
       style={{
         minHeight: size,
         width: '100%',
-        contain: 'layout style paint', // Optimize rendering
       }}
     >
       <canvas
@@ -107,9 +106,6 @@ function GlobeDemo({ size = 600 }: { size?: number }) {
           height: size, 
           maxWidth: "100%", 
           aspectRatio: 1,
-          willChange: 'transform',
-          pointerEvents: 'auto',
-          touchAction: 'none', // Prevent touch scroll interference
         }}
         className="[filter:drop-shadow(0_10px_20px_rgba(0,0,0,0.4))] focus:outline-none"
       />

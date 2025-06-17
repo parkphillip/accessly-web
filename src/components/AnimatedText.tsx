@@ -114,7 +114,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
           height: '1.2em',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          contain: 'layout style', // Optimize rendering
         }}
       >
         {[...line].map((char, j) => {
@@ -134,8 +133,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
         display: 'inline-block', 
         verticalAlign: 'bottom',
         position: 'relative',
-        contain: 'layout style paint', // Optimize rendering
-        willChange: 'contents', // Optimize for content changes
       }}
     >
       {/* Ghost element for sizing, prevents layout jumps */}
