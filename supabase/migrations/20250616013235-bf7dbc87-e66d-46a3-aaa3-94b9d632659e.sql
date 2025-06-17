@@ -1,4 +1,3 @@
-
 -- Create the form_submissions table
 CREATE TABLE public.form_submissions (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -9,6 +8,7 @@ CREATE TABLE public.form_submissions (
   address TEXT NOT NULL,
   city TEXT NOT NULL,
   state TEXT NOT NULL,
+  zip_code TEXT NOT NULL,
   menu_type TEXT NOT NULL,
   menu_content TEXT NOT NULL,
   material_preference TEXT NOT NULL,

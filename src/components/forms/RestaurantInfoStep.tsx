@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { FormData } from '@/types/FormData';
+import { FormData, US_STATES } from '@/types/FormData';
 
 interface RestaurantInfoStepProps {
   formData: FormData;
@@ -65,19 +64,40 @@ const RestaurantInfoStep: React.FC<RestaurantInfoStepProps> = ({
         </div>
       </div>
 
-      <div>
-        <label htmlFor="state" className="form-label">
-          State *
-        </label>
-        <input
-          id="state"
-          type="text"
-          required
-          value={formData.state}
-          onChange={(e) => onInputChange('state', e.target.value)}
-          className={`form-input ${hasError(errors, 'state') ? 'border-red-500 bg-red-50' : ''}`}
-          placeholder="State"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="state" className="form-label">
+            State *
+          </label>
+          <select
+            id="state"
+            required
+            value={formData.state}
+            onChange={(e) => onInputChange('state', e.target.value)}
+            className={`form-input ${hasError(errors, 'state') ? 'border-red-500 bg-red-50' : ''}`}
+          >
+            <option value="">Select a state</option>
+            {US_STATES.map((state) => (
+              <option key={state.value} value={state.value}>
+                {state.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="zipCode" className="form-label">
+            Zip Code *
+          </label>
+          <input
+            id="zipCode"
+            type="text"
+            required
+            value={formData.zipCode}
+            onChange={(e) => onInputChange('zipCode', e.target.value)}
+            className={`form-input ${hasError(errors, 'zip') ? 'border-red-500 bg-red-50' : ''}`}
+            placeholder="12345"
+          />
+        </div>
       </div>
     </div>
   );

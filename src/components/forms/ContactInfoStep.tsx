@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FormData } from '@/types/FormData';
 
@@ -16,6 +15,19 @@ const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
   const hasError = (fieldErrors: string[], fieldName: string) => {
     return fieldErrors.some(error => error.toLowerCase().includes(fieldName.toLowerCase()));
   };
+
+  const getEmailError = () => {
+    const emailError = errors.find(error => error.toLowerCase().includes('email'));
+    if (emailError) {
+      return emailError;
+    }
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      return 'Please input a valid email';
+    }
+    return null;
+  };
+
+  const emailError = getEmailError();
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -44,9 +56,12 @@ const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
           required
           value={formData.email}
           onChange={(e) => onInputChange('email', e.target.value)}
-          className={`form-input ${hasError(errors, 'email') ? 'border-red-500 bg-red-50' : ''}`}
+          className={`form-input ${emailError ? 'border-red-500 bg-red-50' : ''}`}
           placeholder="e.g., contact@yourrestaurant.com"
         />
+        {emailError && (
+          <p className="text-sm text-red-500 mt-1">{emailError}</p>
+        )}
       </div>
 
       <div>

@@ -24,6 +24,7 @@ export type Database = {
           phone: string
           restaurant_name: string
           state: string
+          zip_code: string
           status: string
           updated_at: string
         }
@@ -41,6 +42,7 @@ export type Database = {
           phone: string
           restaurant_name: string
           state: string
+          zip_code: string
           status?: string
           updated_at?: string
         }
@@ -58,6 +60,7 @@ export type Database = {
           phone?: string
           restaurant_name?: string
           state?: string
+          zip_code?: string
           status?: string
           updated_at?: string
         }

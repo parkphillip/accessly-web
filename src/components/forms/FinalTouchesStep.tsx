@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FormData } from '@/types/FormData';
 
@@ -27,7 +26,6 @@ const FinalTouchesStep: React.FC<FinalTouchesStepProps> = ({
         >
           <option value="standard">Standard Paper (recommended for most)</option>
           <option value="heavy-duty">Heavy-Duty Paper (high traffic)</option>
-          <option value="plastic">Plastic Coating (easy cleaning)</option>
           <option value="laminated">Laminated (extra durability)</option>
         </select>
         <p className="text-xs text-medium-text mt-2">

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MapPin, User, BookOpen, Heart } from 'lucide-react';
+import { MapPin, User, BookOpen, Heart, Facebook, Twitter, Instagram } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { FormData, validateStep1, validateStep2, validateStep3, validateStep4 } from '@/types/FormData';
@@ -24,13 +24,17 @@ const OrderForm = () => {
     address: '',
     city: '',
     state: '',
+    zipCode: '',
     menuType: 'full-menu',
+    menuInputType: 'image',
+    menuImages: [],
     menuContent: '',
     materialPreference: 'standard',
     additionalNotes: ''
   });
   const [containerHeight, setContainerHeight] = useState<number | undefined>();
   const stepContentRef = useRef<HTMLDivElement>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Test Supabase connection on component mount
   useEffect(() => {
@@ -159,6 +163,20 @@ const OrderForm = () => {
     }
   };
 
+  const uploadImagesAndGetUrls = async (files: File[]) => {
+    const urls: string[] = [];
+    for (const file of files) {
+      const filePath = `menus/${Date.now()}-${file.name}`;
+      const { data, error } = await supabase.storage
+        .from('menu-images')
+        .upload(filePath, file);
+      if (error) throw error;
+      const { data: publicData } = supabase.storage.from('menu-images').getPublicUrl(filePath);
+      if (publicData && publicData.publicUrl) urls.push(publicData.publicUrl);
+    }
+    return urls;
+  };
+
   const handleSubmit = async () => {
     console.log('🚀🚀🚀 SUBMIT FUNCTION CALLED!');
     console.log('📊 Current form data:', formData);
@@ -181,6 +199,10 @@ const OrderForm = () => {
     try {
       console.log('📋 Preparing submission data...');
       
+      let menuImageUrls: string[] = [];
+      if (formData.menuInputType === 'image' && formData.menuImages.length > 0) {
+        menuImageUrls = await uploadImagesAndGetUrls(formData.menuImages);
+      }
       const submissionData = {
         restaurant_name: formData.restaurantName,
         contact_name: formData.contactName,
@@ -189,10 +211,12 @@ const OrderForm = () => {
         address: formData.address,
         city: formData.city,
         state: formData.state,
+        zip_code: formData.zipCode,
         menu_type: formData.menuType,
         menu_content: formData.menuContent,
         material_preference: formData.materialPreference,
-        additional_notes: formData.additionalNotes
+        additional_notes: formData.additionalNotes,
+        menu_images: menuImageUrls
       };
       
       console.log('📤 About to submit to Supabase:', submissionData);
@@ -242,7 +266,10 @@ const OrderForm = () => {
         address: '',
         city: '',
         state: '',
+        zipCode: '',
         menuType: 'full-menu',
+        menuInputType: 'image',
+        menuImages: [],
         menuContent: '',
         materialPreference: 'standard',
         additionalNotes: ''
@@ -250,6 +277,7 @@ const OrderForm = () => {
       setCurrentStep(1);
       setValidationErrors([]);
       setHasAttemptedContinue(false);
+      setIsSubmitted(true);
       console.log('✅ Form reset complete');
     } catch (error) {
       console.error('💥 Unexpected error during submission:', error);
@@ -300,26 +328,38 @@ const OrderForm = () => {
         </div>
 
         <div className="structured-card overflow-hidden">
-          <div className="bg-subtle-gray/50">
-            <FormStep steps={steps} currentStep={currentStep} />
-          </div>
-
-          <form className="p-8 md:p-12">
-            <div style={{ height: containerHeight }} className="overflow-hidden transition-[height] duration-500 ease-in-out">
-              <div ref={stepContentRef}>
-                {renderCurrentStep()}
+          {isSubmitted ? (
+            <div className="flex flex-col items-center justify-center py-24">
+              <h3 className="text-3xl font-bold mb-4">Thank you, we will be in touch with you shortly</h3>
+              <div className="flex space-x-6 mt-6">
+                <a href="#" aria-label="Facebook" className="text-gray-500 hover:text-primary"><Facebook size={32} /></a>
+                <a href="#" aria-label="Twitter" className="text-gray-500 hover:text-primary"><Twitter size={32} /></a>
+                <a href="#" aria-label="Instagram" className="text-gray-500 hover:text-primary"><Instagram size={32} /></a>
               </div>
             </div>
-            <FormNavigation 
-              currentStep={currentStep} 
-              onPrevStep={prevStep} 
-              onNextStep={nextStep} 
-              onSubmit={handleSubmit}
-              isSubmitting={isSubmitting}
-              canProceed={canProceed}
-              validationErrors={errorsToShow}
-            />
-          </form>
+          ) : (
+            <div className="bg-subtle-gray/50">
+              <FormStep steps={steps} currentStep={currentStep} />
+            </div>
+          )}
+          {!isSubmitted && (
+            <form className="p-8 md:p-12">
+              <div style={{ height: containerHeight }} className="overflow-hidden transition-[height] duration-500 ease-in-out">
+                <div ref={stepContentRef}>
+                  {renderCurrentStep()}
+                </div>
+              </div>
+              <FormNavigation 
+                currentStep={currentStep} 
+                onPrevStep={prevStep} 
+                onNextStep={nextStep} 
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+                canProceed={validateCurrentStep().isValid}
+                validationErrors={hasAttemptedContinue ? validationErrors : []}
+              />
+            </form>
+          )}
         </div>
       </div>
     </section>
