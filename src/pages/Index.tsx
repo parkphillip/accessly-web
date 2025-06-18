@@ -1,11 +1,9 @@
-
 import React from 'react';
 import Navigation from '../components/Navigation';
 import Hero from '../components/Hero';
 import DiningLens from '../components/DiningLens';
 import CostOfInaccessibility from '../components/CostOfInaccessibility';
 import Footer from '../components/Footer';
-import Marquee from '../components/Marquee';
 import ProcessSection from '../components/ProcessSection';
 
 const Index = () => {
@@ -13,9 +11,11 @@ const Index = () => {
     <div className="min-h-screen bg-light-bg">
       <Navigation />
       <Hero />
-      <Marquee />
+      <div className="my-12" />
       <DiningLens />
+      <div className="my-12" />
       <CostOfInaccessibility />
+      <div className="my-12" />
       <ProcessSection />
       <Footer />
     </div>

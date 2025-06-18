@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -46,7 +45,7 @@ const CostOfInaccessibility = () => {
             
             <div className="space-y-8 order-1 lg:order-2 lg:col-span-3">
                 <p className="text-xl text-dark-text leading-relaxed">
-                  We surveyed <strong className="text-brand-navy font-bold">230 local restaurants</strong>. Only <strong className="text-brand-navy font-bold">2 had Braille menus</strong>—and both were outdated. That’s a gap we’re here to close.
+                  We surveyed 230 local restaurants in Southern California. Only 2 had Braille menus—and both were outdated. That’s a gap we’re here to close.
                 </p>
                 
                 <div className="space-y-6 pt-4">
@@ -84,7 +83,7 @@ const CostOfInaccessibility = () => {
                 </div>
 
                 <p className="text-xl text-medium-text leading-relaxed font-medium pt-6 border-t border-light-gray mt-8">
-                  These aren't just numbers—they're barriers. We're committed to removing them.
+                  These numbers reflect barriers. We're working to eliminate them.
                 </p>
             </div>
         </div>

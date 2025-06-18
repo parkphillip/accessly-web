@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ProcessTimeline from './ProcessTimeline';
 import { motion } from 'framer-motion';
@@ -20,7 +19,7 @@ const ProcessSection = () => {
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-20">
           <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-6 leading-tight">Our Mission is Simple</h2>
-          <p className="text-xl text-medium-text max-w-3xl mx-auto leading-relaxed">We’ve streamlined the process to make acquiring accessibility features effortless and completely free—for your restaurant, starting with braille menus.</p>
+          <p className="text-xl text-medium-text max-w-3xl mx-auto leading-relaxed">Our first initiative: helping every restaurant offer braille menus, simply and affordably.</p>
         </div>
         <ProcessTimeline />
         <div className="text-center mt-20">

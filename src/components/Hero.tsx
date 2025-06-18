@@ -20,8 +20,10 @@ const Hero = () => {
                 <span className="block mt-1">World</span>
               </h1>
               <p className="text-3xl lg:text-4xl text-brand-navy font-normal font-sans mt-4">One Menu at a Time</p>
-              <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto lg:mx-0 leading-relaxed">Accessly is a civic startup building a future where access is standard, not special. We're starting with
-free braille menus for every restaurant.</p>
+              <p className="mt-6 text-lg lg:text-xl text-medium-text max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                Accessly is a civic startup building a future where accessibility is standard in all spaces.<br />
+                Our first initiative: helping every restaurant offer braille menus, simply and affordably.
+              </p>
             </div>
 
             {/* Call to Action */}

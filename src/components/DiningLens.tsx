@@ -43,10 +43,10 @@ const LeftColumn = () => (
             Dining Through a Different Lens
         </h2>
         <p className="text-xl text-medium-text mt-4 mb-8">
-            Every dining experience should be inclusive and independent.
+            Menus should be simple. For many with vision loss, they aren't.
         </p>
         <p className="text-lg text-neutral-600 mb-10">
-            Dining out presents hidden barriers for millions with vision impairments.
+            Most are still print-only, leaving millions of blind diners without access.
         </p>
         <div className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-8 sm:space-y-0 sm:space-x-8">
             <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
