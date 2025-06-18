@@ -9,6 +9,7 @@ import Network from "./pages/Network";
 import Fund from "./pages/Fund";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ const App = () => {
           <Toaster />
         </BrowserRouter>
       </TooltipProvider>
+      <Analytics />
     </QueryClientProvider>
   );
 };
