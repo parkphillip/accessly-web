@@ -23,6 +23,9 @@ const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({
     if (files.length > 0) {
       onInputChange('menuImages', [...formData.menuImages, ...files]);
     }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -42,6 +45,9 @@ const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({
   const handleRemoveImage = (index: number) => {
     const newImages = formData.menuImages.filter((_, i) => i !== index);
     onInputChange('menuImages', newImages);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (
