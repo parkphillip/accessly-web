@@ -11,11 +11,11 @@ const Index = () => {
     <div className="min-h-screen bg-light-bg">
       <Navigation />
       <Hero />
-      <div className="my-8 md:my-12" />
+      <div className="my-6 md:my-12" />
       <DiningLens />
-      <div className="my-8 md:my-12" />
+      <div className="my-6 md:my-12" />
       <CostOfInaccessibility />
-      <div className="my-8 md:my-12" />
+      <div className="my-6 md:my-12" />
       <ProcessSection />
       <Footer />
     </div>

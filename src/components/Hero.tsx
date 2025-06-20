@@ -16,7 +16,7 @@ const Hero = () => {
             <div>
               <h1 className="text-5xl lg:text-7xl font-heading font-semibold text-dark-text leading-tight tracking-tight">
                 <span className="block mb-1">Building an</span>
-                <div className="block w-full text-center sm:block sm:w-full sm:text-center lg:text-left">
+                <div className="text-center lg:text-left">
                   <AnimatedText text={"Accessible"} className="text-brand-navy" />
                 </div>
                 <span className="block mt-1">World</span>
