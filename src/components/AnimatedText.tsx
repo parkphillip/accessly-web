@@ -137,10 +137,10 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   };
 
   return (
-    <span 
-      className={dynamicClassName} 
+    <span
+      className={dynamicClassName + ' mx-auto block sm:inline-block'}
       style={{
-        display: 'inline-block',
+        display: 'block',
         verticalAlign: 'baseline',
         position: 'relative',
         height: '1.1em', // Fixed height matching heading line height
