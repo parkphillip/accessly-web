@@ -101,52 +101,21 @@ const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({
 
       {formData.menuInputType === 'image' ? (
         <div
-          className={`border-2 border-dashed rounded-lg p-8 flex flex-col items-center transition-colors w-full min-h-[260px]
+          className={`border-2 border-dashed rounded-lg p-8 flex flex-col items-center transition-colors w-full min-h-[260px] px-4
             ${formData.menuImages.length > 0 ? 'border-primary bg-primary/5' : 'border-gray-300 hover:border-primary/50'}
             ${hasError(errors, 'menu') ? 'border-red-500 bg-red-50' : ''}`}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
-          <div className="flex flex-col space-y-4 w-full mb-4">
-            {isMobile ? (
-              <>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (fileInputRef.current) {
-                      fileInputRef.current.removeAttribute('capture');
-                      fileInputRef.current.click();
-                    }
-                  }}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-base"
-                >
-                  <Upload size={20} />
-                  <span>Upload from Gallery</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (fileInputRef.current) {
-                      fileInputRef.current.setAttribute('capture', 'environment');
-                      fileInputRef.current.click();
-                    }
-                  }}
-                  className="flex items-center justify-center space-x-2 px-4 py-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-base"
-                >
-                  <Camera size={20} />
-                  <span>Take Photo</span>
-                </button>
-              </>
-            ) : (
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50"
-              >
-                <Upload size={18} />
-                <span>Upload Image</span>
-              </button>
-            )}
+          <div className="flex flex-col items-center w-full mb-4">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center justify-center space-x-2 px-4 py-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-base w-full max-w-xs mx-auto"
+            >
+              <Upload size={20} />
+              <span>Upload Image</span>
+            </button>
           </div>
           <input
             ref={fileInputRef}
