@@ -48,24 +48,24 @@ const LeftColumn = () => (
         <p className="text-lg text-neutral-600 mb-10">
             Most are still print-only, leaving millions of blind diners without access.
         </p>
-        <div className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-8 sm:space-y-0 sm:space-x-8">
-            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
+        <div className="flex flex-col items-center sm:flex-row sm:justify-center lg:justify-start space-y-8 sm:space-y-0 sm:space-x-8">
+            <div className="flex flex-col items-center gap-2 sm:flex-col sm:gap-0">
                 <Eye className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                <div className="text-left sm:text-center">
+                <div className="text-center">
                     <p className="text-3xl font-bold text-brand-navy">2.2B</p>
                     <p className="text-sm text-medium-text">people with vision impairments</p>
                 </div>
             </div>
-            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
+            <div className="flex flex-col items-center gap-2 sm:flex-col sm:gap-0">
                 <UsersRound className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                <div className="text-left sm:text-center">
+                <div className="text-center">
                     <p className="text-3xl font-bold text-brand-navy">90%</p>
                     <p className="text-sm text-medium-text">need menu assistance</p>
                 </div>
             </div>
-            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
+            <div className="flex flex-col items-center gap-2 sm:flex-col sm:gap-0">
                 <Accessibility className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                <div className="text-left sm:text-center">
+                <div className="text-center">
                     <p className="text-3xl font-bold text-brand-navy">10%</p>
                     <p className="text-sm text-medium-text">dine independently</p>
                 </div>
