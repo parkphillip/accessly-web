@@ -108,6 +108,21 @@ const Navigation = () => {
       clearTimeout(scrollTimeout);
     };
   }, [isHomePage]);
+  const handleLinkClick = (sectionId?: string) => {
+    setIsMenuOpen(false); // Close menu on link click
+    if (sectionId) {
+      // Use a timeout to ensure the menu is closed before scrolling
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 100);
+    }
+  };
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -159,9 +174,76 @@ const Navigation = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden p-2 rounded-md hover:bg-subtle-gray transition-colors">
+          <button 
+            className="md:hidden p-2 rounded-md hover:bg-subtle-gray transition-colors"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
             <Menu className="w-6 h-6 text-dark-text" />
           </button>
+        </div>
+      </div>
+      
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/40 z-40" 
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
+      )}
+      <div
+        className={`md:hidden fixed top-0 right-0 h-full w-2/3 max-w-xs bg-off-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col p-8 space-y-6">
+          <button 
+            onClick={() => setIsMenuOpen(false)}
+            className="self-end p-2 mb-4"
+          >
+          </button>
+          
+          {navItems.map(item => {
+            if (item.href) {
+              return (
+                <Link 
+                  key={item.id} 
+                  to={item.href}
+                  onClick={() => handleLinkClick()}
+                  className="text-lg font-medium text-dark-text hover:text-brand-navy"
+                >
+                  {item.label}
+                </Link>
+              );
+            }
+            return (
+              isHomePage ? (
+                <button 
+                  key={item.id} 
+                  onClick={() => handleLinkClick(item.id)}
+                  className="text-lg font-medium text-dark-text hover:text-brand-navy text-left"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link 
+                  key={item.id} 
+                  to={`/#${item.id}`}
+                  onClick={() => handleLinkClick()}
+                  className="text-lg font-medium text-dark-text hover:text-brand-navy"
+                >
+                  {item.label}
+                </Link>
+              )
+            );
+          })}
+          <div className="pt-4">
+             <Link to="/partner" onClick={() => handleLinkClick()}>
+                <Button className="w-full group">
+                  Partner With Us
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+          </div>
         </div>
       </div>
     </nav>;

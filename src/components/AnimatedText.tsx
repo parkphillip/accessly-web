@@ -107,8 +107,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
 
   const dynamicClassName = [
     className,
-    'whitespace-nowrap',
-    'overflow-x-auto',
+    'whitespace-pre-wrap',
     'transition-all duration-500',
     'animated-text-container',
     isBraille ? 'font-mono' : '',
