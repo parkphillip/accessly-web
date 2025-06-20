@@ -7,14 +7,14 @@ const CostOfInaccessibility = () => {
   return (
     <motion.section 
       id="cost" 
-      className="py-32 bg-white"
+      className="py-20 lg:py-32 bg-white"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8 }}
     >
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-20">
+        <div className="text-center mb-16 lg:mb-20">
             <h2 className="text-4xl lg:text-5xl font-heading text-dark-text font-bold mb-4">The State of Accessibility</h2>
             <div className="w-16 h-1 bg-brand-terracotta mx-auto rounded-full"></div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { translateToBraille } from '../utils/brailleUtils';
 import BrailleChar from './BrailleChar';
 
@@ -11,6 +12,8 @@ interface AnimatedTextProps {
 }
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
+  const isMobile = useIsMobile();
+
   const brailleText = useMemo(() => {
     return text
       .split('\n')
@@ -91,6 +94,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     'whitespace-pre-wrap',
     'transition-all duration-500',
     'animated-text-container',
+    isMobile ? 'text-center' : '',
     isBraille ? 'font-mono' : '',
   ].filter(Boolean).join(' ');
 
@@ -115,15 +119,19 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     ));
   };
 
+  const rootStyle: React.CSSProperties = {
+    display: isMobile ? 'block' : 'inline-block',
+    width: isMobile ? '100%' : 'auto',
+    verticalAlign: 'baseline',
+    position: 'relative',
+    height: '1.1em',
+    lineHeight: '1.1',
+  };
+
   return (
-    <span
-      className={dynamicClassName + ' mx-auto inline-block'}
-      style={{
-        verticalAlign: 'baseline',
-        position: 'relative',
-        height: '1.1em',
-        lineHeight: '1.1',
-      }}
+    <span 
+      className={dynamicClassName} 
+      style={rootStyle}
     >
       <span style={{
         opacity: 0,

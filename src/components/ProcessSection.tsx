@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
 const ProcessSection = () => {
-  return <motion.section id="process" className="py-32 bg-slate-50" initial={{
+  return <motion.section id="process" className="py-20 lg:py-32 bg-slate-50" initial={{
     opacity: 0
   }} whileInView={{
     opacity: 1

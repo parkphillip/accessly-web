@@ -38,8 +38,8 @@ const cardsData = [
 type CardData = typeof cardsData[0];
 
 const LeftColumn = () => (
-    <div className="max-w-lg text-center lg:text-left flex flex-col justify-center h-full">
-        <h2 id="dining-heading" className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-4 leading-tight tracking-tight">
+    <div className="max-w-lg text-center lg:text-left flex flex-col justify-center h-full px-6 lg:px-0">
+        <h2 id="dining-heading" className="text-4xl lg:text-6xl font-heading font-bold text-dark-text mb-4 leading-tight tracking-tight">
             Dining Through a Different Lens
         </h2>
         <p className="text-xl text-medium-text mt-4 mb-8">
@@ -199,9 +199,9 @@ const DiningLens = () => {
     }, [setupAnimations]);
 
     return (
-        <section id="impact" ref={sectionRef} className="relative bg-slate-50">
-            <div className={`${isMobile ? 'min-h-screen' : 'h-screen'} flex items-center justify-center overflow-hidden`}>
-                <div className="max-w-6xl w-full mx-auto px-5 lg:px-7 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
+        <section id="impact" ref={sectionRef} className="relative bg-slate-50 py-20 lg:py-32">
+            <div className="flex items-center justify-center overflow-hidden">
+                <div className="max-w-6xl w-full mx-auto px-5 lg:px-7 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                     <LeftColumn />
 
                     <div className="lg:hidden flex flex-col gap-8 mt-8">
