@@ -11,15 +11,15 @@ const Index = () => {
     <div className="min-h-screen bg-light-bg">
       <Navigation />
       <Hero />
-      <div className="my-12" />
+      <div className="my-8 md:my-12" />
       <DiningLens />
-      <div className="my-12" />
+      <div className="my-8 md:my-12" />
       <CostOfInaccessibility />
-      <div className="my-12" />
+      <div className="my-8 md:my-12" />
       <ProcessSection />
       <Footer />
     </div>
   );
 };
-
+// this is gonna be a game changer for next launch
 export default Index;
