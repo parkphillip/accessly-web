@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { FormData } from '@/types/FormData';
-import { Upload, Type, X } from 'lucide-react';
+import { Upload, Type, X, Camera } from 'lucide-react';
 
 interface MenuDetailsStepProps {
   formData: FormData;
@@ -14,6 +15,7 @@ const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({
   errors = []
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
   const hasError = (fieldErrors: string[], fieldName: string) => {
     return fieldErrors.some(error => error.toLowerCase().includes(fieldName.toLowerCase()));
   };
@@ -105,19 +107,44 @@ const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 mb-6"
-          >
-            <Upload size={18} />
-            <span>Upload Image</span>
-          </button>
+          {isMobile ? (
+            <div className="flex flex-col space-y-4 w-full">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center justify-center space-x-2 px-4 py-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-base"
+              >
+                <Upload size={20} />
+                <span>Upload from Gallery</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (fileInputRef.current) {
+                    fileInputRef.current.setAttribute('capture', 'environment');
+                    fileInputRef.current?.click();
+                  }
+                }}
+                className="flex items-center justify-center space-x-2 px-4 py-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-base"
+              >
+                <Camera size={20} />
+                <span>Take Photo</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 mb-6"
+            >
+              <Upload size={18} />
+              <span>Upload Image</span>
+            </button>
+          )}
           <input
             ref={fileInputRef}
             type="file"
             accept="image/*"
-            capture="environment"
             multiple
             onChange={handleFileChange}
             className="hidden"
@@ -151,8 +178,12 @@ const MenuDetailsStep: React.FC<MenuDetailsStepProps> = ({
           ) : (
             <div className="space-y-2 flex flex-col items-center justify-center w-full">
               <Upload className="mx-auto h-12 w-12 text-gray-400" />
-              <p className="text-gray-600">Please upload a clear image of your menu or take a photo</p>
-              <p className="text-sm text-gray-500">Drag and drop or use the button above</p>
+              <p className="text-gray-600 text-center">
+                Please upload a clear image of your menu or take a photo
+              </p>
+              <p className="text-sm text-gray-500">
+                Drag and drop or use the button above
+              </p>
             </div>
           )}
         </div>
