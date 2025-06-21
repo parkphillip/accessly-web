@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { translateToBraille } from '../utils/brailleUtils';
 import BrailleChar from './BrailleChar';
 
-// Character sets for the scramble effect
 const BRAILLE_SCRAMBLE_CHARS = '⠁⠃⠉⠙⠑⠋⠛⠓⠊⠚⠅⠇⠍⠝⠕⠏⠟⠗⠎⠞⠥⠧⠺⠭⠽⠵';
 const ENGLISH_SCRAMBLE_CHARS = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -12,7 +12,8 @@ interface AnimatedTextProps {
 }
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
-  // Memoize braille translation to avoid re-computation.
+  const isMobile = useIsMobile();
+
   const brailleText = useMemo(() => {
     return text
       .split('\n')
@@ -20,63 +21,51 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       .join('\n');
   }, [text]);
 
-  const [displayedText, setDisplayedText] = useState(brailleText); // Start with Braille text
+  const [displayedText, setDisplayedText] = useState(brailleText);
   const [isBraille, setIsBraille] = useState(true);
-  
+
   const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const toggleIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isInitialMount = useRef(true);
 
-  // Compute the widest text (English or Braille) for ghost sizing
   const widestText = useMemo(() => {
     return brailleText.length > text.length ? brailleText : text;
   }, [brailleText, text]);
 
   const targetText = isBraille ? brailleText : text;
 
-  // This effect runs the combined typewriter and decode animation.
   useEffect(() => {
-    // Don't run the animation on the very first render.
     if (isInitialMount.current) {
       isInitialMount.current = false;
       return;
     }
-
     const scrambleChars = isBraille ? BRAILLE_SCRAMBLE_CHARS : ENGLISH_SCRAMBLE_CHARS;
-    
-    if (animationIntervalRef.current) {
-        clearInterval(animationIntervalRef.current);
-    }
-    
+    if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
+
     let currentIndex = 0;
     let revealedText = '';
     let scrambleIteration = 0;
-    const scramblePerChar = 3; // Keep consistent animation speed
-    const frameRate = 35; // Keep consistent animation speed
+    const scramblePerChar = 3;
+    const frameRate = 35;
 
-    // Reset displayed text to empty to start the typing animation from scratch
     setDisplayedText('');
 
     animationIntervalRef.current = setInterval(() => {
-        if (currentIndex >= targetText.length) {
-            if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
-            setDisplayedText(targetText); // Final clean up
-            return;
-        }
-
-        // Scramble the current character for a few frames
-        if (scrambleIteration < scramblePerChar) {
-            const randomChar = scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-            setDisplayedText(revealedText + randomChar);
-            scrambleIteration++;
-        } else {
-            // Reveal the correct character and move to the next one
-            revealedText += targetText[currentIndex];
-            currentIndex++;
-            scrambleIteration = 0;
-            // Set the text for the next frame, which will be the revealed part
-            setDisplayedText(revealedText);
-        }
+      if (currentIndex >= targetText.length) {
+        if (animationIntervalRef.current) clearInterval(animationIntervalRef.current);
+        setDisplayedText(targetText);
+        return;
+      }
+      if (scrambleIteration < scramblePerChar) {
+        const randomChar = scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+        setDisplayedText(revealedText + randomChar);
+        scrambleIteration++;
+      } else {
+        revealedText += targetText[currentIndex];
+        currentIndex++;
+        scrambleIteration = 0;
+        setDisplayedText(revealedText);
+      }
     }, frameRate);
 
     return () => {
@@ -84,19 +73,14 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     };
   }, [targetText, brailleText, text]);
 
-  // This effect handles the timed toggling between English and Braille.
   useEffect(() => {
     if (toggleIntervalRef.current) clearInterval(toggleIntervalRef.current);
-    
-    // Initial delay before first transition
     const initialDelay = setTimeout(() => {
-      setIsBraille(false); // First transition to English
-      
-      // Set up subsequent transitions
+      setIsBraille(false);
       toggleIntervalRef.current = setInterval(() => {
         setIsBraille(prev => !prev);
-      }, 5000); // Keep the same interval for subsequent transitions
-    }, 1000); // Wait 1 second before first transition
+      }, 5000);
+    }, 1000);
 
     return () => {
       if (toggleIntervalRef.current) clearInterval(toggleIntervalRef.current);
@@ -110,44 +94,45 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
     'whitespace-pre-wrap',
     'transition-all duration-500',
     'animated-text-container',
+    isMobile ? 'text-center' : '',
     isBraille ? 'font-mono' : '',
   ].filter(Boolean).join(' ');
 
   const renderTextWithBraille = (textToRender: string) => {
-    const linesToRender = textToRender.split('\n');
-    return linesToRender.map((line, lineIndex) => (
+    return textToRender.split('\n').map((line, lineIndex) => (
       <span 
         key={lineIndex} 
         className="animated-text-line" 
         style={{
-          display: 'inline', // Inline for no line break
-          lineHeight: 'inherit', // Inherit for natural alignment
-          whiteSpace: 'pre', // Preserve spaces, no wrapping
-          overflow: 'visible', // Never cut off
+          display: 'inline',
+          lineHeight: 'inherit',
+          whiteSpace: 'pre',
+          overflow: 'visible',
         }}
       >
-        {[...line].map((char, j) => {
-          if (char.charCodeAt(0) >= 0x2800 && char.charCodeAt(0) <= 0x28FF) {
-            return <BrailleChar key={`${j}-${char}`} braille={char} />;
-          }
-          return char;
-        })}
+        {[...line].map((char, j) =>
+          char.charCodeAt(0) >= 0x2800 && char.charCodeAt(0) <= 0x28FF
+            ? <BrailleChar key={`${j}-${char}`} braille={char} />
+            : char
+        )}
       </span>
     ));
+  };
+
+  const rootStyle: React.CSSProperties = {
+    display: isMobile ? 'block' : 'inline-block',
+    width: isMobile ? '100%' : 'auto',
+    verticalAlign: 'baseline',
+    position: 'relative',
+    height: '1.1em',
+    lineHeight: '1.1',
   };
 
   return (
     <span 
       className={dynamicClassName} 
-      style={{
-        display: 'inline-block',
-        verticalAlign: 'baseline',
-        position: 'relative',
-        height: '1.1em', // Fixed height matching heading line height
-        lineHeight: '1.1',
-      }}
+      style={rootStyle}
     >
-      {/* Ghost element for sizing, prevents layout jumps */}
       <span style={{
         opacity: 0,
         pointerEvents: 'none',
@@ -163,7 +148,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
       }}>
         {renderTextWithBraille(widestText)}
       </span>
-      {/* Visible animated element */}
       <span style={{
         position: 'absolute',
         top: 0,
@@ -182,8 +166,3 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
 };
 
 export default AnimatedText;
-
-
-// test comment
-
-// doesnt allow second upload after deletion 

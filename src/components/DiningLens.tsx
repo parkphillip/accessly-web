@@ -38,8 +38,8 @@ const cardsData = [
 type CardData = typeof cardsData[0];
 
 const LeftColumn = () => (
-    <div className="max-w-lg text-center lg:text-left flex flex-col justify-center h-full">
-        <h2 id="dining-heading" className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-4 leading-tight tracking-tight">
+    <div className="max-w-lg text-center lg:text-left flex flex-col justify-center h-full px-6 lg:px-0">
+        <h2 id="dining-heading" className="text-4xl lg:text-6xl font-heading font-bold text-dark-text mb-4 leading-tight tracking-tight">
             Dining Through a Different Lens
         </h2>
         <p className="text-xl text-medium-text mt-4 mb-8">
@@ -48,24 +48,24 @@ const LeftColumn = () => (
         <p className="text-lg text-neutral-600 mb-10">
             Most are still print-only, leaving millions of blind diners without access.
         </p>
-        <div className="flex flex-col sm:flex-row justify-center lg:justify-start space-y-8 sm:space-y-0 sm:space-x-8">
-            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
+        <div className="flex flex-col items-center sm:flex-row sm:justify-center lg:justify-start space-y-8 sm:space-y-0 sm:space-x-8">
+            <div className="flex flex-col items-center gap-2 sm:flex-col sm:gap-0">
                 <Eye className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                <div className="text-left sm:text-center">
+                <div className="text-center">
                     <p className="text-3xl font-bold text-brand-navy">2.2B</p>
                     <p className="text-sm text-medium-text">people with vision impairments</p>
                 </div>
             </div>
-            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
+            <div className="flex flex-col items-center gap-2 sm:flex-col sm:gap-0">
                 <UsersRound className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                <div className="text-left sm:text-center">
+                <div className="text-center">
                     <p className="text-3xl font-bold text-brand-navy">90%</p>
                     <p className="text-sm text-medium-text">need menu assistance</p>
                 </div>
             </div>
-            <div className="flex items-center sm:flex-col gap-4 sm:gap-0">
+            <div className="flex flex-col items-center gap-2 sm:flex-col sm:gap-0">
                 <Accessibility className="w-8 h-8 sm:w-6 sm:h-6 sm:mx-auto sm:mb-2 text-brand-navy" />
-                <div className="text-left sm:text-center">
+                <div className="text-center">
                     <p className="text-3xl font-bold text-brand-navy">10%</p>
                     <p className="text-sm text-medium-text">dine independently</p>
                 </div>
@@ -144,7 +144,7 @@ const DiningLens = () => {
             scrollTrigger: {
                 trigger: sectionRef.current,
                 start: 'top top',
-                end: `+=${cardsData.length * 80}%`,
+                end: `+=${cardsData.length * 50}%`,
                 pin: true,
                 scrub: 0.5,
                 anticipatePin: 1,
@@ -199,9 +199,9 @@ const DiningLens = () => {
     }, [setupAnimations]);
 
     return (
-        <section id="impact" ref={sectionRef} className="relative bg-slate-50">
-            <div className={`${isMobile ? 'min-h-screen' : 'h-screen'} flex items-center justify-center overflow-hidden`}>
-                <div className="max-w-6xl w-full mx-auto px-5 lg:px-7 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-20 lg:py-0">
+        <section id="impact" ref={sectionRef} className="relative bg-slate-50 py-20 lg:py-0">
+            <div className="flex items-center justify-center overflow-hidden lg:h-screen">
+                <div className="max-w-6xl w-full mx-auto px-5 lg:px-7 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                     <LeftColumn />
 
                     <div className="lg:hidden flex flex-col gap-8 mt-8">

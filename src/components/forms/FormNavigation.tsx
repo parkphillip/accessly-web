@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Heart, ArrowLeft, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 
@@ -55,11 +54,11 @@ const FormNavigation: React.FC<FormNavigationProps> = ({
         </div>
       )}
       
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
         <button
           type="button"
           onClick={onPrevStep}
-          className="secondary-button disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          className="secondary-button w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           disabled={currentStep === 1 || isSubmitting}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -70,7 +69,7 @@ const FormNavigation: React.FC<FormNavigationProps> = ({
           <button
             type="button"
             onClick={handleNextClick}
-            className="primary-button flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="primary-button w-full sm:w-auto flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isSubmitting || !canProceed}
           >
             Continue
@@ -80,7 +79,7 @@ const FormNavigation: React.FC<FormNavigationProps> = ({
           <button
             type="button"
             onClick={handleSubmitClick}
-            className="primary-button bg-brand-terracotta hover:bg-brand-terracotta/90 flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="primary-button bg-brand-terracotta hover:bg-brand-terracotta/90 w-full sm:w-auto flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isSubmitting || !canProceed}
           >
             {isSubmitting ? (

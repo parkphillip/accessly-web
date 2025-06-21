@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
 const ProcessSection = () => {
-  return <motion.section id="process" className="py-32 bg-slate-50" initial={{
+  return <motion.section id="process" className="py-20 lg:py-32 bg-slate-50" initial={{
     opacity: 0
   }} whileInView={{
     opacity: 1
@@ -18,7 +18,7 @@ const ProcessSection = () => {
   }}>
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-20">
-          <h2 className="text-5xl lg:text-6xl font-heading font-bold text-dark-text mb-6 leading-tight">Our Mission is Simple</h2>
+          <h2 className="text-4xl lg:text-6xl font-heading font-bold text-dark-text mb-6 leading-tight">Our Mission is Simple</h2>
           <p className="text-xl text-medium-text max-w-3xl mx-auto leading-relaxed">Our first initiative: helping every restaurant offer braille menus, simply and affordably.</p>
         </div>
         <ProcessTimeline />
